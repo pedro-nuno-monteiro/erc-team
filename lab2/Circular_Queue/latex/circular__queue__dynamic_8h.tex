@@ -1,0 +1,157 @@
+\hypertarget{circular__queue__dynamic_8h}{}\doxysection{circular\+\_\+queue\+\_\+dynamic.\+h File Reference}
+\label{circular__queue__dynamic_8h}\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+Include dependency graph for circular\+\_\+queue\+\_\+dynamic.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{circular__queue__dynamic_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{circular__queue__dynamic_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{circular__queue__dynamic_8h_a918a6568ca22eb11b6854e5ccc893225}{inic}} (struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$q)
+\item 
+void \mbox{\hyperlink{circular__queue__dynamic_8h_a8ffa9ffe8fae3f60244f0a042517ed9a}{freeQ}} (struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$q)
+\item 
+int \mbox{\hyperlink{circular__queue__dynamic_8h_ac4243a0f88c5d4b49c29089ebaaaa3a3}{is\+Empty}} (const struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$q)
+\item 
+int \mbox{\hyperlink{circular__queue__dynamic_8h_a299d0fa5452f97ea9af3eb93e0ab0825}{is\+Full}} (const struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$q)
+\item 
+int \mbox{\hyperlink{circular__queue__dynamic_8h_ac51abcfdd6f9e0f20a8fa8241c6cbc5f}{expand}} (struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$q)
+\item 
+int \mbox{\hyperlink{circular__queue__dynamic_8h_aae2ac57eb508ace101b6bd6159e4554f}{enQ}} (struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$q, double val)
+\item 
+int \mbox{\hyperlink{circular__queue__dynamic_8h_acaa7cc2f624d33e02c12573b368975ff}{deQ}} (struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$q, double $\ast$val)
+\item 
+void \mbox{\hyperlink{circular__queue__dynamic_8h_ae9d04c5f201f2e264073607266280847}{printQ}} (const struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$q)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{circular__queue__dynamic_8h_acaa7cc2f624d33e02c12573b368975ff}\label{circular__queue__dynamic_8h_acaa7cc2f624d33e02c12573b368975ff}} 
+\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}!deQ@{deQ}}
+\index{deQ@{deQ}!circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+\doxysubsubsection{\texorpdfstring{deQ()}{deQ()}}
+{\footnotesize\ttfamily int deQ (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$}]{q,  }\item[{double $\ast$}]{val }\end{DoxyParamCaption})}
+
+Dequeues the front elemento of the queue 
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to the queue \\
+\hline
+{\em val} & value that was at the front of the queue \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if the queue was not empty, otherwise it returns 0 indicating this function should not have been called 
+\end{DoxyReturn}
+\mbox{\Hypertarget{circular__queue__dynamic_8h_aae2ac57eb508ace101b6bd6159e4554f}\label{circular__queue__dynamic_8h_aae2ac57eb508ace101b6bd6159e4554f}} 
+\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}!enQ@{enQ}}
+\index{enQ@{enQ}!circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+\doxysubsubsection{\texorpdfstring{enQ()}{enQ()}}
+{\footnotesize\ttfamily int enQ (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$}]{q,  }\item[{double}]{val }\end{DoxyParamCaption})}
+
+Enqueues a new elemento to the queue 
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to the queue \\
+\hline
+{\em val} & value to me added to the end of the queue \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if value was successuly added, otherwise returns 0 indicating queue was full and the call to expand failed to enlarge the queue. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{circular__queue__dynamic_8h_ac51abcfdd6f9e0f20a8fa8241c6cbc5f}\label{circular__queue__dynamic_8h_ac51abcfdd6f9e0f20a8fa8241c6cbc5f}} 
+\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}!expand@{expand}}
+\index{expand@{expand}!circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+\doxysubsubsection{\texorpdfstring{expand()}{expand()}}
+{\footnotesize\ttfamily int expand (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$}]{q }\end{DoxyParamCaption})}
+
+Doubles the allocated space, but only if the queue is full 
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to the queue to enlarged \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/1 if the queue is not full (does nothing), if memory allocation failed returns 0 (false) otherwise returns 1 (true) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{circular__queue__dynamic_8h_a8ffa9ffe8fae3f60244f0a042517ed9a}\label{circular__queue__dynamic_8h_a8ffa9ffe8fae3f60244f0a042517ed9a}} 
+\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}!freeQ@{freeQ}}
+\index{freeQ@{freeQ}!circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+\doxysubsubsection{\texorpdfstring{freeQ()}{freeQ()}}
+{\footnotesize\ttfamily void freeQ (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$}]{q }\end{DoxyParamCaption})}
+
+Frees space allocated by the queue 
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to the queue to be cleared -\/ the allocated memory is released \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{circular__queue__dynamic_8h_a918a6568ca22eb11b6854e5ccc893225}\label{circular__queue__dynamic_8h_a918a6568ca22eb11b6854e5ccc893225}} 
+\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}!inic@{inic}}
+\index{inic@{inic}!circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+\doxysubsubsection{\texorpdfstring{inic()}{inic()}}
+{\footnotesize\ttfamily int inic (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$}]{q }\end{DoxyParamCaption})}
+
+Inciializes queue q -\/ this is the first routine that must be called before using q. 
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to the queue to be inicialized \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+if memory allocation failed returns 0 (false) otherwise returns 1 (true) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{circular__queue__dynamic_8h_ac4243a0f88c5d4b49c29089ebaaaa3a3}\label{circular__queue__dynamic_8h_ac4243a0f88c5d4b49c29089ebaaaa3a3}} 
+\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}!isEmpty@{isEmpty}}
+\index{isEmpty@{isEmpty}!circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+\doxysubsubsection{\texorpdfstring{isEmpty()}{isEmpty()}}
+{\footnotesize\ttfamily int is\+Empty (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$}]{q }\end{DoxyParamCaption})}
+
+Informs is the queue is empty 
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to the queue to be evaluated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 (true) if $\ast$q is empty otherwise returns 0 (false) ~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{circular__queue__dynamic_8h_a299d0fa5452f97ea9af3eb93e0ab0825}\label{circular__queue__dynamic_8h_a299d0fa5452f97ea9af3eb93e0ab0825}} 
+\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}!isFull@{isFull}}
+\index{isFull@{isFull}!circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+\doxysubsubsection{\texorpdfstring{isFull()}{isFull()}}
+{\footnotesize\ttfamily int is\+Full (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$}]{q }\end{DoxyParamCaption})}
+
+Informs is the queue is full 
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to the queue to be evaluated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 (true) if $\ast$q is full otherwise returns 0 (false) ~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{circular__queue__dynamic_8h_ae9d04c5f201f2e264073607266280847}\label{circular__queue__dynamic_8h_ae9d04c5f201f2e264073607266280847}} 
+\index{circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}!printQ@{printQ}}
+\index{printQ@{printQ}!circular\_queue\_dynamic.h@{circular\_queue\_dynamic.h}}
+\doxysubsubsection{\texorpdfstring{printQ()}{printQ()}}
+{\footnotesize\ttfamily void printQ (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structcircular__queue}{circular\+\_\+queue}} $\ast$}]{q }\end{DoxyParamCaption})}
+
+Prints the value of all elements in the queue (for DEBUG purposes) 
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to the queue \\
+\hline
+\end{DoxyParams}
