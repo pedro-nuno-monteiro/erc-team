@@ -21,35 +21,65 @@
 #define IDLE 0
  /*! and idle. */
 
-/*! Global variabled defined in simula_fila1s.c */
+/*/*! Global variabled defined in simula_fila1s.c */
 // variáveis definidas noutro sítio (por isso é que têm extern int)
-extern int next_event_type, num_custs_delayed, num_delays_required, num_events,
+/*extern int next_event_type, num_custs_delayed, num_delays_required, num_events,
 num_in_q, server_status;
 extern float area_num_in_q, area_server_status, mean_interarrival, mean_service,
 sim_time, time_arrival[Q_LIMIT + 1], time_last_event, time_next_event[3],
 total_of_delays;
-extern FILE *infile, *outfile;
+extern FILE *infile, *outfile;*/
+
+
+typedef struct {
+    int next_event_type;       
+    int num_custs_delayed;     
+    int num_delays_required;   
+    int num_in_q;              
+    int server_status;         
+    float time_arrival[Q_LIMIT + 1];  
+    float mean_interarrival;  // Média do intervalo entre chegadas
+    float mean_service;
+} SystemState;
+
+typedef struct {
+    float area_num_in_q;       
+    float area_server_status;  
+    float total_of_delays;     
+} Statistics;
+
+typedef struct {
+    float sim_time;            
+    float time_last_event;     
+    float time_next_event[3];  
+} EventList;
+
+typedef struct {
+    FILE *infile;   // Ficheiro de entrada
+    FILE *outfile;  // Ficheiro de saída
+} Files;
+
 
 /*!
  * Initialization function.
  * \note arguments to be added
  * */
-void initialize(void);
+void initialize(SystemState *state, Statistics *stats, EventList *events);
 
 /*! Timing function. */
-void timing(void);
+void timing(SystemState *state, Statistics *stats, Files* files, EventList *events, int num_events);
 
 /*! Arrival event function. */
-void arrive(void);
+void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events);
 
 /*! Departure event function. */
-void depart(void);
+void depart(SystemState *state, Statistics *stats, EventList *events);
 
 /*! Report generator function. */
-void report(void);
+void report(SystemState* state, Statistics* stats, Files* files, EventList* events);
 
 /*! Update area accumulators for time-average statistics. */
-void update_time_avg_stats(void);
+void update_time_avg_stats(SystemState *state, Statistics *stats, EventList *events);
 
 /*! Exponential variate generation function. 
  * @param mean is the expected value of the random variable
