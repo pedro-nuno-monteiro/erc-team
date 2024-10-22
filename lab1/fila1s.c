@@ -54,16 +54,17 @@ void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * 
 }
 
 void timing(SystemState * state, Statistics * stats, Files * files, EventList * events, int num_events) {
-	int i;
 	float min_time_next_event = 1.0e+29;
 
 	state->next_event_type = 0;
+	
 	/*! Determine the event type of the next event to occur. */
-	for (i = 1; i <= num_events; ++i)
+	for (int i = 1; i <= num_events; ++i)
 		if (events->time_next_event[i] < min_time_next_event) {
 			min_time_next_event = events->time_next_event[i];
 			state->next_event_type = i;
 		}
+
 	/*! Check to see whether the event list is empty. */
 	if (state->next_event_type == 0) {
 		/* The event list is empty, so stop the simulation. */
@@ -110,7 +111,6 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 }
 
 void depart(SystemState *state, Statistics *stats, EventList *events) {
-	int  i;
 	float delay;
 
 	/*! Check to see whether the queue is empty. */
@@ -132,7 +132,7 @@ void depart(SystemState *state, Statistics *stats, EventList *events) {
 		++state->num_custs_delayed;
 		events->time_next_event[2] = events->sim_time + expon(state->mean_service,2);
 		/*! Move each customer in queue (if any) up one place. */
-		for (i = 1; i <= state->num_in_q; ++i)
+		for (int i = 1; i <= state->num_in_q; ++i)
 			state->time_arrival[i] = state->time_arrival[i + 1];
 	}
 }

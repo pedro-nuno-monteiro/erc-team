@@ -27,7 +27,8 @@
  * processes events, and outputs results.
  *
  * @return Exit status of the program, EXIT_SUCCESS or EXIT_FAILURE.
- */int main() {
+ */
+int main() {
 
 	SystemState state;	/*!< Structure to hold the system state variables. */
 	Statistics stats;		/*!< Structure to hold the statistical variables. */
@@ -74,6 +75,7 @@
 	
   /*! Run the simulation while the required number of customers has not been delayed. */
 	while (state.num_custs_delayed < state.num_delays_required) {
+
 		/*! Determine the next event (either an arrival or departure). */
 		timing(&state, &stats, &files, &events, num_events);
 		
@@ -89,8 +91,8 @@
 			case 2:
 				depart(&state, &stats, &events);
 				break;
-			}
-    }
+		}
+	}
 
 	/*! Invoke the report generator and end the simulation. */
 	report(&state, &stats, &files, &events);
