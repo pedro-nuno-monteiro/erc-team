@@ -28,7 +28,7 @@
  *
  * @return Exit status of the program, EXIT_SUCCESS or EXIT_FAILURE.
  */
-int main() {
+int main(int argc, char *argv[]) {
 
 	SystemState state;	/*!< Structure to hold the system state variables. */
 	Statistics stats;		/*!< Structure to hold the statistical variables. */
@@ -39,16 +39,33 @@ int main() {
 	int is_ok = EXIT_FAILURE;
 
 	/*! Open input file. */
+	if (argc == 2) {
+		printf("Usage: %s <filename>\n", argv[0]);
+		files.infile = fopen(argv[1], "r");
 
-	// trocar para não ser hard coded
-	// pedir ao user ou passar como argumento na linha de comando
-
-	files.infile = fopen("mm1in.txt", "r");
-	if(!files.infile) {
-		perror("File opening of mm1in.txt failed");
-		return is_ok;
-  }
+		if(!files.infile) {
+			perror("File opening of mm1in.txt failed");
+			return is_ok;
+		}
+		
+		/*! Read input parameters. */
+		fscanf(files.infile, "%f %f %d", &state.mean_interarrival, &state.mean_service, &state.num_delays_required);
+		printf("Mean interarrival time: %f\n", state.mean_interarrival);
+		printf("Mean service time: %f\n", state.mean_service);
+		printf("Number of customers: %d\n", state.num_delays_required);
+	}
+	else {
+		printf("Mean interarrival time -> ");
+		scanf("%f", &state.mean_interarrival);
+		printf("Mean service time -> ");
+		scanf("%f", &state.mean_service);
+		printf("Number of customers -> ");
+		scanf("%d", &state.num_delays_required);
+	}
   
+	/*! Specify the number of event types (arrival and departure) */
+	int num_events = 2;
+
 	/*! Open output file. */
 	files.outfile = fopen("mm1out.txt", "w");
 	if(!files.outfile) {
@@ -56,15 +73,9 @@ int main() {
 		return is_ok;
   }
 
-	/*! Specify the number of event types (arrival and departure) */
-	int num_events = 2;
-
-	/*! Read input parameters. */
-	fscanf(files.infile, "%f %f %d", &state.mean_interarrival, &state.mean_service, &state.num_delays_required);
-
 	/*! Write report heading and input parameters to the output file. */
 	fprintf(files.outfile, "Single-server queueing system\n\n");
-	fprintf(files.outfile, "Mean interarrival time%11.3f minutes\n\n",state. mean_interarrival);
+	fprintf(files.outfile, "Mean interarrival time%11.3f minutes\n\n", state. mean_interarrival);
 	fprintf(files.outfile, "Mean service time%16.3f minutes\n\n", state.mean_service);
 	fprintf(files.outfile, "Number of customers%14d\n\n", state.num_delays_required);
 	

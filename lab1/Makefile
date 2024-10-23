@@ -11,4 +11,4 @@ simula_fila1s.o: lcgrand.h fila1s.h simula_fila1s.c
 	gcc -c simula_fila1s.c
 	
 clean: 
-	del *.o simula_fila1s
+	del *.o simula_fila1s.exe
