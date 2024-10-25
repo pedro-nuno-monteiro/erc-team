@@ -38,31 +38,116 @@ int main(int argc, char *argv[]) {
 	/*! Set the initial return value to EXIT_FAILURE in case something goes wrong. */
 	int is_ok = EXIT_FAILURE;
 
-	/*! Open input file. */
-	if (argc == 2) {
-		printf("Usage: %s <filename>\n", argv[0]);
-		files.infile = fopen(argv[1], "r");
+	srand(time(NULL));
 
-		if(!files.infile) {
-			perror("File opening of mm1in.txt failed");
-			return is_ok;
-		}
+	int indices[3];
+
+
+	/*! Open input file. */
+
+	if (argc >= 2) {
 		
-		/*! Read input parameters. */
-		fscanf(files.infile, "%f %f %d", &state.mean_interarrival, &state.mean_service, &state.num_delays_required);
+		if(argc==2){
+			printf("Usage: %s <%s>\n", argv[0], argv[1]);
+			files.infile = fopen(argv[1], "ra");
+
+			if(!files.infile) {
+				perror("File opening of mm1in.txt failed");
+				return is_ok;
+			}
+			/*! Read input parameters. */
+			fscanf(files.infile, "%f %f %d %d %d %d", &state.mean_interarrival, &state.mean_service, &state.num_delays_required, &indices[0], &indices[1], &indices[2]);
+			
+			if (indices[0] <= 0 || indices[1] <= 0 || indices[2] <= 0 || indices[2] > 100) {
+				fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
+				exit(EXIT_FAILURE);
+			}
+		}
+
+		else if (argc==4){
+			state.mean_interarrival = atof(argv[1]); 
+        	state.mean_service = atof(argv[2]); 
+        	state.num_delays_required = atoi(argv[3]); 
+			for (int count = 0; count < 3; ) {
+				int num = rand() % 100 + 1;
+				int unique = 1;
+
+				for (int j = 0; j < count; j++) {
+					if (indices[j] == num) {
+						unique = 0;
+						break;
+					}
+				}
+				if (unique) {
+					indices[count] = num;
+					count++;
+				}
+			}
+			files.infile = fopen("mm1in.txt", "w");
+			fprintf(files.infile, "%.2f %.2f %d\n", state.mean_interarrival, state.mean_service, state.num_delays_required);
+			fprintf(files.infile, "%d %d %d\n", indices[0], indices[1], indices[2]);
+		}
+
+		if (state.mean_interarrival <= 0 || state.mean_service <= 0 || state.num_delays_required <= 0) {
+				fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
+				exit(EXIT_FAILURE);
+		}
+
 		printf("Mean interarrival time: %f\n", state.mean_interarrival);
 		printf("Mean service time: %f\n", state.mean_service);
 		printf("Number of customers: %d\n", state.num_delays_required);
 	}
+
 	else {
-		printf("Mean interarrival time -> ");
-		scanf("%f", &state.mean_interarrival);
-		printf("Mean service time -> ");
-		scanf("%f", &state.mean_service);
-		printf("Number of customers -> ");
-		scanf("%d", &state.num_delays_required);
+		do{
+			printf("Mean interarrival time -> ");
+			if (scanf("%f", &state.mean_interarrival) != 1) {  // Verifica se `scanf` leu um float
+            	printf("Por favor, insira um numero positivo.\n");
+            	int ch;
+            	while ((ch = getchar()) != '\n' && ch != EOF);  // Limpa o buffer de entrada
+            	state.mean_interarrival = -1;  // Define um valor inválido para repetir o loop
+        	}
+		} while(state.mean_interarrival<=0);
+		do{
+			printf("Mean service time -> ");
+			if (scanf("%f", &state.mean_service) != 1) {  // Verifica se `scanf` leu um float
+            	printf("Por favor, insira um numero positivo.\n");
+            	int ch;
+            	while ((ch = getchar()) != '\n' && ch != EOF);  // Limpa o buffer de entrada
+            	state.mean_service = -1;  // Define um valor inválido para repetir o loop
+        	}
+		}while(state.mean_service<=0);
+		do{
+			printf("Number of customers -> ");
+			if (scanf("%d", &state.num_delays_required) != 1) {  // Verifica se `scanf` leu um float
+            	printf("Por favor, insira um numero positivo.\n");
+            	int ch;
+            	while ((ch = getchar()) != '\n' && ch != EOF);  // Limpa o buffer de entrada
+            	state.num_delays_required = -1;  // Define um valor inválido para repetir o loop
+        	}
+		}while(state.num_delays_required<=0);
+
+		for (int count = 0; count < 3; ) {
+			int num = rand() % 100 + 1;
+			int unique = 1;
+
+			for (int j = 0; j < count; j++) {
+				if (indices[j] == num) {
+					unique = 0;
+					break;
+				}
+			}
+			if (unique) {
+				indices[count] = num;
+				count++;
+			}
+		}
+
+		files.infile = fopen("mm1in.txt", "w");
+		fprintf(files.infile, "%.2f %.2f %d\n", state.mean_interarrival, state.mean_service, state.num_delays_required);
+		fprintf(files.infile, "%d %d %d\n", indices[0], indices[1], indices[2]);
 	}
-  
+
 	/*! Specify the number of event types (arrival and departure) */
 	int num_events = 2;
 
@@ -73,16 +158,11 @@ int main(int argc, char *argv[]) {
 		return is_ok;
   }
 
-	/*! Write report heading and input parameters to the output file. */
-	fprintf(files.outfile, "Single-server queueing system\n\n");
-	fprintf(files.outfile, "Mean interarrival time%11.3f minutes\n\n", state. mean_interarrival);
-	fprintf(files.outfile, "Mean service time%16.3f minutes\n\n", state.mean_service);
-	fprintf(files.outfile, "Number of customers%14d\n\n", state.num_delays_required);
 	
 	// PODE SER APENAS UMA FUNÇÃO QUE É CHAMADA
 
 	/*! Initialize the simulation. */
-	initialize(&state, &stats, &events);
+	initialize(&state, &stats, &events, indices[0]);
 	
   /*! Run the simulation while the required number of customers has not been delayed. */
 	while (state.num_custs_delayed < state.num_delays_required) {
@@ -96,11 +176,11 @@ int main(int argc, char *argv[]) {
 		/*! Process the next event based on its type (1 for arrival, 2 for departure). */
 		switch (state.next_event_type) {
 			case 1:
-				arrive(&state, &stats, &files, &events);
+				arrive(&state, &stats, &files, &events, indices[1]);
 				break;
 
 			case 2:
-				depart(&state, &stats, &events);
+				depart(&state, &stats, &events, indices[2]);
 				break;
 		}
 	}
