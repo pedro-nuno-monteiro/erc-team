@@ -39,7 +39,15 @@ int main(int argc, char *argv[]) {
 	int is_ok = EXIT_FAILURE;
 
 	/*! Open input file. */
-	if (argc == 2) {
+	if (argc != 2) {
+		printf("Mean interarrival time -> ");
+		scanf("%f", &state.mean_interarrival);
+		printf("Mean service time -> ");
+		scanf("%f", &state.mean_service);
+		printf("Number of customers -> ");
+		scanf("%d", &state.num_delays_required);
+	}
+	else {
 		printf("Usage: %s <filename>\n", argv[0]);
 		files.infile = fopen(argv[1], "r");
 
@@ -54,14 +62,6 @@ int main(int argc, char *argv[]) {
 		printf("Mean service time: %f\n", state.mean_service);
 		printf("Number of customers: %d\n", state.num_delays_required);
 	}
-	else {
-		printf("Mean interarrival time -> ");
-		scanf("%f", &state.mean_interarrival);
-		printf("Mean service time -> ");
-		scanf("%f", &state.mean_service);
-		printf("Number of customers -> ");
-		scanf("%d", &state.num_delays_required);
-	}
   
 	/*! Specify the number of event types (arrival and departure) */
 	int num_events = 2;
@@ -70,12 +70,13 @@ int main(int argc, char *argv[]) {
 	files.outfile = fopen("mm1out.txt", "w");
 	if(!files.outfile) {
 		perror("File opening of mm1out.txt failed");
+		printf("erro no ficheiro de saida");
 		return is_ok;
   }
 
 	/*! Write report heading and input parameters to the output file. */
 	fprintf(files.outfile, "Single-server queueing system\n\n");
-	fprintf(files.outfile, "Mean interarrival time%11.3f minutes\n\n", state. mean_interarrival);
+	fprintf(files.outfile, "Mean interarrival time%11.3f minutes\n\n", state.mean_interarrival);
 	fprintf(files.outfile, "Mean service time%16.3f minutes\n\n", state.mean_service);
 	fprintf(files.outfile, "Number of customers%14d\n\n", state.num_delays_required);
 	
@@ -86,7 +87,6 @@ int main(int argc, char *argv[]) {
 	
   /*! Run the simulation while the required number of customers has not been delayed. */
 	while (state.num_custs_delayed < state.num_delays_required) {
-
 		/*! Determine the next event (either an arrival or departure). */
 		timing(&state, &stats, &files, &events, num_events);
 		
