@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
 			/*! Read input parameters. */
 			fscanf(files.infile, "%f %f %d %d %d %d", &state.mean_interarrival, &state.mean_service, &state.num_delays_required, &indices[0], &indices[1], &indices[2]);
 			
+			/*! Verifies the validity of the parameters */ 
 			if (indices[0] <= 0 || indices[1] <= 0 || indices[2] <= 0 || indices[2] > 100) {
 				fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
 				exit(EXIT_FAILURE);
@@ -65,9 +66,11 @@ int main(int argc, char *argv[]) {
 		}
 
 		else if (argc==4){
+			/*! Reads from the console the parameters */
 			state.mean_interarrival = atof(argv[1]); 
         	state.mean_service = atof(argv[2]); 
-        	state.num_delays_required = atoi(argv[3]); 
+        	state.num_delays_required = atoi(argv[3]);
+			/*! Create 3 random seeds without repetition */ 
 			for (int count = 0; count < 3; ) {
 				int num = rand() % 100 + 1;
 				int unique = 1;
@@ -83,50 +86,53 @@ int main(int argc, char *argv[]) {
 					count++;
 				}
 			}
+			/*! Open input file and write the parameters and the random seeds. */
 			files.infile = fopen("mm1in.txt", "w");
 			fprintf(files.infile, "%.2f %.2f %d\n", state.mean_interarrival, state.mean_service, state.num_delays_required);
 			fprintf(files.infile, "%d %d %d\n", indices[0], indices[1], indices[2]);
 		}
-
+		/*! Verifies the validity of the parameters */ 
 		if (state.mean_interarrival <= 0 || state.mean_service <= 0 || state.num_delays_required <= 0) {
 				fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
 				exit(EXIT_FAILURE);
 		}
-
+		/*! Write in the terminal the parameters */ 
 		printf("Mean interarrival time: %f\n", state.mean_interarrival);
 		printf("Mean service time: %f\n", state.mean_service);
 		printf("Number of customers: %d\n", state.num_delays_required);
 	}
 
 	else {
+		/*! Ask for parameters and guarantees the validity of those */ 
 		do{
 			printf("Mean interarrival time -> ");
-			if (scanf("%f", &state.mean_interarrival) != 1) {  // Verifica se `scanf` leu um float
+			if (scanf("%f", &state.mean_interarrival) != 1) {  
             	printf("Por favor, insira um numero positivo.\n");
             	int ch;
-            	while ((ch = getchar()) != '\n' && ch != EOF);  // Limpa o buffer de entrada
-            	state.mean_interarrival = -1;  // Define um valor inválido para repetir o loop
+            	while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
+            	state.mean_interarrival = -1;  // Defines an invalid number to repeat the loop
         	}
 		} while(state.mean_interarrival<=0);
 		do{
 			printf("Mean service time -> ");
-			if (scanf("%f", &state.mean_service) != 1) {  // Verifica se `scanf` leu um float
+			if (scanf("%f", &state.mean_service) != 1) {  
             	printf("Por favor, insira um numero positivo.\n");
             	int ch;
-            	while ((ch = getchar()) != '\n' && ch != EOF);  // Limpa o buffer de entrada
-            	state.mean_service = -1;  // Define um valor inválido para repetir o loop
+            	while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
+            	state.mean_service = -1;  // Defines an invalid number to repeat the loop
         	}
 		}while(state.mean_service<=0);
 		do{
 			printf("Number of customers -> ");
-			if (scanf("%d", &state.num_delays_required) != 1) {  // Verifica se `scanf` leu um float
+			if (scanf("%d", &state.num_delays_required) != 1) {  
             	printf("Por favor, insira um numero positivo.\n");
             	int ch;
-            	while ((ch = getchar()) != '\n' && ch != EOF);  // Limpa o buffer de entrada
-            	state.num_delays_required = -1;  // Define um valor inválido para repetir o loop
+            	while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
+            	state.num_delays_required = -1;  // Defines an invalid number to repeat the loop
         	}
 		}while(state.num_delays_required<=0);
 
+		/*! Create 3 random seeds without repetition */ 
 		for (int count = 0; count < 3; ) {
 			int num = rand() % 100 + 1;
 			int unique = 1;
@@ -142,7 +148,8 @@ int main(int argc, char *argv[]) {
 				count++;
 			}
 		}
-
+		
+		/*! Open input file and write the parameters and the random seeds. */
 		files.infile = fopen("mm1in.txt", "w");
 		fprintf(files.infile, "%.2f %.2f %d\n", state.mean_interarrival, state.mean_service, state.num_delays_required);
 		fprintf(files.infile, "%d %d %d\n", indices[0], indices[1], indices[2]);
@@ -157,9 +164,6 @@ int main(int argc, char *argv[]) {
 		perror("File opening of mm1out.txt failed");
 		return is_ok;
   }
-
-	
-	// PODE SER APENAS UMA FUNÇÃO QUE É CHAMADA
 
 	/*! Initialize the simulation. */
 	initialize(&state, &stats, &events, indices[0]);
