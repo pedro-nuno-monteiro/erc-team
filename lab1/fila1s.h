@@ -14,6 +14,7 @@
 #include <math.h>
 #include "lcgrand.h"
 #include <time.h>
+#include <string.h>
 
 /*! Header file for random-number generator. */
 /*! Limit on queue length. */

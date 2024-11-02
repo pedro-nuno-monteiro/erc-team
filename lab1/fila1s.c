@@ -28,7 +28,7 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	stats->area_server_status	 =	 0.0;
 	/*! Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */
-	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival, stream);
+	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival, stream); 
 	events->time_next_event[2] = 1.0e+30;
 }
 
