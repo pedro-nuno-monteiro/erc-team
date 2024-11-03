@@ -10,7 +10,7 @@ float expon(float mean, int stream) {
 	return -mean * logf(lcgrand(stream));
 }
 
-void initialize(SystemState * state, Statistics * stats, EventList * events) {
+void initialize(SystemState * state, Statistics * stats, EventList * events, int stream) {
 	
 	events->sim_time = 0.0; /*! Initialize the simulation clock. */
 
@@ -28,11 +28,18 @@ void initialize(SystemState * state, Statistics * stats, EventList * events) {
 	stats->area_server_status	 =	 0.0;
 	/*! Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */
-	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival, 1);
+	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival, stream); 
 	events->time_next_event[2] = 1.0e+30;
 }
 
 void report(SystemState * state, Statistics * stats, Files * files, EventList * events) {
+
+	/*! Write report heading and input parameters to the output file. */
+	fprintf(files->outfile, "Single-server queueing system\n\n");
+	fprintf(files->outfile, "Mean interarrival time%11.3f minutes\n\n", state->mean_interarrival);
+	fprintf(files->outfile, "Mean service time%16.3f minutes\n\n", state->mean_service);
+	fprintf(files->outfile, "Number of customers%14d\n\n", state->num_delays_required);
+
 	fprintf(files->outfile, "\n\nAverage delay in queue%11.3f minutes\n\n",
 	stats->total_of_delays / state->num_custs_delayed);
 	fprintf(files->outfile, "Average number in queue%10.3f\n\n",
@@ -75,7 +82,7 @@ void timing(SystemState * state, Statistics * stats, Files * files, EventList * 
 	events->sim_time = min_time_next_event;
 }
 
-void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events) {
+void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events, int stream) {
 	float delay;
 	
 	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival,1); /*! Schedule next arrival. */
@@ -106,11 +113,11 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 		++state->num_custs_delayed;
 		state->server_status = BUSY;
 		/*! Schedule a departure (service completion). */
-		events->time_next_event[2] = events->sim_time + expon(state->mean_service,2);
+		events->time_next_event[2] = events->sim_time + expon(state->mean_service,stream);
 	}
 }
 
-void depart(SystemState *state, Statistics *stats, EventList *events) {
+void depart(SystemState *state, Statistics *stats, EventList *events, int stream) {
 	float delay;
 
 	/*! Check to see whether the queue is empty. */
@@ -130,7 +137,7 @@ void depart(SystemState *state, Statistics *stats, EventList *events) {
 		stats->total_of_delays += delay;
 		/*! Increment the number of customers delayed, and schedule departure. */
 		++state->num_custs_delayed;
-		events->time_next_event[2] = events->sim_time + expon(state->mean_service,2);
+		events->time_next_event[2] = events->sim_time + expon(state->mean_service,stream);
 		/*! Move each customer in queue (if any) up one place. */
 		for (int i = 1; i <= state->num_in_q; ++i)
 			state->time_arrival[i] = state->time_arrival[i + 1];

@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include "lcgrand.h"
+#include <time.h>
+#include <string.h>
 
 /*! Header file for random-number generator. */
 /*! Limit on queue length. */
@@ -67,16 +69,16 @@ typedef struct {
 /*!
  * Initialization function.
  * */
-void initialize(SystemState *state, Statistics *stats, EventList *events);
+void initialize(SystemState *state, Statistics *stats, EventList *events, int stream);
 
 /*! Timing function. */
 void timing(SystemState *state, Statistics *stats, Files* files, EventList *events, int num_events);
 
 /*! Arrival event function. */
-void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events);
+void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events, int stream);
 
 /*! Departure event function. */
-void depart(SystemState *state, Statistics *stats, EventList *events);
+void depart(SystemState *state, Statistics *stats, EventList *events, int stream);
 
 /*! Report generator function.
  * 	Compute and write estimates of desired measures of performance.
