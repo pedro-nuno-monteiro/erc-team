@@ -38,14 +38,14 @@ int main(int argc, char *argv[]) {
 	/*! Set the initial return value to EXIT_FAILURE in case something goes wrong. */
 	int is_ok = EXIT_FAILURE;
 
-	int sementes[2]; // são só necessárias 2 sementes
+	/*! There are only 2 seeds needes*/
+	int sementes[2];
 
-
-	/*! Open input file. */
-
+	/*! Check if the input file is provided as an argument. */
 	if (argc >= 2) {
 		
-		if(argc==2){
+		/*! Open input file and read the parameters. */
+		if(argc == 2) {
 			printf("Usage: %s <%s>\n", argv[0], argv[1]);
 			files.infile = fopen(argv[1], "ra");
 
@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
 				perror(" failed");
 				return is_ok;
 			}
+
 			/*! Read input parameters. */
 			fscanf(files.infile, "%f %f %d %d %d", &state.mean_interarrival, &state.mean_service, &state.num_delays_required, &sementes[0], &sementes[1]);
 			
@@ -62,110 +63,110 @@ int main(int argc, char *argv[]) {
 				fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
 				exit(EXIT_FAILURE);
 			}
+
 			/*! Verifies the validity of the parameters */ 
 			if (state.mean_interarrival <= 0 || state.mean_service <= 0 || state.num_delays_required <= 0) {
-					fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
-					exit(EXIT_FAILURE);
+				fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
+				exit(EXIT_FAILURE);
 			}
 		}
-		/*! Write in the terminal the parameters */ 
+
+		/*! Write the parameters */ 
 		printf("Mean interarrival time: %f\n", state.mean_interarrival);
 		printf("Mean service time: %f\n", state.mean_service);
 		printf("Number of customers: %d\n", state.num_delays_required);
 		printf("Streams: %d , %d \n", sementes[0], sementes[1]);
 
+	} else {
 
-		// Pede o nome do ficheiro de saída
-	}
-
-	else {
 		/*! Ask for parameters and guarantees the validity of those */ 
-		system("cls"); 
-		do{
-			
-			printf("\nMean interarrival time ([0, 1])-> ");
+		#ifdef _WIN32
+			system("cls");
+		#else
+			system("clear");
+		#endif 
+		
+		do {
+			printf("\nMean interarrival time ([0, 1]) -> ");
 			if (scanf("%f", &state.mean_interarrival) != 1) {  
-				system("cls"); 
-            	printf("Por favor, insira um numero positivo.\n");
-            	int ch;
-            	while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
-            	state.mean_interarrival = -1;  // Defines an invalid number to repeat the loop
-        	}
-			if(state.mean_interarrival<=0 || state.mean_interarrival>1){
+				#ifdef _WIN32
+          system("cls");
+        #else
+					system("clear");
+        #endif 
+				printf("Por favor, insira um numero positivo.\n");
+				int ch;
+				while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
+				state.mean_interarrival = -1;  // Defines an invalid number to repeat the loop
+      }
+			
+			if(state.mean_interarrival <= 0 || state.mean_interarrival > 1) {
 				printf("O tempo medio entre chegadas tem de estar compreendido entre [0, 1]. \n");
 			}
-		} while(state.mean_interarrival<=0 || state.mean_interarrival>1);
+		} while(state.mean_interarrival <= 0 || state.mean_interarrival > 1);
 
-		system("cls"); 
+		#ifdef _WIN32
+			system("cls");
+		#else
+			system("clear");
+		#endif 
 
-		do{
+		do {
 			printf("\nMean service time ([0, 1]) -> ");
 			if (scanf("%f", &state.mean_service) != 1) { 
-				system("cls");
-            	printf("Por favor, insira um numero positivo.\n");
-            	int ch;
-            	while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
-            	state.mean_service = -1;  // Defines an invalid number to repeat the loop
-        	}
-			if(state.mean_service<=0 || state.mean_service>1){
+				#ifdef _WIN32
+          system("cls");
+        #else
+					system("clear");
+        #endif
+				printf("Por favor, insira um numero positivo.\n");
+				int ch;
+				while ((ch = getchar()) != '\n' && ch != EOF);
+				state.mean_service = -1;
+      }
+			
+			if(state.mean_service <= 0 || state.mean_service > 1) {
 				printf("O tempo medio de servico tem de estar compreendido entre [0, 1]. \n");
 			}
-		}while(state.mean_service<=0 || state.mean_service>1);
+		} while(state.mean_service <= 0 || state.mean_service > 1);
 
-		system("cls"); 
+		#ifdef _WIN32
+			system("cls");
+		#else
+			system("clear");
+		#endif 
 
-		do{
+		do {
 			printf("Number of customers -> ");
 			if (scanf("%d", &state.num_delays_required) != 1) {  
+			#ifdef _WIN32
 				system("cls");
-            	printf("Por favor, insira um numero positivo.\n");
-            	int ch;
-            	while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
-            	state.num_delays_required = -1;  // Defines an invalid number to repeat the loop
-        	}
-		}while(state.num_delays_required<=0);
+			#else
+				system("clear");
+			#endif
+				printf("Por favor, insira um numero positivo.\n");
+				int ch;
+				while ((ch = getchar()) != '\n' && ch != EOF);
+				state.num_delays_required = -1;
+      }
+		} while(state.num_delays_required <= 0);
 
+		/*! Asks for 2 seeds and confirms they're not repited */ 
+		for(int i = 0; i < 2; i++) {
+			do {
+				printf("Escreve a %d semente: ", i + 1);
+				if (scanf("%d", &sementes[i]) != 1) {  
+					printf("Por favor, insira um numero positivo.\n");
+					int ch;
+					while ((ch = getchar()) != '\n' && ch != EOF); 
+					sementes[i] = -1;
+				}
 
-		/*! PEDE DUAS SEMENTES E CONFIRMA QUE NÃO SAO REPETIDAS */ 
-		int count=0;
-		for(int i=0; i<2; i++){
-			if(count==0){
-				system("cls");
-				do{
-					printf("Escreve a primeira semente: ");
-					if (scanf("%d", &sementes[0]) != 1) {  
-						printf("Por favor, insira um numero positivo.\n");
-						int ch;
-						while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
-						sementes[0] = -1;  // Defines an invalid number to repeat the loop
-        			}
-					if(sementes[0]<0 || sementes[0]>100){
-						printf("As sementes têm de estar compreendidas entre [0, 100]. \n");
-					}
-				} while (sementes[0]<0 || sementes[0]>100);	
-				count++;
-			}
-			else{
-				system("cls");
-				do{
-					
-					printf("Escreve outra semente: ");
-					if (scanf("%d", &sementes[1]) != 1) {  
-						printf("Por favor, insira um numero positivo.\n");
-						int ch;
-						while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
-						sementes[1] = -1;  // Defines an invalid number to repeat the loop
-        			}
-					if(sementes[1]<0 || sementes[1]>100){
-						printf("As sementes têm de estar compreendidas entre [0, 100]. \n");
-					}
-					if(sementes[1]==sementes[0]){
-						printf("As sementes tem de ser diferentes. \n");
-					}
-				} while (sementes[1]<0 || sementes[1]>100 || sementes[1]==sementes[0]);	
-			}
+				if(sementes[i] < 0 || sementes[i] > 100) {
+					printf("As sementes têm de estar compreendidas entre [0, 100]. \n");
+				}
+			} while(sementes[i] < 0 || sementes[i] > 100 || (i == 1 && sementes[0] == sementes[1]));
 		}
-
 
 		/*! Open input file and write the parameters and the random seeds. */
 		files.infile = fopen("mm1in.txt", "w");
@@ -176,39 +177,25 @@ int main(int argc, char *argv[]) {
 	/*! Specify the number of event types (arrival and departure) */
 	int num_events = 2;
 
+	/*! Open the output file */
+	char nome_saida[100];
+	while (1) {
+		printf("Escreva o ficheiro onde quer escrever o report (com extensao .txt): ");
+		scanf("%99s", nome_saida);  // Lê o nome do arquivo, limitando a 99 caracteres
 
-	//////////////////////////////////////////////////////////////////////////////////////////////7
-	/*char *nome_saida;
-	printf("Escreva o ficheiro onde quer escrever o report: ");
-	scanf("%s", nome_saida);
+		// Verifica se o nome termina com ".txt"
+		if (strlen(nome_saida) > 4 && strcmp(nome_saida + strlen(nome_saida) - 4, ".txt") == 0) {
+			break;  // Sai do loop se o nome terminar com ".txt"
+		} else {
+			printf("Erro: O nome do ficheiro deve terminar com '.txt'. Tente novamente.\n");
+		}
+  }
 
-	/*! Open output file. */
-	/*files.outfile = fopen(nome_saida, "w");
-	if(!files.outfile) {
-		perror("File opening of mm1out.txt failed");
-		return is_ok;
-  	}*/
-  	// AQUIIIIIIIIIIIIIIIIIIIII
-	 /*char nome_saida[100];
-	 while (1) {
-        printf("Escreva o ficheiro onde quer escrever o report (com extensao .txt): ");
-        scanf("%99s", nome_saida);  // Lê o nome do arquivo, limitando a 99 caracteres
-
-        // Verifica se o nome termina com ".txt"
-        if (strlen(nome_saida) > 4 && strcmp(nome_saida + strlen(nome_saida) - 4, ".txt") == 0) {
-            break;  // Sai do loop se o nome terminar com ".txt"
-        } else {
-            printf("Erro: O nome do ficheiro deve terminar com '.txt'. Tente novamente.\n");
-        }
-    }*/
-
-   /////////////////////////////////////////////////////////////////////////////////////////////
-
-	files.outfile = fopen("mm1out.txt", "w");
-	if(!files.outfile) {
-		perror("File opening of mm1out.txt failed");
-		return is_ok;
-  	}
+	files.outfile = fopen(nome_saida, "w");
+    if (!files.outfile) {
+			perror("File opening failed");
+			return EXIT_FAILURE;
+  }
 
 	/*! Initialize the simulation. */
 	initialize(&state, &stats, &events, sementes[0]);
