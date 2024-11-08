@@ -74,6 +74,8 @@ typedef struct {
 
 void ask_streams(SystemState *state);
 
+void generate_other_streams(SystemState *state);
+
 int selectFreeServer(SystemState * state);
 
 /*! * Initialization function. */
@@ -83,10 +85,10 @@ void initialize(SystemState *state, Statistics *stats, EventList *events, int st
 void timing(SystemState *state, Statistics *stats, Files* files, EventList *events);
 
 /*! Arrival event function. */
-void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events, int stream[]);
+void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events);
 
 /*! Departure event function. */
-void depart(SystemState *state, Statistics *stats, EventList *events, int stream);
+void depart(SystemState *state, Statistics *stats, EventList *events);
 
 /*! Report generator function. Compute and write estimates of desired measures of performance. */
 void report(SystemState* state, Statistics* stats, Files* files, EventList* events);

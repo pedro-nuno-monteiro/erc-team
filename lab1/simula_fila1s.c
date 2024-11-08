@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 	int is_ok = EXIT_FAILURE;
 
 	/*! There are only 2 seeds needes*/
-	int sementes[2];
+	//int sementes[2];
 	// int A;
 
 	/*! Check if the input file is provided as an argument. */
@@ -82,12 +82,10 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
+		generate_other_streams(&state);
+
 		/*! Write the parameters */ 
-		printf("Mean interarrival time: %f\n", state.mean_interarrival);
-		printf("Mean service time: %f\n", state.mean_service);
-		printf("Number of customers: %d\n", state.num_delays_required);
-		printf("Number of servers: %d\n", state.number_of_servers);
-		printf("Streams: %d , %d \n", state.streams[0], state.streams[1]);
+		// printf("Streams: %d , %d \n", state.streams[0], state.streams[1]);
 
 	} else {
 
@@ -188,36 +186,28 @@ int main(int argc, char *argv[]) {
       }
 		} while(state.num_delays_required <= 0);
 
-		//////////////////////////////////////////////
+		ask_streams(&state);
+
+		#ifdef _WIN32
+			system("cls");
+		#else
+			system("clear");
+		#endif 
+
+		generate_other_streams(&state);
 		
-
-
-		/////////////////////////////////////////////////////////////////////
-		/*! Asks for 2 seeds and confirms they're not repited */ 
-		for(int i = 0; i < 2; i++) {
-			do {
-				printf("Escreve a %d semente: ", i + 1);
-				if (scanf("%d", &sementes[i]) != 1) {  
-					printf("Por favor, insira um numero positivo.\n");
-					int ch;
-					while ((ch = getchar()) != '\n' && ch != EOF); 
-					sementes[i] = -1;
-				}
-
-				if(sementes[i] < 0 || sementes[i] > 100) {
-					printf("As sementes têm de estar compreendidas entre [0, 100]. \n");
-				}
-			} while(sementes[i] < 0 || sementes[i] > 100 || (i == 1 && sementes[0] == sementes[1]));
-		}
-
-		///////////////////////////////////////////////////////////////////////////////////////
-
 		/*! Open input file and write the parameters and the random seeds. */
 		files.infile = fopen("mm1in.txt", "w");
 		fprintf(files.infile, "%.2f %.2f %d\n", state.mean_interarrival, state.mean_service, state.num_delays_required);
 		fprintf(files.infile, "%d\n", state.number_of_servers);
 		fprintf(files.infile, "%d %d\n", state.streams[0], state.streams[1]);
 	}
+
+		printf("Mean interarrival time: %f\n", state.mean_interarrival);
+		printf("Mean service time: %f\n", state.mean_service);
+		printf("Number of customers: %d\n", state.num_delays_required);
+		printf("Number of servers: %d\n", state.number_of_servers);
+
 
 	/*! Specify the number of event types (arrival and departure) */
 	//int num_events = 2;
@@ -244,7 +234,7 @@ int main(int argc, char *argv[]) {
 
 
 	/*! Initialize the simulation. */
-	initialize(&state, &stats, &events, sementes[0]);
+	initialize(&state, &stats, &events, state.streams[0]);
 	
   /*! Run the simulation while the required number of customers has not been delayed. */
 	while (state.num_custs_delayed < state.num_delays_required) {
@@ -258,11 +248,11 @@ int main(int argc, char *argv[]) {
 		/*! Process the next event based on its type (1 for arrival, 2 for departure). */
 		switch (state.next_event_type) {
 			case 1:
-				arrive(&state, &stats, &files, &events, sementes);
+				arrive(&state, &stats, &files, &events);
 				break;
 
 			default: /* Se o next_event_type estiver entre 2 e number_of_server+1 */
-				depart(&state, &stats, &events, sementes[1]);
+				depart(&state, &stats, &events);
 				break;
 		}
 	}

@@ -11,9 +11,46 @@
 
 void ask_streams(SystemState *state){
 
-	
 
+	/* Pedimos 2 sementes a primeira é reservada para as chegadas e a segunda é utilizada para as partidas*/
+	for(int i = 0; i < 2; i++) {
+			do {
+				printf("Escreve a %d semente: ", i + 1);
+				if (scanf("%d", &state->streams[i]) != 1) {  
+					printf("Por favor, insira um numero positivo.\n");
+					int ch;
+					while ((ch = getchar()) != '\n' && ch != EOF); 
+					state->streams[i] = -1;
+				}
 
+				if(state->streams[i] < 0 || state->streams[i] > 100) {
+					printf("As sementes têm de estar compreendidas entre [0, 100]. \n");
+				}
+			} while(state->streams[i] < 0 || state->streams[i] > 100 || (i == 1 && state->streams[0] == state->streams[1]));
+		}
+
+}
+
+void generate_other_streams(SystemState *state){
+
+	for(int i= 2; i<=state->number_of_servers + 1; i++){
+		state->streams[i] = state->streams[i-1] + 1;
+		if(state->streams[i] == state->streams[0]){
+			state->streams[i] = state->streams[i-1] + 2;
+		}
+		if (state->streams[i] == 100) {
+			state->streams[i] = 1;
+		}	
+	}
+	printf("Streams = [ ");
+	for(int i=0; i<=state->number_of_servers + 1 ; i++){
+		if(i < state->number_of_servers+1){
+			printf(" %d, ", state->streams[i]);
+		}
+		else{
+			printf(" %d ] \n", state->streams[i]);
+		}
+	}
 
 }
 
@@ -149,12 +186,12 @@ void timing(SystemState * state, Statistics * stats, Files * files, EventList * 
 }
 
 /* Trata dos clientes que chegam à fila */
-void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events, int stream[]) {
+void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events) {
 	
 	float delay;
 	
 	/* Agenda o proximo evento de chegada */
-	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival,stream[0]); 
+	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival,state->streams[0]); 
 
 	/* Verifica se há servidores livres, se nao houver a funçao retorna -1 */
 	int free_server_index = selectFreeServer(state);
@@ -170,7 +207,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
         state->server_status[free_server_index] = BUSY;
 
         // Agendar uma partida para este cliente (conclusão de atendimento)
-        events->time_next_event[free_server_index] = events->sim_time + expon(state->mean_service, stream[1]);
+        events->time_next_event[free_server_index] = events->sim_time + expon(state->mean_service, state->streams[free_server_index-1]);
     }
 
 	else{ /* Todos os servers estao ocupados */
@@ -190,7 +227,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	}
 }
 
-void depart(SystemState *state, Statistics *stats, EventList *events, int stream) {
+void depart(SystemState *state, Statistics *stats, EventList *events) {
 	
 	float delay;
 
@@ -213,7 +250,7 @@ void depart(SystemState *state, Statistics *stats, EventList *events, int stream
 
 		/*! Increment the number of customers delayed, and schedule departure. */
 		++state->num_custs_delayed;
-		events->time_next_event[2] = events->sim_time + expon(state->mean_service,stream);
+		events->time_next_event[2] = events->sim_time + expon(state->mean_service,state->streams[state->next_event_type]);
 
 		/*! Move each customer in queue (if any) up one place. Com fila circular é muito melhor*/
 		for (int i = 1; i <= state->num_in_q; ++i)
