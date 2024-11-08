@@ -20,6 +20,9 @@
 /*! Limit on queue length. */
 #define Q_LIMIT 100
 
+/* limit of the number of servers*/
+#define MAX_SERVERS 10
+
 /*! Mnemonics for server's being busy */
 #define BUSY 1
 
@@ -34,10 +37,13 @@ typedef struct {
     int num_custs_delayed;          /*!< Number of customers that have been delayed. */
     int num_delays_required;        /*!< Number of delays required to complete the simulation. */
     int num_in_q;                   /*!< Number of customers in the queue. */
-    int server_status;              /*!< Server status (0 = idle, 1 = busy). */
+    int server_status[MAX_SERVERS + 2];              /*!< Server status (0 = idle, 1 = busy). */
     float time_arrival[Q_LIMIT + 1];    /*!< Time of arrival for each customer in the queue. */
     float mean_interarrival;        /*!< Mean time between customer arrivals (inter-arrival time). */
     float mean_service;             /*!< Mean service time. */
+    int number_of_servers; 
+    int num_events; /*!< Antes era um numero fixo, mas agora é dinamico pois depende do numero de servers. */
+    int streams[MAX_SERVERS + 1];
 } SystemState;
 
 /*! 
@@ -45,7 +51,7 @@ typedef struct {
  */
 typedef struct {
     float area_num_in_q;        /*!< Cumulative area under the number-in-queue function. */
-    float area_server_status;   /*!< Cumulative area under the server-status function (busy or idle). */
+    float area_server_status[MAX_SERVERS + 2];   /*!< Cumulative area under the server-status function (busy or idle). */
     float total_of_delays;      /*!< Total amount of delay. */
 } Statistics;
 
@@ -55,7 +61,7 @@ typedef struct {
 typedef struct {
     float sim_time;             /*!< Simulation time. */
     float time_last_event;      /*!< Time of the last event. */
-    float time_next_event[3];   /*!< Scheduled times for the next events. */
+    float time_next_event[MAX_SERVERS + 2];   /*!< Scheduled times for the next events. */
 } EventList;
 
 /*! 
@@ -66,23 +72,23 @@ typedef struct {
     FILE * outfile;  /*!< Output file pointer for storing/writing results. */
 } Files;
 
-/*!
- * Initialization function.
- * */
+void ask_streams(SystemState *state);
+
+int selectFreeServer(SystemState * state);
+
+/*! * Initialization function. */
 void initialize(SystemState *state, Statistics *stats, EventList *events, int stream);
 
 /*! Timing function. */
-void timing(SystemState *state, Statistics *stats, Files* files, EventList *events, int num_events);
+void timing(SystemState *state, Statistics *stats, Files* files, EventList *events);
 
 /*! Arrival event function. */
-void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events, int stream);
+void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events, int stream[]);
 
 /*! Departure event function. */
 void depart(SystemState *state, Statistics *stats, EventList *events, int stream);
 
-/*! Report generator function.
- * 	Compute and write estimates of desired measures of performance.
- * */
+/*! Report generator function. Compute and write estimates of desired measures of performance. */
 void report(SystemState* state, Statistics* stats, Files* files, EventList* events);
 
 /*!
