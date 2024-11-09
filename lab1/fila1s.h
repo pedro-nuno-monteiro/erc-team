@@ -44,6 +44,7 @@ typedef struct {
     int number_of_servers; 
     int num_events; /*!< Antes era um numero fixo, mas agora é dinamico pois depende do numero de servers. */
     int streams[MAX_SERVERS + 1];
+    int with_without_queue; /* with queue = 1 , without queue = 0 */
 } SystemState;
 
 /*! 
@@ -53,6 +54,7 @@ typedef struct {
     float area_num_in_q;        /*!< Cumulative area under the number-in-queue function. */
     float area_server_status[MAX_SERVERS + 2];   /*!< Cumulative area under the server-status function (busy or idle). */
     float total_of_delays;      /*!< Total amount of delay. */
+    int lost_customers; /** Conta o nºde clientes perdidos -> Earlang-B*/
 } Statistics;
 
 /*! 
@@ -76,7 +78,7 @@ void ask_streams(SystemState *state);
 
 void generate_other_streams(SystemState *state);
 
-int selectFreeServer(SystemState * state);
+int selectFreeServer(SystemState * state, Statistics * stats);
 
 /*! * Initialization function. */
 void initialize(SystemState *state, Statistics *stats, EventList *events, int stream);

@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 			}
 
 			/*! Read input parameters. */
-			fscanf(files.infile, "%f %f %d %d %d %d", &state.mean_interarrival, &state.mean_service, &state.num_delays_required, &state.number_of_servers ,&state.streams[0], &state.streams[1]);
+			fscanf(files.infile, "%f %f %d %d %d %d %d", &state.mean_interarrival, &state.mean_service, &state.num_delays_required, &state.number_of_servers, &state.with_without_queue,&state.streams[0], &state.streams[1]);
 			
 			/*! Verifies the validity of the parameters */ 
 			if (state.streams[0] <= 0 || state.streams[1] <= 0 || state.streams[0] >= 100 || state.streams[1] >= 100) {
@@ -80,6 +80,12 @@ int main(int argc, char *argv[]) {
 				fprintf(stderr, "O numero de server nao respeita as condicoes necessarias\n");
 				exit(EXIT_FAILURE);
 			}
+
+			if (state.with_without_queue != 0 && state.with_without_queue != 1 ) {
+				fprintf(stderr, "Dados incorretos:    With Queue = 1      Without Queue = 0 \n");
+				exit(EXIT_FAILURE);
+			}
+			
 		}
 
 		generate_other_streams(&state);
@@ -186,6 +192,29 @@ int main(int argc, char *argv[]) {
       }
 		} while(state.num_delays_required <= 0);
 
+		#ifdef _WIN32
+			system("cls");
+		#else
+			system("clear");
+		#endif 
+
+		// A = 1/state.mean_interarrival * state.mean_service; 
+
+		do {
+			printf("Without Queue = 0  ou With Queue = 1 -> ");
+			if (scanf("%d", &state.with_without_queue) != 1) {  
+			#ifdef _WIN32
+				system("cls");
+			#else
+				system("clear");
+			#endif
+				printf("Por favor, insira um numero positivo.\n");
+				int ch;
+				while ((ch = getchar()) != '\n' && ch != EOF);
+				state.num_delays_required = -1;
+      }
+		} while(state.with_without_queue != 1 && state.with_without_queue != 0 );
+
 		ask_streams(&state);
 
 		#ifdef _WIN32
@@ -199,18 +228,22 @@ int main(int argc, char *argv[]) {
 		/*! Open input file and write the parameters and the random seeds. */
 		files.infile = fopen("mm1in.txt", "w");
 		fprintf(files.infile, "%.2f %.2f %d\n", state.mean_interarrival, state.mean_service, state.num_delays_required);
-		fprintf(files.infile, "%d\n", state.number_of_servers);
+		fprintf(files.infile, "%d %d\n", state.number_of_servers, state.with_without_queue);
 		fprintf(files.infile, "%d %d\n", state.streams[0], state.streams[1]);
 	}
 
-		printf("Mean interarrival time: %f\n", state.mean_interarrival);
-		printf("Mean service time: %f\n", state.mean_service);
-		printf("Number of customers: %d\n", state.num_delays_required);
-		printf("Number of servers: %d\n", state.number_of_servers);
+	printf("Mean interarrival time: %f\n", state.mean_interarrival);
+	printf("Mean service time: %f\n", state.mean_service);
+	printf("Number of customers: %d\n", state.num_delays_required);
+	printf("Number of servers: %d\n", state.number_of_servers);
 
+	if(state.with_without_queue == 0){
+		printf("Without Queue \n");
+	}
+	else{
+		printf("With Queue \n");
+	}
 
-	/*! Specify the number of event types (arrival and departure) */
-	//int num_events = 2;
 
 	/*! Open the output file */
 	char nome_saida[100];

@@ -54,16 +54,30 @@ void generate_other_streams(SystemState *state){
 
 }
 
-int selectFreeServer(SystemState * state) { 
+int selectFreeServer(SystemState * state, Statistics * stats) { 
 	/**percorrre a lista de servidores*/
 	/**server_status--um array que indica on estado de cada servidor (IDLE ou BUSY)
 	* num_servers--numero total de servidores no sistema*/
+	int livre = -1;
+	int aux = stats->area_server_status[2]; /*Vamos supor que o primeiro server é o que tem a menor taxa de utilização*/ 
+	int indice = 2; 
     for (int i = 2; i <= state->number_of_servers+1; ++i) {
         if (state->server_status[i] == IDLE) {
-            return i;/**retorna o indice do primeiro servidor diponivel */
+			livre = 1; /* Há pelo menos um servidor livre */
+			if(stats->area_server_status[i]<=aux){
+				aux = stats->area_server_status[i];
+				indice = i; 
+			}
+            //return i;/**retorna o indice do primeiro servidor diponivel */
         }
     }
-    return -1;/**retorna -1 se todos os servidores estiverem ocupados*/
+	if (livre == -1){
+		return -1;/**retorna -1 se todos os servidores estiverem ocupados*/
+	}
+	else{
+		return indice;
+	}
+    
 }
 
 float expon(float mean, int stream) {
@@ -101,6 +115,7 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	state->num_custs_delayed =	 0; /* Number of custumers */
 	stats->total_of_delays	 =	 0.0; /* Number of delays */
 	stats->area_num_in_q	 =	 0.0; 
+	stats->lost_customers    =   0; /* Number of lost costumers */
 	/*! Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */
 	
@@ -114,13 +129,30 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	fprintf(files->outfile, "Mean interarrival time%11.3f minutes\n\n", state->mean_interarrival);
 	fprintf(files->outfile, "Mean service time%16.3f minutes\n\n", state->mean_service);
 	fprintf(files->outfile, "Number of customers%14d\n\n", state->num_delays_required);
+	if(state->with_without_queue == 0 ){
+		fprintf(files->outfile, "Without Queue\n\n");
+	}
+	else{
+		fprintf(files->outfile, "With Queue\n\n");
+	}
+	
 
 
 	/** Imprime a média do atraso na fila por cliente */
 	fprintf(files->outfile, "\n\nAverage delay in queue per client %11.3f minutes\n\n", stats->total_of_delays / state->num_custs_delayed);
 
-	/** Imprime a média do número de clientes que estiveram na fila*/
-	fprintf(files->outfile, "Average number of clients in queue %10.3f\n\n", stats->area_num_in_q / events->sim_time);
+	if(state->with_without_queue == 0){
+		/** Imprime a média do número de clientes perdidos*/
+		fprintf(files->outfile, "Average number of lost clients %14.3f\n\n", stats->lost_customers);
+	}
+
+	else{
+		/** Imprime a média do número de clientes que estiveram na fila*/
+		fprintf(files->outfile, "Average number of clients in queue %10.3f\n\n", stats->area_num_in_q / events->sim_time);
+	}
+	
+
+	
 
 	/** Imprime a utilização media dos servidores*/
 	for (int i = 2; i <= state->number_of_servers + 1; i++ ){
@@ -194,7 +226,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival,state->streams[0]); 
 
 	/* Verifica se há servidores livres, se nao houver a funçao retorna -1 */
-	int free_server_index = selectFreeServer(state);
+	int free_server_index = selectFreeServer(state, stats);
 
 	if (free_server_index != -1) { /* Há server livres */
         delay = 0.0; /* O cliente é atendido logo, logo o delay = 0 */
@@ -211,19 +243,27 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
     }
 
 	else{ /* Todos os servers estao ocupados */
-		++state->num_in_q; /*! Aumentamos o numero de utilizadores na fila de espera */
-		
-		/*! Check to see whether an overflow condition exists. */
-		if (state->num_in_q > Q_LIMIT) {
-			/*! The queue has overflowed, so stop the simulation. */
-			fprintf(files->outfile, "\nOverflow of the array time_arrival at");
-			fprintf(files->outfile, " time %f", events->sim_time);
-			exit(2);
-		}
-		/*! There is still room in the queue, so store the time of arrival of the
-		arriving customer at the (new) end of time_arrival. */
-		state->time_arrival[state->num_in_q] = events->sim_time;
 
+		if(state->with_without_queue == 0){ /* Se nao tivermos fila -> M/M/n/0 (Erlang-B): Rejeita cliente */
+			stats->lost_customers++;
+		}
+
+		else{
+
+			++state->num_in_q; /*! Aumentamos o numero de utilizadores na fila de espera */
+			
+			/*! Check to see whether an overflow condition exists. */
+			if (state->num_in_q > Q_LIMIT) {
+				/*! The queue has overflowed, so stop the simulation. */
+				fprintf(files->outfile, "\nOverflow of the array time_arrival at");
+				fprintf(files->outfile, " time %f", events->sim_time);
+				exit(2);
+			}
+			/*! There is still room in the queue, so store the time of arrival of the
+			arriving customer at the (new) end of time_arrival. */
+			state->time_arrival[state->num_in_q] = events->sim_time;
+
+		}
 	}
 }
 
