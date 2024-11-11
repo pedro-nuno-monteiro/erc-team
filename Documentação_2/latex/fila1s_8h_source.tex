@@ -1,0 +1,80 @@
+\doxysection{fila1s.\+h}
+\hypertarget{fila1s_8h_source}{}\label{fila1s_8h_source}\index{lab1/fila1s.h@{lab1/fila1s.h}}
+\mbox{\hyperlink{fila1s_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ FILA1S\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ FILA1S\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{lcgrand_8h}{lcgrand.h}}"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <time.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ Q\_LIMIT\ 100}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/*\ limit\ of\ the\ number\ of\ servers*/}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ MAX\_SERVERS\ 99\ }\textcolor{comment}{/*\ As\ we\ have\ no\ repetitions,\ then\ n+1<\ 100,\ that\ is,\ n<99\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ BUSY\ 1}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ IDLE\ 0}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\_event\_type}};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_system_state_a95b8a861931c663705d8ecedd6d0219c}{num\_custs\_delayed}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_system_state_ada13471633986449759bdd49f4ad8b87}{num\_delays\_required}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{int}\ server\_status[\mbox{\hyperlink{fila1s_8h_aaf8d2ae1c0e1c6413c3a70c4526ace9f}{MAX\_SERVERS}}\ +\ 2];\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{float}\ time\_arrival[\mbox{\hyperlink{fila1s_8h_aaa75be566c9c8da967954407ca97c72b}{Q\_LIMIT}}\ +\ 1];\ \ \ \ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_system_state_afa0250edc22f626f46ed6999f17f160a}{mean\_interarrival}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_system_state_aaabf9535f8b7048b8b8d9ac912d622eb}{mean\_service}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_system_state_a338fcdd423201660ebe5bafe73ed6a60}{number\_of\_servers}};\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_system_state_a2de2ffc34d0664f7a2e748d2342d1e10}{num\_events}};\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{int}\ streams[\mbox{\hyperlink{fila1s_8h_aaf8d2ae1c0e1c6413c3a70c4526ace9f}{MAX\_SERVERS}}\ +\ 1];}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_system_state_a031a066c65250220261001c826e50450}{without\_infinite\_queue}};\ \textcolor{comment}{/*\ Infinite\ queue\ =\ 1\ ,\ without\ queue\ =\ 0\ */}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_system_state_ad0fae016647bf6b083c331ca152b50e1}{A}};\ \textcolor{comment}{/*\ !<\ Tráfego\ oferecido\ */}}
+\DoxyCodeLine{00049\ \}\ \mbox{\hyperlink{struct_system_state}{SystemState}};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00054\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_statistics_a2f4a1bbeb237a5f133e7e991ee240593}{area\_num\_in\_q}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{float}\ area\_server\_status[\mbox{\hyperlink{fila1s_8h_aaf8d2ae1c0e1c6413c3a70c4526ace9f}{MAX\_SERVERS}}\ +\ 2];\ \ \ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_statistics_a4c8e9207a46d30f1ab90d90bc2242733}{total\_of\_delays}};\ \ \ \ \ \ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_statistics_acb661e710baf5da0ce33cee61d59ff96}{lost\_customers}};\ }
+\DoxyCodeLine{00059\ \}\ \mbox{\hyperlink{struct_statistics}{Statistics}};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_event_list_afaba36fb5a44b654432472baa454e7a9}{time\_last\_event}};\ \ \ \ \ \ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{float}\ time\_next\_event[\mbox{\hyperlink{fila1s_8h_aaf8d2ae1c0e1c6413c3a70c4526ace9f}{MAX\_SERVERS}}\ +\ 2];\ \ \ }
+\DoxyCodeLine{00068\ \}\ \mbox{\hyperlink{struct_event_list}{EventList}};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00073\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00074\ \ \ \ \ FILE\ *\ \mbox{\hyperlink{struct_files_af19157da745ecb3f2b088c8f3a10c0a7}{infile}};\ \ \ }
+\DoxyCodeLine{00075\ \ \ \ \ FILE\ *\ \mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}};\ \ }
+\DoxyCodeLine{00076\ \}\ \mbox{\hyperlink{struct_files}{Files}};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{fila1s_8h_a189ad95e30fe45bf8dbb37a1cfd4dd16}{ask\_streams}}(\mbox{\hyperlink{struct_system_state}{SystemState}}\ *state);}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{fila1s_8h_a507322543b0cef813fc88b4e03b2049f}{generate\_other\_streams}}(\mbox{\hyperlink{struct_system_state}{SystemState}}\ *state);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{fila1s_8h_a7d7e97d6c7e6924f105f98f9050d3e38}{selectFreeServer}}(\mbox{\hyperlink{struct_system_state}{SystemState}}\ *\ state,\ \mbox{\hyperlink{struct_statistics}{Statistics}}\ *\ stats);}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00085\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{fila1s_8h_a7fdc20bba0c0736ba207bd864343577b}{initialize}}(\mbox{\hyperlink{struct_system_state}{SystemState}}\ *state,\ \mbox{\hyperlink{struct_statistics}{Statistics}}\ *stats,\ \mbox{\hyperlink{struct_event_list}{EventList}}\ *events,\ \textcolor{keywordtype}{int}\ stream);}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00088\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{fila1s_8h_a251b70b2f3fa49e0ef6b5096c1d4270b}{timing}}(\mbox{\hyperlink{struct_system_state}{SystemState}}\ *state,\ \mbox{\hyperlink{struct_statistics}{Statistics}}\ *stats,\ \mbox{\hyperlink{struct_files}{Files}}*\ files,\ \mbox{\hyperlink{struct_event_list}{EventList}}\ *events);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00091\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{fila1s_8h_a0162b1e4ed03e2abbfc30ad29467e1e7}{arrive}}(\mbox{\hyperlink{struct_system_state}{SystemState}}\ *state,\ \mbox{\hyperlink{struct_statistics}{Statistics}}\ *stats,\ \mbox{\hyperlink{struct_files}{Files}}*\ files,\ \mbox{\hyperlink{struct_event_list}{EventList}}\ *events);}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00094\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{fila1s_8h_a8080cfd0a743b89367173c895bab1837}{depart}}(\mbox{\hyperlink{struct_system_state}{SystemState}}\ *state,\ \mbox{\hyperlink{struct_statistics}{Statistics}}\ *stats,\ \mbox{\hyperlink{struct_event_list}{EventList}}\ *events);}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00097\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{fila1s_8h_ac012e944467055e23e5089858e60123d}{report}}(\mbox{\hyperlink{struct_system_state}{SystemState}}*\ state,\ \mbox{\hyperlink{struct_statistics}{Statistics}}*\ stats,\ \mbox{\hyperlink{struct_files}{Files}}*\ files,\ \mbox{\hyperlink{struct_event_list}{EventList}}*\ events);}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00107\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{fila1s_8h_a4bfec20f8a953e28b389800b506499f4}{update\_time\_avg\_stats}}(\mbox{\hyperlink{struct_system_state}{SystemState}}\ *state,\ \mbox{\hyperlink{struct_statistics}{Statistics}}\ *stats,\ \mbox{\hyperlink{struct_event_list}{EventList}}\ *events);}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00114\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{fila1s_8h_ad3058f8628cdcdec85698cbf472abd86}{expon}}(\textcolor{keywordtype}{float}\ mean,\ \textcolor{keywordtype}{int}\ stream);}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
