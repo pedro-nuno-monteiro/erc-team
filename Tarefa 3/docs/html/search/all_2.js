@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['depart_0',['depart',['../fila1s_8c.html#a8080cfd0a743b89367173c895bab1837',1,'depart(SystemState *state, Statistics *stats, EventList *events):&#160;fila1s.c'],['../fila1s_8h.html#a8080cfd0a743b89367173c895bab1837',1,'depart(SystemState *state, Statistics *stats, EventList *events):&#160;fila1s.c']]],
-  ['docs_1',['Docs',['../index.html',1,'']]]
+  ['busy_0',['BUSY',['../fila1s_8h.html#ab5be0aaddb58ffb9cb20c12530d66316',1,'fila1s.h']]]
 ];

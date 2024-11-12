@@ -1,13 +1,13 @@
 #ifndef FILA1S_H
 #define FILA1S_H
 
-/*! \file fila1s.h
+/*! \page fila1
+ *  \file fila1s.h
  *  \brief Header file for simulation and modelling.
  *  
  *  It uses the code from Simulation and Modelling 5e by Averill M. Law B.
  */
 
-/*! External definitions for single-server queueing system. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

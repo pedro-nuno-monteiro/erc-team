@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['report_0',['report',['../fila1s_8c.html#ac012e944467055e23e5089858e60123d',1,'report(SystemState *state, Statistics *stats, Files *files, EventList *events):&#160;fila1s.c'],['../fila1s_8h.html#ac012e944467055e23e5089858e60123d',1,'report(SystemState *state, Statistics *stats, Files *files, EventList *events):&#160;fila1s.c']]]
+  ['outfile_0',['outfile',['../struct_files.html#a3a45941eae23fbbcb6a707456d2d9067',1,'Files']]]
 ];

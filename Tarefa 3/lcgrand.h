@@ -1,7 +1,8 @@
 #ifndef LCGRAND_H
 #define LCGRAND_H
 
-/*! \file lcgrand.h
+/*! \page lcgrand
+ *  \file lcgrand.h
  *  \brief Header file for the random number generator functions.
  *
  *  This file defines constants and declares functions for generating 
@@ -12,7 +13,6 @@
  *  using these functions by executing #include "lcgrand.h"
  */
 
-/*! Define the constants. */
 #define MODLUS 2147483647  /*!< Modulus value for the LCG algorithm. */
 #define MULT1 24112        /*!< Multiplier value for the LCG algorithm. */
 #define MULT2 26143        /*!< Multiplier 2 for the LCG algorithm. */

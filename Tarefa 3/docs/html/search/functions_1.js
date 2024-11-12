@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['depart_0',['depart',['../fila1s_8c.html#a8080cfd0a743b89367173c895bab1837',1,'depart(SystemState *state, Statistics *stats, EventList *events):&#160;fila1s.c'],['../fila1s_8h.html#a8080cfd0a743b89367173c895bab1837',1,'depart(SystemState *state, Statistics *stats, EventList *events):&#160;fila1s.c']]]
+  ['clear_5fscreen_0',['clear_screen',['../simula__fila1s_8c.html#a4953d1edcbbfc7e420c423ded1d5621a',1,'simula_fila1s.c']]]
 ];
