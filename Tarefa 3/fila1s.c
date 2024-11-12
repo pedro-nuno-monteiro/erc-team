@@ -1,67 +1,8 @@
 #include "fila1s.h"
 #include "lcgrand.h"
+#include "utilits.h"
 
-void ask_streams(SystemState *state) {
 
-	/* Ask for 2 seeds, the first is for arrivals and the second for departures */
-	for(int i = 0; i < 2; i++) {
-		do {
-			if(i == 0) printf("Escreve a semente correspondente as chegadas: ");
-			else printf("Escreve a semente correspondente as partidas: ");
-			
-			if (scanf("%d", &state->streams[i]) != 1) {  
-				printf("Por favor, insira um numero positivo.\n");
-				int ch;
-				while ((ch = getchar()) != '\n' && ch != EOF); 
-				state->streams[i] = -1;
-			}
-
-			/* We guarantee that each seed introduced is within the desired values */
-			if(state->streams[i] <= 0 || state->streams[i] > 100) {
-				printf("As sementes têm de estar compreendidas entre [1, 100]. \n");
-			}
-
-			/* This loop ensures that the two seeds are different from each other */
-		} while(state->streams[i] <= 0 || state->streams[i] > 100 || (i == 1 && state->streams[0] == state->streams[1]));
-	}
-}
-
-void generate_other_streams(SystemState *state) {
-
-	/* Generate seeds for each server. 
-	If there are n servers, generate n-1 additional seeds. 
-	The first seed corresponds to arrivals and is used for the first server. */
-
-	for(int i = 2; i<=state->number_of_servers + 1; i++) {
-		
-		/* Generate the next seed by incrementing the previous one. */
-		state->streams[i] = state->streams[i - 1] + 1; 
-
-		/* Ensure seeds are unique by checking against the arrival stream seed.
-		Adjust by adding 2 if there's a conflict. */
-		if(state->streams[i] == state->streams[0]) {
-			state->streams[i] = state->streams[i - 1] + 2;
-		}
-
-		/* Wrap around if the seed exceeds the upper limit (100). */
-		if (state->streams[i] == 101) {
-			state->streams[i] = 1;
-		}	
-	}
-
-	printf("Streams = [ ");
-
-  /* Print all generated seeds for verification. */
-	for(int i = 0; i <= state->number_of_servers + 1 ; i++) {
-
-		if(i < state->number_of_servers + 1) {
-			printf(" %d, ", state->streams[i]);
-		}
-		else {
-			printf(" %d ] \n", state->streams[i]);
-		}
-	}
-}
 
 int selectFreeServer(SystemState * state, Statistics * stats) { 
 	
@@ -165,7 +106,6 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	}
 	fprintf(files->outfile, "Time simulation ended %26.3f minutes", events->sim_time);
 }
-
 
 void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * events) {
 	

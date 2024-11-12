@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "lcgrand.h"
+//#include "utilits.h"
 #include <time.h>
 #include <string.h>
 
@@ -71,27 +72,7 @@ typedef struct {
     FILE * outfile;  /*!< Output file pointer for storing/writing results. */
 } Files;
 
-/*! 
- * @brief Prompts the user to enter two unique seeds, one for arrivals and one for departures.
- *
- * This function requests seeds within a specific range [1, 100], ensuring the seeds are positive,
- * within the specified range, and distinct from each other.
- *
- * @param state Pointer to the system state structure where the seeds are stored.
- */
-void ask_streams(SystemState *state);
 
-/*! 
- * @brief Generates additional seed streams for each server in the system.
- *
- * This function fills the `streams` array in `state` with unique seeds for each server. 
- * It ensures that the seeds are sequential, distinct from the arrival stream seed, 
- * and wraps around if the seed exceeds 100.
- *
- * @param state Pointer to the system state structure containing the number of servers 
- *              and an array to store the generated seeds.
- */
-void generate_other_streams(SystemState *state);
 
 /*! 
  * @brief Selects an available server with the lowest usage rate.
