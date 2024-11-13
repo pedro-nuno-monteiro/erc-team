@@ -8,7 +8,7 @@
 #include <stdlib.h> // malloc , realloc, free
 
 /*! Representation of the struct storing a circular queue */
-struct circular_queue        {
+struct circular_queue {
     unsigned int max_size; /*!< current max_size of the queue (starts with 2) */
     int front, rear;       /*!< index of the front and rear (both -1 if empty)*/
     double *tab;           /*!< pointer to a block with max_size elements */
