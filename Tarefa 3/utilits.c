@@ -51,8 +51,8 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files)
 		state->A = 1 / state->mean_interarrival * state->mean_service; 
 		
 		/* We confirm whether the traffic offered is greater than or equal to the number of servers */
-		if(state->A >= state->number_of_servers) {
-			fprintf(stderr, "O trafego oferecido nao pode ser maior ou igual que o numero de canais. Tem de alterar os valores de Mean_Interarrival e/ou Mean_Service. \n");
+		if(state->A >= state->number_of_servers && state->without_infinite_queue == 1) {
+			fprintf(stderr, "Quando nao temos fila de espera, o trafego oferecido nao pode ser maior ou igual que o numero de canais. Tem de alterar os valores de Mean_Interarrival e/ou Mean_Service. \n");
 			something_wrong = 1;
 		}
 
@@ -82,6 +82,19 @@ void ask_for_par(SystemState *state, Files *files) {
 			state->number_of_servers = -1;
 		}
 	} while(state->number_of_servers <= 0 || state->number_of_servers>MAX_SERVERS);
+
+	do {
+		printf("Without Queue = 0  ou Infinite Queue = 1 -> ");
+
+		if (scanf("%d", &state->without_infinite_queue) != 1) {  
+			clear_screen();
+
+			printf("Por favor, insira um numero positivo.\n");
+			int ch;
+			while ((ch = getchar()) != '\n' && ch != EOF);
+			state->num_delays_required = -1;
+		}
+	} while(state->without_infinite_queue != 1 && state->without_infinite_queue != 0 );
 
 	do {
 		
@@ -126,16 +139,16 @@ void ask_for_par(SystemState *state, Files *files) {
 		
 		state->A = 1/state->mean_interarrival * state->mean_service;
 
-		if(state->A >= state->number_of_servers){
+		if(state->A >= state->number_of_servers && state->without_infinite_queue == 1){
 			printf("O trafego oferecido nao pode ser maior ou igual que o numero de canais. Tem de alterar os valores de Mean_Interarrival e/ou Mean_Service. \n");
 		}
 	
-	} while(state->A >= state->number_of_servers);
+	} while(state->A >= state->number_of_servers && state->without_infinite_queue == 1);
 		
 	clear_screen();
 
 	do {
-		printf("Number of customers -> ");
+		printf("Number of delayed customers -> ");
 		if (scanf("%d", &state->num_delays_required) != 1) { 
 
 		clear_screen();
@@ -148,19 +161,6 @@ void ask_for_par(SystemState *state, Files *files) {
 	} while(state->num_delays_required <= 0);
 
 	clear_screen();
-
-	do {
-		printf("Without Queue = 0  ou Infinite Queue = 1 -> ");
-
-		if (scanf("%d", &state->without_infinite_queue) != 1) {  
-			clear_screen();
-
-			printf("Por favor, insira um numero positivo.\n");
-			int ch;
-			while ((ch = getchar()) != '\n' && ch != EOF);
-			state->num_delays_required = -1;
-		}
-	} while(state->without_infinite_queue != 1 && state->without_infinite_queue != 0 );
 
 	ask_streams(state);
 
