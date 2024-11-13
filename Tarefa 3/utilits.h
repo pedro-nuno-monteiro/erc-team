@@ -3,13 +3,9 @@
 
 /*! \page utilits
  *  \file utilits.h
- *  \brief Header file for 
- *  
- *  
+ *  \brief Header file for utility functions. 
  */
-
 #include "fila1s.h"
-
 
 /*! 
  * @brief Prompts the user to enter two unique seeds, one for arrivals and one for departures.

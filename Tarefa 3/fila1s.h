@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "lcgrand.h"
-//#include "utilits.h"
 #include <time.h>
 #include <string.h>
 
@@ -71,8 +70,6 @@ typedef struct {
     FILE * infile;   /*!< Input file pointer for reading data. */
     FILE * outfile;  /*!< Output file pointer for storing/writing results. */
 } Files;
-
-
 
 /*! 
  * @brief Selects an available server with the lowest usage rate.

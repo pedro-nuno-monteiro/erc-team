@@ -21,10 +21,6 @@
  * The simulation outputs the results to a file `mm1out.txt`.
  */
 
-/*int receive_input_file(int argc, char *argv[], SystemState *state, Files *files);
-void ask_for_par(SystemState *state, Files *files);
-void clear_screen();*/
-
 /*! Main function that runs the simulation of the M/M/1 queueing system.
  *
  * The main function reads input parameters, initializes the simulation,
@@ -110,5 +106,3 @@ int main(int argc, char *argv[]) {
 	
 	return EXIT_SUCCESS;
 }
-
-/* Open input file and read the parameters. */
