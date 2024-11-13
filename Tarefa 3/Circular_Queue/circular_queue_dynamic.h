@@ -8,8 +8,7 @@
 #include <stdlib.h> // malloc , realloc, free
 
 /*! Representation of the struct storing a circular queue */
-struct circular_queue       
-{
+struct circular_queue        {
     unsigned int max_size; /*!< current max_size of the queue (starts with 2) */
     int front, rear;       /*!< index of the front and rear (both -1 if empty)*/
     double *tab;           /*!< pointer to a block with max_size elements */
@@ -21,18 +20,15 @@ struct circular_queue
  * */
 int inic(struct circular_queue * q);
 
-
 /*! Frees space allocated by the queue 
  * @param q pointer to the queue to be cleared - the allocated memory is released
  * */
 void freeQ(struct circular_queue * q);
 
-
 /*! Informs is the queue is empty
  * @param q pointer to the queue to be evaluated
  * @return  1 (true) if *q is empty otherwise returns 0 (false)  */
 int isEmpty (const struct circular_queue * q);
-
 
 /*! Informs is the queue is full
  * @param q pointer to the queue to be evaluated
@@ -52,14 +48,12 @@ int expand (struct circular_queue * q);
  * */
 int enQ (struct circular_queue * q, double val);
 
-
 /*! Dequeues the front elemento of the queue 
  * @param q pointer to the queue 
  * @param val value that was at the front of the queue
  * @return 1 if the queue was not empty, otherwise it returns 0 indicating this function should not have been called
  * */
 int deQ (struct circular_queue * q, double *val) ;
-
 
 /*! Prints the value of all elements in the queue (for DEBUG purposes)
  * @param q pointer to the queue 
