@@ -63,6 +63,7 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	stats->total_of_delays	 =	 0.0; /* No delays initially */
 	stats->area_num_in_q	 =	 0.0; 	/* No customers in queue, so no area under the curve */
 	stats->lost_customers    =   0; 	/* No customers lost initially */
+	stats->num_occupied_servers = 0;    /* No server occupied */
 	
 	/* Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */	
@@ -84,15 +85,19 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	
 	/* Print the average delay in queue per client */
 	fprintf(files->outfile, "\n\nAverage delay in queue per client %11.3f minutes\n\n", stats->total_of_delays / state->num_custs_delayed);
-
+	fprintf(files->outfile, "Average number of occupied servers: %11.3f\n\n", stats->num_occupied_servers / state->num_custs_delayed);
 	if(state->without_infinite_queue == 0) {  /* If we don't have an infinite queue */
 		/* Print the average number of lost clients */
-		fprintf(files->outfile, "Average number of lost clients %14.3f\n\n", stats->lost_customers);
+		fprintf(files->outfile, "Average number of lost clients %14.3f\n\n\n", stats->lost_customers);
 	} 
 	else { /* If we have an infinite queue */
 		/* Print the average number of clients in queue */
-		fprintf(files->outfile, "Average number of clients in queue %10.3f\n\n", stats->area_num_in_q / events->sim_time);
+		fprintf(files->outfile, "Average number of clients in queue %10.3f\n\n\n", stats->area_num_in_q / events->sim_time);
 	}
+	if(state->without_infinite_queue == 0){
+		fprintf(files->outfile, "Blocking Rate: %11.3f\n\n\n", erlang_B(state->A, state->number_of_servers));
+	}
+	
 	
 	/* Print the average server utilization. 
 	We use this loop to ensure that if area_server_status == 0 then we avoid divisions by zero */
@@ -155,6 +160,7 @@ void timing(SystemState * state, Statistics * stats, Files * files, EventList * 
 void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events) {
 	
 	float delay;
+
 	
 	/* Schedule the next arrival event */
 	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival,state->streams[0]); 
@@ -173,6 +179,8 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 
 		/* Schedule a departure for this customer (service completion) */
 		events->time_next_event[free_server_index] = events->sim_time + expon(state->mean_service, state->streams[free_server_index-1]);
+  
+		//stats->num_occupied_servers += 1;
   }
 	else { /* All servers are occupied */
 
@@ -208,6 +216,8 @@ void depart(SystemState *state, Statistics *stats, EventList *events) {
 		departure (service completion) event from consideration. */
 		state->server_status[state->next_event_type] = IDLE; /* The next_event type corresponds to the server index -> see in the timing function */
 		events->time_next_event[state->next_event_type] = 1.0e+30; /* Sets the next event to infinite */
+
+		//stats->num_occupied_servers -= 1;
 	}
 	else { /* The queue is not empty */
 		
@@ -226,5 +236,7 @@ void depart(SystemState *state, Statistics *stats, EventList *events) {
 		/* Move each customer in queue (if any) up one place. With a circular queue it is much better */
 		for (int i = 1; i <= state->num_in_q; ++i)
 			state->time_arrival[i] = state->time_arrival[i + 1];
+
+		//stats->num_occupied_servers += 1;
 	}
 }

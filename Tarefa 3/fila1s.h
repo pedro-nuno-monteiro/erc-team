@@ -52,6 +52,7 @@ typedef struct {
     float area_server_status[MAX_SERVERS + 2];   /*!< Cumulative area under the server-status function (busy or idle). */
     float total_of_delays;      /*!< Total delay time. */
     int lost_customers;         /*!< Number of lost customers (Erlang-B model). */
+    int num_occupied_servers;   /* !< Sum of occupied servers. */
 } Statistics;
 
 /*! 

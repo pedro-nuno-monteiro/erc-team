@@ -78,6 +78,8 @@ void ask_for_par(SystemState *state, Files *files);
 void clear_screen();
 
 
+double erlang_B(double A, unsigned int n);
+
 
 #endif
 
