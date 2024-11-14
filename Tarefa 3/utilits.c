@@ -246,14 +246,13 @@ void clear_screen() {
 }
 
 double erlang_B(double A, unsigned int n) { 
-	// A = tráfego e n = nº de canais 
-    double E = 1.0;  // Se n=0: E(A, 0) = 1
+	
+    double E = 1.0;  /*If n=0: E(A, 0) = 1*/ 
 
     double AE;
     for (int i = 1; i <= n; i++) {
 		AE = A *E;
-        E = AE / (AE + i); // em cada iteraçao i, vale  E(A, i)
+        E = AE / (AE + i); /*In each iteration i is E(A, i)*/
     }
-    // A formula de Earlang_B permite calcular a probabilidade de perda(bloqueio) num sistema M/M/n/0
     return E;
 }

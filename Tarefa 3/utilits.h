@@ -77,7 +77,17 @@ void ask_for_par(SystemState *state, Files *files);
  */
 void clear_screen();
 
-
+/*!
+ * @brief Calculates the blocking probability in an M/M/n/0 system using the Erlang-B formula.
+ *
+ * This function computes the blocking probability (or customer loss) in an M/M/n/0 queuing system, where customers arrive according to a Poisson process and are served by `n` servers. The calculation is based on the Erlang-B formula, which uses the offered traffic `A` (arrival rate multiplied by the average service time) and the number of channels `n` (the number of servers) to determine the probability of a customer being rejected (blocked).
+ *
+ * The Erlang-B formula is especially used for loss systems, where there is no waiting queue, and customers are rejected if all servers are busy.
+ *
+ * @param A The offered traffic to the system, which is the arrival rate multiplied by the average service time (A = λ * T).
+ * @param n The number of channels (servers) available in the system.
+ * @return The blocking probability (customer loss) in the M/M/n/0 system.
+ */
 double erlang_B(double A, unsigned int n);
 
 
