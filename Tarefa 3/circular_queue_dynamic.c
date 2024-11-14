@@ -4,7 +4,7 @@
 
 #include "circular_queue_dynamic.h"
 
-int inic(struct circular_queue * q) {
+int inic(circular_queue * q) {
 	int result = 1; // ok
 	q->front = -1;
 	q->rear = -1;
@@ -18,20 +18,20 @@ int inic(struct circular_queue * q) {
 	return result;
 }
 
-void freeQ(struct circular_queue * q) {
+void freeQ(circular_queue * q) {
 	free(q->tab);
 	q->max_size = 0;
 }
 
-int isEmpty (const struct circular_queue * q) { 
+int isEmpty (const circular_queue * q) { 
 	return q->front == -1 && q->rear == -1; // is empty
 }
 
-int isFull (const struct circular_queue * q) { 
+int isFull (const circular_queue * q) { 
 	return (q->rear + 1) % q->max_size == q->front; // is full
 }
 
-int expand (struct circular_queue * q) {
+int expand (circular_queue * q) {
 	if(!isFull(q)) return -1; // Should NOT be called
 	
 	// Dynamically re-allocate memory using realloc()
@@ -59,7 +59,7 @@ int expand (struct circular_queue * q) {
 	return 1; 
 }
 
-int enQ (struct circular_queue * q, double val) {
+int enQ (circular_queue * q, double val) {
 
 	// If full, expands before attempting insert
 	if(isFull(q) && !expand(q)) return 0; // ends in case expand failed
@@ -78,7 +78,7 @@ int enQ (struct circular_queue * q, double val) {
 	return 1;
 }
 
-int deQ (struct circular_queue * q, double *val) {
+int deQ (circular_queue * q, float *val) {
     
 	// If is empty nothing to do
 	if(isEmpty(q)) return 0; 
@@ -97,7 +97,7 @@ int deQ (struct circular_queue * q, double *val) {
 	return 1;
 }
 
-void printQ(const struct circular_queue * q) {
+void printQ(const circular_queue * q) {
 	if(isEmpty(q)) printf("\nIs empty\n");
 	else {
 		if(isFull(q)) printf("Printing a FULL Queue\n");

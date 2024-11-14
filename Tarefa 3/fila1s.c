@@ -1,8 +1,7 @@
 #include "fila1s.h"
 #include "lcgrand.h"
 #include "utilits.h"
-
-
+#include "circular_queue_dynamic.h"
 
 int selectFreeServer(SystemState * state, Statistics * stats) { 
 	
@@ -33,7 +32,7 @@ float expon(float mean, int stream) {
 	return -mean * logf(lcgrand(stream));
 }
 
-void initialize(SystemState * state, Statistics * stats, EventList * events, int stream) {
+void initialize(SystemState * state, Statistics * stats, EventList * events, int stream, circular_queue * q1) {
 	
 	events->sim_time = 0.0; /* Initialize the simulation clock. */
 
@@ -66,6 +65,9 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	
 	/* Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */	
+
+	/* Initialize circular queue */
+	inic(q1);
 }
 
 void report(SystemState * state, Statistics * stats, Files * files, EventList * events) {
@@ -152,7 +154,7 @@ void timing(SystemState * state, Statistics * stats, Files * files, EventList * 
 	events->sim_time = min_time_next_event; 
 }
 
-void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events) {
+void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1) {
 	
 	float delay;
 	
@@ -184,25 +186,32 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 			++state->num_in_q; /* We increased the number of users in the waiting list */
 			
 			/* Check to see whether an overflow condition exists. */
+			
+			if(!enQ(q1, events->sim_time)) {
+				fprintf(files->outfile, "\nOverflow of the array time_arrival at %f", events->sim_time);
+			}
+
+			/*
 			if (state->num_in_q > Q_LIMIT) {
-				/* The queue has overflowed, so stop the simulation. */
+				/* The queue has overflowed, so stop the simulation. 
 				fprintf(files->outfile, "\nOverflow of the array time_arrival at");
 				fprintf(files->outfile, " time %f", events->sim_time);
 				exit(2);
 			}
 		
 			/* There is still room in the queue, so store the time of arrival of the
-			arriving customer at the (new) end of time_arrival. */
+			arriving customer at the (new) end of time_arrival. 
 			state->time_arrival[state->num_in_q] = events->sim_time;
+			*/
 		}
 	}
 }
 
-void depart(SystemState *state, Statistics *stats, EventList *events) {
+void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1) {
 	
 	float delay;
 
-	/* If the queue is empty */
+	/* If the queue is empty -> IDLE */
 	if (state->num_in_q == 0) {
 		/* The queue is empty so make the server idle and eliminate the
 		departure (service completion) event from consideration. */
@@ -214,6 +223,10 @@ void depart(SystemState *state, Statistics *stats, EventList *events) {
 		/* So the number of customers in the queue decreases */
 		--state->num_in_q;
 
+		if(!deQ(q1, &state->time_arrival[1])) {
+			printf("\nUnderflow of the array time_arrival at %f", events->sim_time);
+		}
+
 		/* Compute the delay of the customer who is beginning service and update the total delay accumulator. */
 		delay = events->sim_time - state->time_arrival[1];
 
@@ -221,10 +234,6 @@ void depart(SystemState *state, Statistics *stats, EventList *events) {
 
 		/* Increment the number of customers delayed, and schedule departure. */
 		++state->num_custs_delayed;
-		events->time_next_event[2] = events->sim_time + expon(state->mean_service,state->streams[state->next_event_type]);
-
-		/* Move each customer in queue (if any) up one place. With a circular queue it is much better */
-		for (int i = 1; i <= state->num_in_q; ++i)
-			state->time_arrival[i] = state->time_arrival[i + 1];
+		events->time_next_event[2] = events->sim_time + expon(state->mean_service, state->streams[state->next_event_type]);
 	}
 }

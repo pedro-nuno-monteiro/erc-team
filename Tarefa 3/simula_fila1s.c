@@ -1,6 +1,7 @@
 #include "fila1s.h"
 #include "utilits.h"
 #include "lcgrand.h"
+#include "circular_queue_dynamic.h"
 
 /*! \mainpage
  *
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]) {
 	Statistics stats;		/* Structure to hold the statistical variables. */
 	EventList events;		/* Structure to hold the event list variables. */
 	Files files;				/* Structure to hold the file pointers. */
+	circular_queue q1;	/* Structure to hold the queue. */
 
 	/* Check if the input file is provided as an argument. */
 	if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
@@ -70,13 +72,13 @@ int main(int argc, char *argv[]) {
   }
 
 	files.outfile = fopen(nome_saida, "w");
-    if (!files.outfile) {
-			perror("File opening failed");
-			return EXIT_FAILURE;
+	if (!files.outfile) {
+		perror("File opening failed");
+		return EXIT_FAILURE;
   }
 
 	/* Initialize the simulation. */
-	initialize(&state, &stats, &events, state.streams[0]);
+	initialize(&state, &stats, &events, state.streams[0], &q1);
 	
   /* Run the simulation while the required number of customers has not been delayed. */
 	while (state.num_custs_delayed < state.num_delays_required) {
@@ -90,11 +92,11 @@ int main(int argc, char *argv[]) {
 		/* Process the next event based on its type (1 for arrival, 2 for departure). */
 		switch (state.next_event_type) {
 			case 1:
-				arrive(&state, &stats, &files, &events);
+				arrive(&state, &stats, &files, &events, &q1);
 				break;
 
 			default: /* Se o next_event_type estiver entre 2 e number_of_server+1 */
-				depart(&state, &stats, &events);
+				depart(&state, &stats, &events, &q1);
 				break;
 		}
 	}
