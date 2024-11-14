@@ -85,7 +85,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	
 	/* Print the average delay in queue per client */
 	fprintf(files->outfile, "\n\nAverage delay in queue per client %11.3f minutes\n\n", stats->total_of_delays / state->num_custs_delayed);
-	fprintf(files->outfile, "Average number of occupied servers: %11.3f\n\n", stats->num_occupied_servers / state->num_custs_delayed);
+	//fprintf(files->outfile, "Average number of occupied servers: %11.3f\n\n", stats->num_occupied_servers / state->num_custs_delayed);
 	if(state->without_infinite_queue == 0) {  /* If we don't have an infinite queue */
 		/* Print the average number of lost clients */
 		fprintf(files->outfile, "Average number of lost clients %14.3f\n\n\n", stats->lost_customers);
