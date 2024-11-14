@@ -14,6 +14,7 @@
 #include "lcgrand.h"
 #include <time.h>
 #include <string.h>
+#include "circular_queue_dynamic.h"
 
 /*! Limit on queue length. */
 #define Q_LIMIT 100
@@ -97,8 +98,9 @@ int selectFreeServer(SystemState * state, Statistics * stats);
  * @param stats Pointer to the statistics structure that holds the statistical data.
  * @param events Pointer to the event list structure that keeps track of event times and simulation time.
  * @param stream The random number stream used to generate the arrival times.
+ * @param q1 Pointer to the circular queue structure that holds the customer arrival times.
  */
-void initialize(SystemState *state, Statistics *stats, EventList *events, int stream);
+void initialize(SystemState *state, Statistics *stats, EventList *events, int stream, circular_queue *q1);
 
 /** 
  * @brief Determines the next event based on the times stored in the event list and advances the simulation clock to the time of the next event.
@@ -127,8 +129,9 @@ void timing(SystemState *state, Statistics *stats, Files* files, EventList *even
  * @param stats Pointer to the statistics structure, updated to increment lost customers if the queue is full.
  * @param files Pointer to the file management structure, used for handling queue overflow conditions.
  * @param events Pointer to the event list structure, updated to schedule the next arrival event.
+ * @param q1 Pointer to the circular queue structure, updated to add the arrival time of the customer.
  */
-void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events);
+void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events, circular_queue * q1);
 
 /** 
  * @brief Handles customer departures by updating queue length, calculating delay for the customer beginning service,
@@ -141,8 +144,9 @@ void arrive(SystemState *state, Statistics *stats, Files* files, EventList *even
  * @param state Pointer to the system state structure, updated to track server status, queue length, and customer arrival times.
  * @param stats Pointer to the statistics structure, updated to accumulate total delay and number of customers delayed.
  * @param events Pointer to the event list structure, updated to schedule the next departure or set it to infinity if the server becomes idle.
+ * @param q1 Pointer to the circular queue structure, updated to remove the departing customer's arrival time.
  */
-void depart(SystemState *state, Statistics *stats, EventList *events);
+void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1);
 
 /** 
  * @brief Writes the simulation results to the output file, including performance metrics.
