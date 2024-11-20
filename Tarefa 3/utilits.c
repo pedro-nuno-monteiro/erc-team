@@ -76,7 +76,7 @@ void ask_for_par(SystemState *state, Files *files) {
 			
 			clear_screen();
 			
-			printf("Por favor, insira um numero positivo.\n");
+			printf("Por favor, insira um valor positivo.\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
 			state->number_of_servers = -1;
@@ -84,12 +84,12 @@ void ask_for_par(SystemState *state, Files *files) {
 	} while(state->number_of_servers <= 0 || state->number_of_servers>MAX_SERVERS);
 
 	do {
-		printf("Without Queue = 0  ou Infinite Queue = 1 -> ");
+		printf("\nWithout Queue = 0  ou Infinite Queue = 1 -> ");
 
 		if (scanf("%d", &state->without_infinite_queue) != 1) {  
 			clear_screen();
 
-			printf("Por favor, insira um numero positivo.\n");
+			printf("Por favor, insira 0 ou 1.\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
 			state->num_delays_required = -1;
@@ -107,16 +107,11 @@ void ask_for_par(SystemState *state, Files *files) {
 
 				clear_screen();
 
-				printf("Por favor, insira um numero positivo.\n");
+				printf("Por favor, insira um valor positivo.\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
 				state->mean_interarrival = -1;  // Defines an invalid number to repeat the loop
 			}
-			
-			if(state->mean_interarrival <= 0 ) {
-				printf("O tempo medio entre chegadas nao pode ser negativo. \n");
-			}
-
 		} while(state->mean_interarrival <= 0);
 
 		do {
@@ -125,16 +120,11 @@ void ask_for_par(SystemState *state, Files *files) {
 			if (scanf("%f", &state->mean_service) != 1) { 
 				clear_screen();
 
-				printf("Por favor, insira um numero positivo.\n");
+				printf("Por favor, insira um valor positivo.\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF);
 				state->mean_service = -1;
 			}
-			
-			if(state->mean_service <= 0) {
-				printf("O tempo medio de servico nao pode ser negativo. \n");
-			}
-
 		} while(state->mean_service <= 0);
 		
 		state->A = 1/state->mean_interarrival * state->mean_service;
@@ -149,11 +139,12 @@ void ask_for_par(SystemState *state, Files *files) {
 
 	do {
 		printf("Number of delayed customers -> ");
+		
 		if (scanf("%d", &state->num_delays_required) != 1) { 
 
-		clear_screen();
+			clear_screen();
 
-			printf("Por favor, insira um numero positivo.\n");
+			printf("Por favor, insira um valor positivo.\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
 			state->num_delays_required = -1;
