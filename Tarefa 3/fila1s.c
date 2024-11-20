@@ -90,7 +90,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	//fprintf(files->outfile, "Average number of occupied servers: %11.3f\n\n", stats->num_occupied_servers / state->num_custs_delayed);
 	if(state->without_infinite_queue == 0) {  /* If we don't have an infinite queue */
 		/* Print the average number of lost clients */
-		fprintf(files->outfile, "Average number of lost clients %14.3f\n\n\n", stats->lost_customers);
+		fprintf(files->outfile, "Average number of lost clients %14.3d\n\n\n", stats->lost_customers);
 	} 
 	else { /* If we have an infinite queue */
 		/* Print the average number of clients in queue */
@@ -163,7 +163,6 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	
 	float delay;
 
-	
 	/* Schedule the next arrival event */
 	events->time_next_event[1] = events->sim_time + expon(state->mean_interarrival,state->streams[0]); 
 
@@ -198,19 +197,6 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 			if(!enQ(q1, events->sim_time)) {
 				fprintf(files->outfile, "\nOverflow of the array time_arrival at %f", events->sim_time);
 			}
-
-			/*
-			if (state->num_in_q > Q_LIMIT) {
-				/* The queue has overflowed, so stop the simulation. 
-				fprintf(files->outfile, "\nOverflow of the array time_arrival at");
-				fprintf(files->outfile, " time %f", events->sim_time);
-				exit(2);
-			}
-		
-			/* There is still room in the queue, so store the time of arrival of the
-			arriving customer at the (new) end of time_arrival. 
-			state->time_arrival[state->num_in_q] = events->sim_time;
-			*/
 		}
 	}
 }

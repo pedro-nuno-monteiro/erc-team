@@ -60,4 +60,4 @@ int deQ (circular_queue * q, float *val) ;
  * */
 void printQ(const circular_queue * q);
 
-#endif;
+#endif
