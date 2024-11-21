@@ -164,7 +164,7 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
  * 
  * @note This function assumes the `files->outfile` has been opened before calling and will write the results to this file.
  */
-void report(SystemState* state, Statistics* stats, Files* files, EventList* events);
+void report(SystemState* state, Statistics* stats, Files* files, EventList* events, circular_queue * q1);
 
 /** 
  * @brief Updates the time-based statistics for the simulation, such as the area under the 

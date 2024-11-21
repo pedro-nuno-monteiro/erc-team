@@ -76,12 +76,12 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	}
 }
 
-void report(SystemState * state, Statistics * stats, Files * files, EventList * events) {
+void report(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1) {
 
 	/* Write report heading and input parameters to the output file */
-	fprintf(files->outfile, "Single-server queueing system\n\n");
-	fprintf(files->outfile, "Mean interarrival time%11.3f minutes\n\n", state->mean_interarrival);
-	fprintf(files->outfile, "Mean service time%16.3f minutes\n\n", state->mean_service);
+	fprintf(files->outfile, "Simulation of a queueing system with %d servers\n\n", state->number_of_servers);
+	fprintf(files->outfile, "Mean interarrival time%11.2f minutes\n\n", state->mean_interarrival);
+	fprintf(files->outfile, "Mean service time%16.2f minutes\n\n", state->mean_service);
 	fprintf(files->outfile, "Number of customers%14d\n\n", state->num_delays_required);
 	if(state->without_infinite_queue == 0 ){
 		fprintf(files->outfile, "Without Queue\n\n");
@@ -89,6 +89,12 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	else{
 		fprintf(files->outfile, "With Queue\n\n");
 	}
+	if(q1->dis == 0) {
+		fprintf(files->outfile, "FIFO discipline\n\n");
+	}
+	else {
+		fprintf(files->outfile, "LIFO discipline\n\n");
+	}	
 	
 	/* Print the average delay in queue per client */
 	fprintf(files->outfile, "\n\nAverage delay in queue per client %11.3f minutes\n\n", stats->total_of_delays / state->num_custs_delayed);
@@ -104,7 +110,6 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	if(state->without_infinite_queue == 0){
 		fprintf(files->outfile, "Blocking Rate: %11.3f\n\n\n", erlang_B(state->A, state->number_of_servers));
 	}
-	
 	
 	/* Print the average server utilization. 
 	We use this loop to ensure that if area_server_status == 0 then we avoid divisions by zero */
