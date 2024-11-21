@@ -68,7 +68,6 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	(service completion) event is eliminated from consideration. */	
 
 	/* Initialize circular queue with FIFO discipline by default*/
-	printf("Discipline: %d\n", q1->dis);
 	if (q1->dis == 0) {
 		inic(q1, FIFO);
 	}
@@ -187,7 +186,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 		/* Schedule a departure for this customer (service completion) */
 		events->time_next_event[free_server_index] = events->sim_time + expon(state->mean_service, state->streams[free_server_index-1]);
   
-		//stats->num_occupied_servers += 1;
+		stats->total_of_delays += delay;
   }
 	else { /* All servers are occupied */
 
@@ -209,7 +208,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 
 void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1) {
 	
-	float delay;
+	float delay, arrival_time;
 
 	/* If the queue is empty -> IDLE */
 	if (state->num_in_q == 0) {
@@ -217,25 +216,23 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 		departure (service completion) event from consideration. */
 		state->server_status[state->next_event_type] = IDLE; /* The next_event type corresponds to the server index -> see in the timing function */
 		events->time_next_event[state->next_event_type] = 1.0e+30; /* Sets the next event to infinite */
-
-		//stats->num_occupied_servers -= 1;
 	}
 	else { /* The queue is not empty */
 		
 		/* So the number of customers in the queue decreases */
 		--state->num_in_q;
 
-		if(!deQ(q1, &state->time_arrival[1])) {
+		if(!deQ(q1, &arrival_time)) {
 			printf("\nUnderflow of the array time_arrival at %f", events->sim_time);
 		}
 
 		/* Compute the delay of the customer who is beginning service and update the total delay accumulator. */
-		delay = events->sim_time - state->time_arrival[1];
+		delay = events->sim_time - arrival_time;
 
 		stats->total_of_delays += delay;
 
 		/* Increment the number of customers delayed, and schedule departure. */
 		++state->num_custs_delayed;
-		events->time_next_event[2] = events->sim_time + expon(state->mean_service, state->streams[state->next_event_type]);
+		events->time_next_event[state->next_event_type] = events->sim_time + expon(state->mean_service, state->streams[state->next_event_type]);
 	}
 }
