@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	/* Invoke the report generator and end the simulation. */
-	report(&state, &stats, &files, &events);
+	report(&state, &stats, &files, &events, &q1);
 	fclose(files.infile);
 	fclose(files.outfile);
 	
