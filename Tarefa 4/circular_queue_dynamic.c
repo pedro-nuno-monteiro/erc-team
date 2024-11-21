@@ -1,14 +1,11 @@
-// Addapted from 
-// https://www.simplilearn.com/tutorials/data-structure-tutorial/circular-queue-in-data-structure
-// uses malloc, realloc and free
-
 #include "circular_queue_dynamic.h"
 
-int inic(circular_queue * q) {
+int inic(circular_queue * q, discipline dis) {
 	int result = 1; // ok
 	q->front = -1;
 	q->rear = -1;
 	q->max_size = 2; // initially only two postions are allocated
+	q->dis = dis;
 	// Dynamically allocate memory using malloc()
 	q->tab = (double*) malloc(q->max_size*sizeof(double));
 	if(q->tab == NULL) {
@@ -84,16 +81,29 @@ int deQ (circular_queue * q, float *val) {
 	if(isEmpty(q)) return 0; 
 	// Removes elemet
 
-	*val = q->tab[q->front];  //obtém valor no topo da fila
+	if (q->dis == FIFO) {
+		*val = q->tab[q->front];  //obtém valor no topo da fila
 
-	if(q->front == q->rear) {
-		// queue becomes empty
-		q->front = -1;
-		q->rear = -1;
-	} 
-	//updates front
-	else q->front = (q->front + 1) % q->max_size ;
+		if(q->front == q->rear) {
+			// queue becomes empty
+			q->front = -1;
+			q->rear = -1;
+		} 
+		//updates front
+		else q->front = (q->front + 1) % q->max_size ;
 
+	}
+	else {
+		*val = q->tab[q->rear];
+
+		if(q->front == q->rear) {
+			// queue becomes empty
+			q->front = -1;
+			q->rear = -1;
+		} 
+		//updates rear
+		else q->rear = (q->rear - 1) % q->max_size;
+	}
 	return 1;
 }
 

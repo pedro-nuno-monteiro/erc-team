@@ -5,24 +5,28 @@
 
 /*! \mainpage
  *
- * Code taken from  Simulation and Modelling 5e, Averill M. Law B with some modifications
+ * Code taken from Simulation and Modelling 5e, Averill M. Law B with some modifications
  * 
- * This code simulates a singe server queue (FIFO) - M/M/n/\infity, where
+ * This code simulates a queueing system - M/M/n/Y, where
  * where:
  * - m: Markovian (Poisson) arrival process,
  * - m: Exponential service time distribution,
- * - 1: A single server,
- * - \infty: Infinite queue capacity.
+ * - n: Number of servers,
+ * - Y: Queue capacity (being 0 or infinite).
  * 
- * This simulation requires an input file `mm1in.txt` containing three parameters:
+ * This simulation may be run with or without an input file. With the input file, the parameters are:
  * 1. Mean interarrival time,
  * 2. Mean service time,
  * 3. Number of customers to be delayed.
+ * 4. Number of servers,
+ * 5. Queue capacity (0 for infinite queue or any other number for a finite queue).
  * 
- * The simulation outputs the results to a file `mm1out.txt`.
+ * Without the input file, the program will ask the user for the parameters.
+ * 
+ * The simulation outputs the results to a file, with the name given by the user.
  */
 
-/*! Main function that runs the simulation of the M/M/1 queueing system.
+/*! Main function that runs the simulation of the M/M/n/Y queueing system.
  *
  * The main function reads input parameters, initializes the simulation,
  * processes events, and outputs results.
@@ -45,7 +49,7 @@ int main(int argc, char *argv[]) {
 		generate_other_streams(&state);
 	}
 	else {
-		ask_for_par(&state, &files);
+		ask_for_par(&state, &files, &q1);
 	}
 
 	/* Prints all the parameters */

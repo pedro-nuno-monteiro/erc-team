@@ -63,7 +63,7 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files)
 	return is_ok;
 }
 
-void ask_for_par(SystemState *state, Files *files) {
+void ask_for_par(SystemState *state, Files *files, circular_queue *q) {
 
 	clear_screen();
 
@@ -150,6 +150,20 @@ void ask_for_par(SystemState *state, Files *files) {
 			state->num_delays_required = -1;
 		}
 	} while(state->num_delays_required <= 0);
+
+	do {
+		printf("Select the discipline (0 for FIFO and 1 for LIFO) -> ");
+		
+		if (scanf("%d", &q->dis) != 1) { 
+
+			clear_screen();
+
+			printf("Por favor, insira 0 ou 1.\n");
+			int ch;
+			while ((ch = getchar()) != '\n' && ch != EOF);
+			q->dis = -1;
+		}
+	} while(q->dis != 0 && q->dis != 1);
 
 	clear_screen();
 

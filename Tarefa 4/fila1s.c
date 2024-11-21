@@ -67,8 +67,14 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	/* Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */	
 
-	/* Initialize circular queue */
-	inic(q1);
+	/* Initialize circular queue with FIFO discipline by default*/
+	printf("Discipline: %d\n", q1->dis);
+	if (q1->dis == 0) {
+		inic(q1, FIFO);
+	}
+	else {
+		inic(q1, LIFO);
+	}
 }
 
 void report(SystemState * state, Statistics * stats, Files * files, EventList * events) {

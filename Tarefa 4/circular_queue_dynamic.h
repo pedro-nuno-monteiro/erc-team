@@ -1,24 +1,27 @@
-//! Addapted from 
-//! https://www.simplilearn.com/tutorials/data-structure-tutorial/circular-queue-in-data-structure
-//! uses malloc, realloc and free
 #ifndef CIRCULAR_QUEUE_DYNAMIC
 #define CIRCULAR_QUEUE_DYNAMIC
 
 #include <stdio.h>
-#include <stdlib.h> // malloc , realloc, free
+#include <stdlib.h>
+
+typedef enum {
+    FIFO,
+    LIFO
+} discipline;
 
 /*! Representation of the struct storing a circular queue */
 typedef struct {
     unsigned int max_size; /*!< current max_size of the queue (starts with 2) */
     int front, rear;       /*!< index of the front and rear (both -1 if empty)*/
     double *tab;           /*!< pointer to a block with max_size elements */
+    discipline dis;        /*!< discipline of the queue */
 } circular_queue;
 
 /*! Inciializes queue q - this is the first routine that must be called before using q.
  * @param q pointer to the queue to be inicialized
  * @return if memory allocation failed returns 0 (false) otherwise returns 1 (true) 
  * */
-int inic(circular_queue * q);
+int inic(circular_queue * q, discipline dis);
 
 /*! Frees space allocated by the queue 
  * @param q pointer to the queue to be cleared - the allocated memory is released

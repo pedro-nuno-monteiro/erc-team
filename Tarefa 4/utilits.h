@@ -65,7 +65,7 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files)
  * @param state Pointer to the SystemState structure where the simulation parameters will be stored.
  * @param files Pointer to the Files structure that holds the input file pointer.
  */
-void ask_for_par(SystemState *state, Files *files);
+void ask_for_par(SystemState *state, Files *files, circular_queue *q);
 
 /*!
  * @brief Clears the console screen based on the operating system.
