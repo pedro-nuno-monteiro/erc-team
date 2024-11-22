@@ -18,9 +18,20 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files,
 			return is_ok;
 		}
 
+		char buffer[256]; 
+		while (fgets(buffer, sizeof(buffer), files->infile)) {
+			if (buffer[0] != '#') {  // Sai do loop ao encontrar a primeira linha que não começa com '#'
+				break;
+			}
+		}
+
 		/* Read input parameters. */
-		fscanf(files->infile, "%f %f %d %d %d %d %d", &state->mean_interarrival, &state->mean_service, &state->num_delays_required, &state->number_of_servers, &state->without_infinite_queue, &state->streams[0], &state->streams[1]);
+		//fscanf(files->infile, "%f %f %d %d %d %d %d", &state->mean_interarrival, &state->mean_service, &state->num_delays_required, &state->number_of_servers, &state->without_infinite_queue, &state->streams[0], &state->streams[1]);
 		
+		sscanf(buffer, "%f %f %d", &state->mean_interarrival, &state->mean_service, &state->num_delays_required);
+		fscanf(files->infile, "%d %d", &state->number_of_servers, &state->without_infinite_queue);
+		fscanf(files->infile, "%d %d", &state->streams[0], &state->streams[1]);
+
 		if(state->without_infinite_queue == 1){
 			fscanf(files->infile, " %d", &q1->dis);
 		}
@@ -186,6 +197,15 @@ void ask_for_par(SystemState *state, Files *files, circular_queue *q) {
 	
 	/* Open input file and write the parameters and the random seeds. */
 	files->infile = fopen("mm1in.txt", "w");
+
+	fprintf(files->infile, "# mean_interarrival | mean_service | num_delays_required\n");
+	fprintf(files->infile, "# number_of_servers | without_infinite_queue\n");
+	fprintf(files->infile, "# stream_0 | stream_1\n");
+	if(state->without_infinite_queue == 1){
+		fprintf(files->infile, "# discipline\n");
+	}
+	
+
 	fprintf(files->infile, "%.2f %.2f %d\n", state->mean_interarrival, state->mean_service, state->num_delays_required);
 	fprintf(files->infile, "%d %d\n", state->number_of_servers, state->without_infinite_queue);
 	fprintf(files->infile, "%d %d\n", state->streams[0], state->streams[1]);
