@@ -19,8 +19,12 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files,
 		}
 
 		/* Read input parameters. */
-		fscanf(files->infile, "%f %f %d %d %d %d %d %d", &state->mean_interarrival, &state->mean_service, &state->num_delays_required, &state->number_of_servers, &state->without_infinite_queue, &state->streams[0], &state->streams[1], &q1->dis);
+		fscanf(files->infile, "%f %f %d %d %d %d %d", &state->mean_interarrival, &state->mean_service, &state->num_delays_required, &state->number_of_servers, &state->without_infinite_queue, &state->streams[0], &state->streams[1]);
 		
+		if(state->without_infinite_queue == 1){
+			fscanf(files->infile, " %d", &q1->dis);
+		}
+
 		/* Verifies the validity of the parameters */ 
 		if (state->streams[0] <= 0 || state->streams[1] <= 0 || state->streams[0] >= 100 || state->streams[1] >= 100) {
 			fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
@@ -47,7 +51,7 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files,
 			something_wrong = 1;
 		}
 
-		if(q1->dis != 0 && q1->dis != 1) {
+		if(q1->dis != 0 && q1->dis != 1 && state->without_infinite_queue == 1) {
 			fprintf(stderr, "Dados incorretos:    FIFO = 0      LIFO = 1 \n");
 			something_wrong = 1;
 		}
@@ -156,19 +160,21 @@ void ask_for_par(SystemState *state, Files *files, circular_queue *q) {
 		}
 	} while(state->num_delays_required <= 0);
 
-	do {
-		printf("Select the discipline (0 for FIFO and 1 for LIFO) -> ");
-		
-		if (scanf("%d", &q->dis) != 1) { 
+	if(state->without_infinite_queue == 1){
+		do {
+			printf("Select the discipline (0 for FIFO and 1 for LIFO) -> ");
+			
+			if (scanf("%d", &q->dis) != 1) { 
 
-			clear_screen();
+				clear_screen();
 
-			printf("Por favor, insira 0 ou 1.\n");
-			int ch;
-			while ((ch = getchar()) != '\n' && ch != EOF);
-			q->dis = -1;
-		}
-	} while(q->dis != 0 && q->dis != 1);
+				printf("Por favor, insira 0 ou 1.\n");
+				int ch;
+				while ((ch = getchar()) != '\n' && ch != EOF);
+				q->dis = -1;
+			}
+		} while(q->dis != 0 && q->dis != 1);	
+	}
 
 	clear_screen();
 
@@ -183,6 +189,10 @@ void ask_for_par(SystemState *state, Files *files, circular_queue *q) {
 	fprintf(files->infile, "%.2f %.2f %d\n", state->mean_interarrival, state->mean_service, state->num_delays_required);
 	fprintf(files->infile, "%d %d\n", state->number_of_servers, state->without_infinite_queue);
 	fprintf(files->infile, "%d %d\n", state->streams[0], state->streams[1]);
+	if(state->without_infinite_queue == 1){
+		fprintf(files->infile, "%d \n", q->dis);
+	}
+	
 }
 
 void ask_streams(SystemState *state) {

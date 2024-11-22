@@ -60,10 +60,12 @@ int main(int argc, char *argv[]) {
 	printf("Number of customers: %d\n", state.num_delays_required);
 	printf("Number of servers: %d\n", state.number_of_servers);
 	if(state.without_infinite_queue == 0) printf("Without Queue \n");
-	else printf("Infinite Queue \n");
-
-	if(q1.dis == 0) printf("FIFO \n");
-	else printf("LIFO \n");
+	else {
+		printf("With Queue \n");
+		if(q1.dis == 0) printf("FIFO \n");
+		else printf("LIFO \n");
+	}
+	
 
 	/* Asks for the output file. Open the output file */
 	char nome_saida[100];

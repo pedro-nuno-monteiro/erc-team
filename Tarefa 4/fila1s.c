@@ -87,28 +87,34 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 		fprintf(files->outfile, "Without Queue\n\n");
 	}
 	else{
+
 		fprintf(files->outfile, "With Queue\n\n");
+
+		if(q1->dis == 0) {
+			fprintf(files->outfile, "FIFO discipline\n\n");
+		}
+		else {
+			fprintf(files->outfile, "LIFO discipline\n\n");
+		}
 	}
-	if(q1->dis == 0) {
-		fprintf(files->outfile, "FIFO discipline\n\n");
-	}
-	else {
-		fprintf(files->outfile, "LIFO discipline\n\n");
-	}	
+	
+			
+	
+		
 	
 	/* Print the average delay in queue per client */
-	fprintf(files->outfile, "\n\nAverage delay in queue per client %11.3f minutes\n\n", stats->total_of_delays / state->num_custs_delayed);
+	fprintf(files->outfile, "\n\nAverage delay in queue per client %12.3f minutes\n\n", stats->total_of_delays / state->num_custs_delayed);
 	//fprintf(files->outfile, "Average number of occupied servers: %11.3f\n\n", stats->num_occupied_servers / state->num_custs_delayed);
 	if(state->without_infinite_queue == 0) {  /* If we don't have an infinite queue */
 		/* Print the average number of lost clients */
-		fprintf(files->outfile, "Average number of lost clients %14.3d\n\n\n", stats->lost_customers);
+		fprintf(files->outfile, "Average number of lost clients %12d\n\n\n", stats->lost_customers);
 	} 
 	else { /* If we have an infinite queue */
 		/* Print the average number of clients in queue */
-		fprintf(files->outfile, "Average number of clients in queue %10.3f\n\n\n", stats->area_num_in_q / events->sim_time);
+		fprintf(files->outfile, "Average number of clients in queue %11.3f\n\n\n", stats->area_num_in_q / events->sim_time);
 	}
 	if(state->without_infinite_queue == 0){
-		fprintf(files->outfile, "Blocking Rate: %11.3f\n\n\n", erlang_B(state->A, state->number_of_servers));
+		fprintf(files->outfile, "Blocking Rate: %31.3f\n\n\n", erlang_B(state->A, state->number_of_servers));
 	}
 	
 	/* Print the average server utilization. 
@@ -121,7 +127,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 			fprintf(files->outfile, "Server %d utilization %25.3f \n\n", i-1, 0.0);
     }
 	}
-	fprintf(files->outfile, "Time simulation ended %26.3f minutes", events->sim_time);
+	fprintf(files->outfile, "Time simulation ended %27.3f minutes", events->sim_time);
 }
 
 void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * events) {

@@ -1,10 +1,10 @@
-Simulation of a queueing system with 1 servers
+Simulation of a queueing system with 4 servers
 
-Mean interarrival time      10.00 minutes
+Mean interarrival time       2.00 minutes
 
-Mean service time            5.00 minutes
+Mean service time            4.00 minutes
 
-Number of customers            50
+Number of customers          1000
 
 With Queue
 
@@ -12,11 +12,17 @@ FIFO discipline
 
 
 
-Average delay in queue per client       2.334 minutes
+Average delay in queue per client        0.145 minutes
 
-Average number of clients in queue      0.264
+Average number of clients in queue       0.073
 
 
-Server 1 utilization                     0.556
+Server 1 utilization                     0.421
 
-Time simulation ended                    441.607 minutes
+Server 2 utilization                     0.421
+
+Server 3 utilization                     0.420
+
+Server 4 utilization                     0.420
+
+Time simulation ended                    1997.217 minutes

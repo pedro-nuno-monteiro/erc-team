@@ -1,0 +1,165 @@
+\hypertarget{struct_queue_system}{}\doxysection{Queue\+System Struct Reference}
+\label{struct_queue_system}\index{QueueSystem@{QueueSystem}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{struct_queue_system_ac8b5e6092f9773f51cedaab4b136738d}{sim\+\_\+time}}
+\item 
+float \mbox{\hyperlink{struct_queue_system_afaba36fb5a44b654432472baa454e7a9}{time\+\_\+last\+\_\+event}}
+\item 
+int \mbox{\hyperlink{struct_queue_system_a627dcbc52945baab7f3534d5e12d2fd8}{server\+\_\+status}} \mbox{[}12\mbox{]}
+\item 
+float \mbox{\hyperlink{struct_queue_system_ae147d732cfcfcaa2f68fe5df86373b69}{time\+\_\+next\+\_\+event}} \mbox{[}12\mbox{]}
+\item 
+float \mbox{\hyperlink{struct_queue_system_aaabf9535f8b7048b8b8d9ac912d622eb}{mean\+\_\+service}}
+\item 
+int \mbox{\hyperlink{struct_queue_system_a8e50db184fbd8c8fc72410fd87121fa6}{num\+\_\+servers}}
+\item 
+int \mbox{\hyperlink{struct_queue_system_acb661e710baf5da0ce33cee61d59ff96}{lost\+\_\+customers}}
+\item 
+float \mbox{\hyperlink{struct_queue_system_afa0250edc22f626f46ed6999f17f160a}{mean\+\_\+interarrival}}
+\item 
+float \mbox{\hyperlink{struct_queue_system_a2f4a1bbeb237a5f133e7e991ee240593}{area\+\_\+num\+\_\+in\+\_\+q}}
+\item 
+int \mbox{\hyperlink{struct_queue_system_a95b8a861931c663705d8ecedd6d0219c}{num\+\_\+custs\+\_\+delayed}}
+\item 
+float \mbox{\hyperlink{struct_queue_system_a4c8e9207a46d30f1ab90d90bc2242733}{total\+\_\+of\+\_\+delays}}
+\item 
+int \mbox{\hyperlink{struct_queue_system_a2de2ffc34d0664f7a2e748d2342d1e10}{num\+\_\+events}}
+\item 
+float \mbox{\hyperlink{struct_queue_system_a8ea446fa4dc8eff9b58db0005f3cb95a}{time\+\_\+arrival}} \mbox{[}\mbox{\hyperlink{fila1s_8c_aaa75be566c9c8da967954407ca97c72b}{Q\+\_\+\+LIMIT}}\mbox{]}
+\item 
+int \mbox{\hyperlink{struct_queue_system_a8ea09d9b38d97d23f2c2b69a667e01bc}{area\+\_\+server\+\_\+status}} \mbox{[}12\mbox{]}
+\item 
+int \mbox{\hyperlink{struct_queue_system_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\+\_\+event\+\_\+type}}
+\item 
+int \mbox{\hyperlink{struct_queue_system_aa27084f8bc9cddae495a2147becb328b}{idseq}} \mbox{[}12\mbox{]}
+\item 
+int \mbox{\hyperlink{struct_queue_system_ada13471633986449759bdd49f4ad8b87}{num\+\_\+delays\+\_\+required}}
+\item 
+int \mbox{\hyperlink{struct_queue_system_ab9aea11a637daba9c6b4f8c1939fc51e}{with\+\_\+queue}}
+\item 
+\mbox{\hyperlink{fila__circular_8h_adbc4c4c39f10acbb9a6b9a78764a64df}{my\+Queue}} \mbox{\hyperlink{struct_queue_system_a932eef1f4f59b436d948c81efe075e6f}{circular\+Queue}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{struct_queue_system_a2f4a1bbeb237a5f133e7e991ee240593}\label{struct_queue_system_a2f4a1bbeb237a5f133e7e991ee240593}} 
+\index{QueueSystem@{QueueSystem}!area\_num\_in\_q@{area\_num\_in\_q}}
+\index{area\_num\_in\_q@{area\_num\_in\_q}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{area\_num\_in\_q}{area\_num\_in\_q}}
+{\footnotesize\ttfamily float area\+\_\+num\+\_\+in\+\_\+q}
+
+Média do tempo entre chegadas dos clientes \mbox{\Hypertarget{struct_queue_system_a8ea09d9b38d97d23f2c2b69a667e01bc}\label{struct_queue_system_a8ea09d9b38d97d23f2c2b69a667e01bc}} 
+\index{QueueSystem@{QueueSystem}!area\_server\_status@{area\_server\_status}}
+\index{area\_server\_status@{area\_server\_status}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{area\_server\_status}{area\_server\_status}}
+{\footnotesize\ttfamily int area\+\_\+server\+\_\+status\mbox{[}12\mbox{]}}
+
+Tabela que armazena os tempos de chegada dos clientes na fila usando with\+\_\+queue=1 Variaveis-\/\+Estatisticas \mbox{\Hypertarget{struct_queue_system_a932eef1f4f59b436d948c81efe075e6f}\label{struct_queue_system_a932eef1f4f59b436d948c81efe075e6f}} 
+\index{QueueSystem@{QueueSystem}!circularQueue@{circularQueue}}
+\index{circularQueue@{circularQueue}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{circularQueue}{circularQueue}}
+{\footnotesize\ttfamily \mbox{\hyperlink{fila__circular_8h_adbc4c4c39f10acbb9a6b9a78764a64df}{my\+Queue}} circular\+Queue}
+
+Indica se há fila (1-\/sim, 0-\/não) \mbox{\Hypertarget{struct_queue_system_aa27084f8bc9cddae495a2147becb328b}\label{struct_queue_system_aa27084f8bc9cddae495a2147becb328b}} 
+\index{QueueSystem@{QueueSystem}!idseq@{idseq}}
+\index{idseq@{idseq}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{idseq}{idseq}}
+{\footnotesize\ttfamily int idseq\mbox{[}12\mbox{]}}
+
+\mbox{\Hypertarget{struct_queue_system_acb661e710baf5da0ce33cee61d59ff96}\label{struct_queue_system_acb661e710baf5da0ce33cee61d59ff96}} 
+\index{QueueSystem@{QueueSystem}!lost\_customers@{lost\_customers}}
+\index{lost\_customers@{lost\_customers}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{lost\_customers}{lost\_customers}}
+{\footnotesize\ttfamily int lost\+\_\+customers}
+
+Nº total de servidores no sistema Variaveis-\/\+Clientes \mbox{\Hypertarget{struct_queue_system_afa0250edc22f626f46ed6999f17f160a}\label{struct_queue_system_afa0250edc22f626f46ed6999f17f160a}} 
+\index{QueueSystem@{QueueSystem}!mean\_interarrival@{mean\_interarrival}}
+\index{mean\_interarrival@{mean\_interarrival}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{mean\_interarrival}{mean\_interarrival}}
+{\footnotesize\ttfamily float mean\+\_\+interarrival}
+
+conta o nºde clientes perdidos \mbox{\Hypertarget{struct_queue_system_aaabf9535f8b7048b8b8d9ac912d622eb}\label{struct_queue_system_aaabf9535f8b7048b8b8d9ac912d622eb}} 
+\index{QueueSystem@{QueueSystem}!mean\_service@{mean\_service}}
+\index{mean\_service@{mean\_service}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{mean\_service}{mean\_service}}
+{\footnotesize\ttfamily float mean\+\_\+service}
+
+Tabela que armazena o tempo do prox servidor \mbox{\Hypertarget{struct_queue_system_a31cfa0a0a620cabbeeb83e640e64a4c6}\label{struct_queue_system_a31cfa0a0a620cabbeeb83e640e64a4c6}} 
+\index{QueueSystem@{QueueSystem}!next\_event\_type@{next\_event\_type}}
+\index{next\_event\_type@{next\_event\_type}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{next\_event\_type}{next\_event\_type}}
+{\footnotesize\ttfamily int next\+\_\+event\+\_\+type}
+
+Tabela que armazena a area 0 -\/ a lista de eventos esta vazia; 1 é uma chegada; 2 ate num\+\_\+srvers+1 é uma partida desse servidor \mbox{\Hypertarget{struct_queue_system_a95b8a861931c663705d8ecedd6d0219c}\label{struct_queue_system_a95b8a861931c663705d8ecedd6d0219c}} 
+\index{QueueSystem@{QueueSystem}!num\_custs\_delayed@{num\_custs\_delayed}}
+\index{num\_custs\_delayed@{num\_custs\_delayed}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{num\_custs\_delayed}{num\_custs\_delayed}}
+{\footnotesize\ttfamily int num\+\_\+custs\+\_\+delayed}
+
+Aramezena a area do nº de clientes na fila \mbox{\Hypertarget{struct_queue_system_ada13471633986449759bdd49f4ad8b87}\label{struct_queue_system_ada13471633986449759bdd49f4ad8b87}} 
+\index{QueueSystem@{QueueSystem}!num\_delays\_required@{num\_delays\_required}}
+\index{num\_delays\_required@{num\_delays\_required}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{num\_delays\_required}{num\_delays\_required}}
+{\footnotesize\ttfamily int num\+\_\+delays\+\_\+required}
+
+Tabela que aramazena os indentificadores de sequencia para a geração de variaveis aleatorias \mbox{\Hypertarget{struct_queue_system_a2de2ffc34d0664f7a2e748d2342d1e10}\label{struct_queue_system_a2de2ffc34d0664f7a2e748d2342d1e10}} 
+\index{QueueSystem@{QueueSystem}!num\_events@{num\_events}}
+\index{num\_events@{num\_events}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{num\_events}{num\_events}}
+{\footnotesize\ttfamily int num\+\_\+events}
+
+soma de total de atrasos de todos os clientes perdidos \mbox{\Hypertarget{struct_queue_system_a8e50db184fbd8c8fc72410fd87121fa6}\label{struct_queue_system_a8e50db184fbd8c8fc72410fd87121fa6}} 
+\index{QueueSystem@{QueueSystem}!num\_servers@{num\_servers}}
+\index{num\_servers@{num\_servers}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{num\_servers}{num\_servers}}
+{\footnotesize\ttfamily int num\+\_\+servers}
+
+media de tempo de serviço \mbox{\Hypertarget{struct_queue_system_a627dcbc52945baab7f3534d5e12d2fd8}\label{struct_queue_system_a627dcbc52945baab7f3534d5e12d2fd8}} 
+\index{QueueSystem@{QueueSystem}!server\_status@{server\_status}}
+\index{server\_status@{server\_status}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{server\_status}{server\_status}}
+{\footnotesize\ttfamily int server\+\_\+status\mbox{[}12\mbox{]}}
+
+armazena o tempo do ultimo evento ocorrido Variaveis-\/\+Servidor \mbox{\Hypertarget{struct_queue_system_ac8b5e6092f9773f51cedaab4b136738d}\label{struct_queue_system_ac8b5e6092f9773f51cedaab4b136738d}} 
+\index{QueueSystem@{QueueSystem}!sim\_time@{sim\_time}}
+\index{sim\_time@{sim\_time}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{sim\_time}{sim\_time}}
+{\footnotesize\ttfamily float sim\+\_\+time}
+
+Variaveis-\/\+TEMPO \mbox{\Hypertarget{struct_queue_system_a8ea446fa4dc8eff9b58db0005f3cb95a}\label{struct_queue_system_a8ea446fa4dc8eff9b58db0005f3cb95a}} 
+\index{QueueSystem@{QueueSystem}!time\_arrival@{time\_arrival}}
+\index{time\_arrival@{time\_arrival}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{time\_arrival}{time\_arrival}}
+{\footnotesize\ttfamily float time\+\_\+arrival\mbox{[}\mbox{\hyperlink{fila1s_8c_aaa75be566c9c8da967954407ca97c72b}{Q\+\_\+\+LIMIT}}\mbox{]}}
+
+Nº de eventos, é dinamico pois depende dos clientes \mbox{\Hypertarget{struct_queue_system_afaba36fb5a44b654432472baa454e7a9}\label{struct_queue_system_afaba36fb5a44b654432472baa454e7a9}} 
+\index{QueueSystem@{QueueSystem}!time\_last\_event@{time\_last\_event}}
+\index{time\_last\_event@{time\_last\_event}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{time\_last\_event}{time\_last\_event}}
+{\footnotesize\ttfamily float time\+\_\+last\+\_\+event}
+
+tempo atual da simulação \mbox{\Hypertarget{struct_queue_system_ae147d732cfcfcaa2f68fe5df86373b69}\label{struct_queue_system_ae147d732cfcfcaa2f68fe5df86373b69}} 
+\index{QueueSystem@{QueueSystem}!time\_next\_event@{time\_next\_event}}
+\index{time\_next\_event@{time\_next\_event}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{time\_next\_event}{time\_next\_event}}
+{\footnotesize\ttfamily float time\+\_\+next\+\_\+event\mbox{[}12\mbox{]}}
+
+Tabela que indica o estado de cada servidor (IDLE ou BUSY) \mbox{\Hypertarget{struct_queue_system_a4c8e9207a46d30f1ab90d90bc2242733}\label{struct_queue_system_a4c8e9207a46d30f1ab90d90bc2242733}} 
+\index{QueueSystem@{QueueSystem}!total\_of\_delays@{total\_of\_delays}}
+\index{total\_of\_delays@{total\_of\_delays}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{total\_of\_delays}{total\_of\_delays}}
+{\footnotesize\ttfamily float total\+\_\+of\+\_\+delays}
+
+conta o nºde clientes que foram atendidos \mbox{\Hypertarget{struct_queue_system_ab9aea11a637daba9c6b4f8c1939fc51e}\label{struct_queue_system_ab9aea11a637daba9c6b4f8c1939fc51e}} 
+\index{QueueSystem@{QueueSystem}!with\_queue@{with\_queue}}
+\index{with\_queue@{with\_queue}!QueueSystem@{QueueSystem}}
+\doxysubsubsection{\texorpdfstring{with\_queue}{with\_queue}}
+{\footnotesize\ttfamily int with\+\_\+queue}
+
+Nº total de clientes que devem ser atendidos antes da execução do codigo terminar 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{fila1s_8c}{fila1s.\+c}}\end{DoxyCompactItemize}

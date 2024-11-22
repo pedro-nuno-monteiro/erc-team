@@ -1,0 +1,64 @@
+
+Menu:
+1. Definir mean_interarrival
+2. Definir mean_service
+3. Definir num_delays_required
+4. Definir num_servers
+5. Definir with_queue (1 para sim, 0 para não)
+6. Executar simulação
+0. Sair
+Escolha: Digite mean_interarrival: 
+Menu:
+1. Definir mean_interarrival
+2. Definir mean_service
+3. Definir num_delays_required
+4. Definir num_servers
+5. Definir with_queue (1 para sim, 0 para não)
+6. Executar simulação
+0. Sair
+Escolha: Digite mean_service: 
+Menu:
+1. Definir mean_interarrival
+2. Definir mean_service
+3. Definir num_delays_required
+4. Definir num_servers
+5. Definir with_queue (1 para sim, 0 para não)
+6. Executar simulação
+0. Sair
+Escolha: Digite num_delays_required: 
+Menu:
+1. Definir mean_interarrival
+2. Definir mean_service
+3. Definir num_delays_required
+4. Definir num_servers
+5. Definir with_queue (1 para sim, 0 para não)
+6. Executar simulação
+0. Sair
+Escolha: Digite num_servers: 
+Menu:
+1. Definir mean_interarrival
+2. Definir mean_service
+3. Definir num_delays_required
+4. Definir num_servers
+5. Definir with_queue (1 para sim, 0 para não)
+6. Executar simulação
+0. Sair
+Escolha: Digite with_queue (1 para sim, 0 para não): 
+Menu:
+1. Definir mean_interarrival
+2. Definir mean_service
+3. Definir num_delays_required
+4. Definir num_servers
+5. Definir with_queue (1 para sim, 0 para não)
+6. Executar simulação
+0. Sair
+Escolha: 
+Menu:
+1. Definir mean_interarrival
+2. Definir mean_service
+3. Definir num_delays_required
+4. Definir num_servers
+5. Definir with_queue (1 para sim, 0 para não)
+6. Executar simulação
+0. Sair
+Escolha: 
