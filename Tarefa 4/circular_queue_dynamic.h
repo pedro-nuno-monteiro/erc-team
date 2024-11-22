@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*! Struct that holds the discipline of the queue */
 typedef enum {
-    FIFO,
-    LIFO
+    FIFO, /*!< first in first out, 0 */
+    LIFO  /*!< last in first out, 1 */
 } discipline;
 
 /*! Representation of the struct storing a circular queue */
@@ -18,7 +19,7 @@ typedef struct {
 } circular_queue;
 
 /*! Inciializes queue q - this is the first routine that must be called before using q.
- * @param q pointer to the queue to be inicialized
+ * @param q pointer to the queue to be inicialized and the discipline of the queue
  * @return if memory allocation failed returns 0 (false) otherwise returns 1 (true) 
  * */
 int inic(circular_queue * q, discipline dis);

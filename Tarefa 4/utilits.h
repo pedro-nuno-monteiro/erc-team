@@ -40,9 +40,10 @@ void generate_other_streams(SystemState *state);
  * @param argv The array of command-line arguments, where `argv[1]` is expected to be the input file name.
  * @param state Pointer to the SystemState structure that will hold the simulation parameters.
  * @param files Pointer to the Files structure containing file pointers.
+ * @param q1 Pointer to the circular queue structure.
  * @return `EXIT_SUCCESS` if all parameters are valid; otherwise, `EXIT_FAILURE`.
  */
-int receive_input_file(int argc, char *argv[], SystemState *state, Files *files);
+int receive_input_file(int argc, char *argv[], SystemState *state, Files *files, circular_queue *q1);
 
 /*!
  * @brief Prompts the user for simulation parameters, validates inputs, and writes to an input file.
@@ -64,6 +65,7 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files)
  *
  * @param state Pointer to the SystemState structure where the simulation parameters will be stored.
  * @param files Pointer to the Files structure that holds the input file pointer.
+ * @param q Pointer to the circular queue structure.
  */
 void ask_for_par(SystemState *state, Files *files, circular_queue *q);
 

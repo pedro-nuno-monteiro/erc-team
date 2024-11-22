@@ -20,6 +20,8 @@
  * 3. Number of customers to be delayed.
  * 4. Number of servers,
  * 5. Queue capacity (0 for infinite queue or any other number for a finite queue).
+ * 6. Random seeds for the arrival and departure processes.
+ * 7. Queue discipline (0 for FIFO or 1 for LIFO).
  * 
  * Without the input file, the program will ask the user for the parameters.
  * 
@@ -43,7 +45,7 @@ int main(int argc, char *argv[]) {
 
 	/* Check if the input file is provided as an argument. */
 	if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
-		receive_input_file(argc, argv, &state, &files);
+		receive_input_file(argc, argv, &state, &files, &q1);
 	
 		/* Call the function and generate the remaining seeds */
 		generate_other_streams(&state);
@@ -57,9 +59,11 @@ int main(int argc, char *argv[]) {
 	printf("Mean service time: %f\n", state.mean_service);
 	printf("Number of customers: %d\n", state.num_delays_required);
 	printf("Number of servers: %d\n", state.number_of_servers);
-
 	if(state.without_infinite_queue == 0) printf("Without Queue \n");
 	else printf("Infinite Queue \n");
+
+	if(q1.dis == 0) printf("FIFO \n");
+	else printf("LIFO \n");
 
 	/* Asks for the output file. Open the output file */
 	char nome_saida[100];

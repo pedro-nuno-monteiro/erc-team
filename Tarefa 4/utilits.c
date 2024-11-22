@@ -2,7 +2,7 @@
 #include "utilits.h"
 
 
-int receive_input_file(int argc, char *argv[], SystemState *state, Files *files) {
+int receive_input_file(int argc, char *argv[], SystemState *state, Files *files, circular_queue *q1) {
 
 	/* Set the initial return value to EXIT_FAILURE in case something goes wrong. */
 	int is_ok = EXIT_FAILURE;
@@ -19,7 +19,7 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files)
 		}
 
 		/* Read input parameters. */
-		fscanf(files->infile, "%f %f %d %d %d %d %d", &state->mean_interarrival, &state->mean_service, &state->num_delays_required, &state->number_of_servers, &state->without_infinite_queue, &state->streams[0], &state->streams[1]);
+		fscanf(files->infile, "%f %f %d %d %d %d %d %d", &state->mean_interarrival, &state->mean_service, &state->num_delays_required, &state->number_of_servers, &state->without_infinite_queue, &state->streams[0], &state->streams[1], &q1->dis);
 		
 		/* Verifies the validity of the parameters */ 
 		if (state->streams[0] <= 0 || state->streams[1] <= 0 || state->streams[0] >= 100 || state->streams[1] >= 100) {
@@ -42,8 +42,13 @@ int receive_input_file(int argc, char *argv[], SystemState *state, Files *files)
 			something_wrong = 1;
 		}
 
-		if (state->without_infinite_queue != 0 && state->without_infinite_queue != 1 ) {
+		if(state->without_infinite_queue != 0 && state->without_infinite_queue != 1 ) {
 			fprintf(stderr, "Dados incorretos:    With Queue = 1      Without Queue = 0 \n");
+			something_wrong = 1;
+		}
+
+		if(q1->dis != 0 && q1->dis != 1) {
+			fprintf(stderr, "Dados incorretos:    FIFO = 0      LIFO = 1 \n");
 			something_wrong = 1;
 		}
 
