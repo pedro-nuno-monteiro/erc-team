@@ -1,6 +1,7 @@
 # mean_interarrival | mean_service | num_delays_required
 # number_of_servers | without_infinite_queue
 # stream_0 | stream_1
-4.00 2.00 1000
-4 0
-14 56
+4.00 9.00 1000
+5 0
+16 43
+

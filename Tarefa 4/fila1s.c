@@ -82,7 +82,12 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	fprintf(files->outfile, "Simulation of a queueing system with %d servers\n\n", state->number_of_servers);
 	fprintf(files->outfile, "Mean interarrival time%11.2f minutes\n\n", state->mean_interarrival);
 	fprintf(files->outfile, "Mean service time%16.2f minutes\n\n", state->mean_service);
-	fprintf(files->outfile, "Number of customers%14d\n\n", state->num_delays_required);
+	if(state->without_infinite_queue == 1){
+		fprintf(files->outfile, "Number of customers%14d\n\n", state->num_delays_required);
+	}
+	else{
+		fprintf(files->outfile, "Number of customers%14d\n\n", state->num_delays_required + stats->lost_customers);
+	}
 	if(state->without_infinite_queue == 0 ){
 		fprintf(files->outfile, "Without Queue\n\n");
 	}
@@ -97,11 +102,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 			fprintf(files->outfile, "LIFO discipline\n\n");
 		}
 	}
-	
-			
-	
 		
-	
 	/* Print the average delay in queue per client */
 	fprintf(files->outfile, "\n\nAverage delay in queue per client %12.3f minutes\n\n", stats->total_of_delays / state->num_custs_delayed);
 	//fprintf(files->outfile, "Average number of occupied servers: %11.3f\n\n", stats->num_occupied_servers / state->num_custs_delayed);
@@ -202,7 +203,8 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	else { /* All servers are occupied */
 
 		if(state->without_infinite_queue == 0) { /* If we don't have a queue -> M/M/n/0 (Erlang-B): Reject customer */
-			stats->lost_customers++;
+			++stats->lost_customers;
+			--state->num_delays_required; ////////////////////////////////7
 		}
 		else {
 
