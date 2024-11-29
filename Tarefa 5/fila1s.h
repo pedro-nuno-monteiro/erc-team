@@ -20,11 +20,24 @@
 #define Q_LIMIT 100
 
 /*! Maximum number of servers allowed. */
-#define MAX_SERVERS 99  /*!< No repetitions; thus, n < 99. */
+#define MAX_SERVERS 9  /*!< No repetitions; thus, n < 99. */
 
 /*! Mnemonics for server states: BUSY or IDLE. */
 #define BUSY 1
 #define IDLE 0
+
+typedef struct {
+    float mean_interarrival;        /*!< Mean time between customer arrivals (inter-arrival time). */
+    float mean_service;             /*!< Mean service time. */
+    int number_of_servers;          /*!< Number of active servers. */
+    int num_delays_required;        /*!< Number of delays required to complete the simulation. */
+    int streams[MAX_SERVERS + 1];   /*!< Stream identifiers. */
+    int without_infinite_queue;     /*!< 1 for infinite queue, 0 for limited queue. */
+    float A; /* !< Offered traffic. */
+    int number_of_reps;
+} initial_values; 
+
+
 
 /*! 
  * @brief Structure that represents the system state.
@@ -32,17 +45,17 @@
 typedef struct {
     int next_event_type;            /*!< Type of the next event to occur (e.g., arrival, departure). */
     int num_custs_delayed;          /*!< Number of customers that have been delayed. */
-    int num_delays_required;        /*!< Number of delays required to complete the simulation. */
+    // int num_delays_required;        /*!< Number of delays required to complete the simulation. */
     int num_in_q;                   /*!< Number of customers in the queue. */
     int server_status[MAX_SERVERS + 2];              /*!< Server status (0 = idle, 1 = busy). */
     float time_arrival[Q_LIMIT + 1];    /*!< Time of arrival for each customer in the queue. */
-    float mean_interarrival;        /*!< Mean time between customer arrivals (inter-arrival time). */
-    float mean_service;             /*!< Mean service time. */
-    int number_of_servers;          /*!< Number of active servers. */
+    // float mean_interarrival;        /*!< Mean time between customer arrivals (inter-arrival time). */
+    // float mean_service;             /*!< Mean service time. */
+    // int number_of_servers;          /*!< Number of active servers. */
     int num_events;                 /*!< Dynamically calculated based on servers. */
-    int streams[MAX_SERVERS + 1];   /*!< Stream identifiers. */
-    int without_infinite_queue;     /*!< 1 for infinite queue, 0 for limited queue. */
-    float A; /* !< Offered traffic. */
+    // int streams[MAX_SERVERS + 1];   /*!< Stream identifiers. */
+    // int without_infinite_queue;     /*!< 1 for infinite queue, 0 for limited queue. */
+    // float A; /* !< Offered traffic. */
 } SystemState;
 
 /*! 
@@ -85,7 +98,7 @@ typedef struct {
  * @return The index of the available server with the lowest utilization rate, 
  *         or -1 if all servers are busy.
  */
-int selectFreeServer(SystemState * state, Statistics * stats);
+int selectFreeServer(SystemState * state, Statistics * stats, initial_values *ini);
 
 /*! 
  * @brief Initializes the state of the simulation system.
@@ -100,7 +113,7 @@ int selectFreeServer(SystemState * state, Statistics * stats);
  * @param stream The random number stream used to generate the arrival times.
  * @param q1 Pointer to the circular queue structure that holds the customer arrival times.
  */
-void initialize(SystemState *state, Statistics *stats, EventList *events, int stream, circular_queue *q1);
+void initialize(SystemState *state, Statistics *stats, EventList *events, int stream, circular_queue *q1, initial_values *ini);
 
 /** 
  * @brief Determines the next event based on the times stored in the event list and advances the simulation clock to the time of the next event.
@@ -115,7 +128,7 @@ void initialize(SystemState *state, Statistics *stats, EventList *events, int st
  * 
  * @note If the event list is empty, the simulation will stop and an error message will be written to the output file.
  */
-void timing(SystemState *state, Statistics *stats, Files* files, EventList *events);
+void timing(SystemState *state, Statistics *stats, Files* files, EventList *events, initial_values *ini);
 
 /** 
  * @brief Handles customer arrivals at the queue by scheduling the next arrival, checking server availability,
@@ -131,7 +144,7 @@ void timing(SystemState *state, Statistics *stats, Files* files, EventList *even
  * @param events Pointer to the event list structure, updated to schedule the next arrival event.
  * @param q1 Pointer to the circular queue structure, updated to add the arrival time of the customer.
  */
-void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events, circular_queue * q1);
+void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events, circular_queue * q1, initial_values *ini);
 
 /** 
  * @brief Handles customer departures by updating queue length, calculating delay for the customer beginning service,
@@ -146,7 +159,7 @@ void arrive(SystemState *state, Statistics *stats, Files* files, EventList *even
  * @param events Pointer to the event list structure, updated to schedule the next departure or set it to infinity if the server becomes idle.
  * @param q1 Pointer to the circular queue structure, updated to remove the departing customer's arrival time.
  */
-void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1);
+void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1, initial_values *ini);
 
 /** 
  * @brief Writes the simulation results to the output file, including performance metrics.
@@ -164,7 +177,7 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
  * 
  * @note This function assumes the `files->outfile` has been opened before calling and will write the results to this file.
  */
-void report(SystemState* state, Statistics* stats, Files* files, EventList* events, circular_queue * q1);
+void report(SystemState* state, Statistics* stats, Files* files, EventList* events, circular_queue * q1, initial_values *ini);
 
 /** 
  * @brief Updates the time-based statistics for the simulation, such as the area under the 
@@ -181,7 +194,7 @@ void report(SystemState* state, Statistics* stats, Files* files, EventList* even
  * @note The function updates the time-based statistics by integrating over the elapsed time since 
  *       the last event to track changes in the system state.
  */
-void update_time_avg_stats(SystemState *state, Statistics *stats, EventList *events);
+void update_time_avg_stats(SystemState *state, Statistics *stats, EventList *events, initial_values *ini);
 
 /*! 
  * @brief Calculates an exponentially distributed random variable.

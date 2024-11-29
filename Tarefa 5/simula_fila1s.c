@@ -37,35 +37,13 @@
  */
 int main(int argc, char *argv[]) {
 
-	SystemState state;	/* Structure to hold the system state variables. */
-	Statistics stats;		/* Structure to hold the statistical variables. */
-	EventList events;		/* Structure to hold the event list variables. */
+	SystemState state[MAX_SERVERS+1];	/* Structure to hold the system state variables. */
+	Statistics stats[MAX_SERVERS+1];		/* Structure to hold the statistical variables. */
+	EventList events[MAX_SERVERS+1];		/* Structure to hold the event list variables. */
 	Files files;				/* Structure to hold the file pointers. */
 	circular_queue q1;	/* Structure to hold the queue. */
+	initial_values ini;
 
-	/* Check if the input file is provided as an argument. */
-	if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
-		receive_input_file(argc, argv, &state, &files, &q1);
-	
-		/* Call the function and generate the remaining seeds */
-		generate_other_streams(&state);
-	}
-	else {
-		ask_for_par(&state, &files, &q1);
-	}
-
-	/* Prints all the parameters */
-	printf("Mean interarrival time: %f\n", state.mean_interarrival);
-	printf("Mean service time: %f\n", state.mean_service);
-	printf("Number of customers: %d\n", state.num_delays_required);
-	printf("Number of servers: %d\n", state.number_of_servers);
-	if(state.without_infinite_queue == 0) printf("Without Queue \n");
-	else {
-		printf("With Queue \n");
-		if(q1.dis == 0) printf("FIFO \n");
-		else printf("LIFO \n");
-	}
-	
 
 	/* Asks for the output file. Open the output file */
 	char nome_saida[100];
@@ -79,40 +57,76 @@ int main(int argc, char *argv[]) {
 		} else {
 			printf("Erro: O nome do ficheiro deve terminar com '.csv'. Tente novamente.\n");
 		}
-  }
-
-	files.outfile = fopen(nome_saida, "w");
-	if (!files.outfile) {
-		perror("File opening failed");
-		return EXIT_FAILURE;
-  }
-
-	/* Initialize the simulation. */
-	initialize(&state, &stats, &events, state.streams[0], &q1);
-	
-  /* Run the simulation while the required number of customers has not been delayed. */
-	while (state.num_custs_delayed < state.num_delays_required) {
-
-		/* Determine the next event (either an arrival or departure). */
-		timing(&state, &stats, &files, &events);
-		
-    /* Update the time-average statistics based on the time elapsed since the last event. */
-		update_time_avg_stats(&state, &stats, &events);
-
-		/* Process the next event based on its type (1 for arrival, 2 for departure). */
-		switch (state.next_event_type) {
-			case 1:
-				arrive(&state, &stats, &files, &events, &q1);
-				break;
-
-			default: /* Se o next_event_type estiver entre 2 e number_of_server+1 */
-				depart(&state, &stats, &events, &q1);
-				break;
-		}
 	}
 
-	/* Invoke the report generator and end the simulation. */
-	report(&state, &stats, &files, &events, &q1);
+		files.outfile = fopen(nome_saida, "w");
+		if (!files.outfile) {
+			perror("File opening failed");
+			return EXIT_FAILURE;
+	}
+
+		int reps = 9;
+
+		/* Check if the input file is provided as an argument. */
+		if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
+			receive_input_file(argc, argv, &files, &q1, &ini);
+		
+			/* Call the function and generate the remaining seeds */
+			generate_other_streams(&ini);
+		}
+		else {
+			ask_for_par(&files, &q1, &ini);
+		}
+	
+		printf("Mean interarrival time: %f\n", ini.mean_interarrival);
+		printf("Mean service time: %f\n", ini.mean_service);
+		printf("Number of customers: %d\n", ini.num_delays_required);
+		printf("Number of servers: %d\n", ini.number_of_servers);
+		printf("Number of runs: %d\n", ini.number_of_reps);
+		if(ini.without_infinite_queue == 0) printf("Without Queue \n");
+		else {
+			printf("With Queue \n");
+			if(q1.dis == 0) printf("FIFO \n");
+			else printf("LIFO \n");
+		}
+
+
+
+	for(int i=1; i <= ini.number_of_reps; i++){
+
+		/* Prints all the parameters */
+		
+
+		/* Initialize the simulation. */
+		initialize(&state[i], &stats[i], &events[i], ini.streams[0], &q1, &ini);
+		
+	/* Run the simulation while the required number of customers has not been delayed. */
+		while (state[i].num_custs_delayed < ini.num_delays_required) {
+
+			/* Determine the next event (either an arrival or departure). */
+			timing(&state[i], &stats[i], &files, &events[i], &ini);
+			
+		/* Update the time-average statistics based on the time elapsed since the last event. */
+			update_time_avg_stats(&state[i], &stats[i], &events[i], &ini);
+
+			/* Process the next event based on its type (1 for arrival, 2 for departure). */
+			switch (state[i].next_event_type) {
+				case 1:
+					arrive(&state[i], &stats[i], &files, &events[i], &q1, &ini);
+					break;
+
+				default: /* Se o next_event_type estiver entre 2 e number_of_server+1 */
+					depart(&state[i], &stats[i], &events[i], &q1, &ini);
+					break;
+			}
+		}
+
+		/* Invoke the report generator and end the simulation. */
+
+	}
+
+	report(&state, &stats, &files, &events, &q1, &ini);
+	
 	fclose(files.infile);
 	fclose(files.outfile);
 	

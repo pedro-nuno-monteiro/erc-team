@@ -1,10 +1,12 @@
+
+
 Simulation of a queueing system with 5 servers
 
-Mean interarrival time;       34.00 ; minutes
+Mean interarrival time;        2.00 ; minutes
 
 Mean service time;             3.00 ; minutes
 
-Number of customers ;            344
+Number of customers ;           1000
 
 With Queue
 
@@ -12,19 +14,174 @@ LIFO discipline
 
 
 
-Average delay in queue per client ;        0.000 ; minutes
+Average delay in queue per client ;        0.002 ; minutes
+
+Average number of clients in queue ;       0.001
+
+
+Server 1 utilization ;                     0.268
+
+Server 2 utilization ;                     0.269
+
+Server 3 utilization ;                     0.252
+
+Server 4 utilization ;                     0.289
+
+Server 5 utilization ;                     0.304
+
+Time simulation ended ;                    1957.088 ; minutes
+
+Simulation of a queueing system with 5 servers
+
+Mean interarrival time;        2.00 ; minutes
+
+Mean service time;             3.00 ; minutes
+
+Number of customers ;           1000
+
+With Queue
+
+LIFO discipline
+
+
+
+Average delay in queue per client ;        0.007 ; minutes
+
+Average number of clients in queue ;       0.003
+
+
+Server 1 utilization ;                     0.268
+
+Server 2 utilization ;                     0.269
+
+Server 3 utilization ;                     0.252
+
+Server 4 utilization ;                     0.289
+
+Server 5 utilization ;                     0.304
+
+Time simulation ended ;                    2094.471 ; minutes
+
+Simulation of a queueing system with 5 servers
+
+Mean interarrival time;        2.00 ; minutes
+
+Mean service time;             3.00 ; minutes
+
+Number of customers ;           1000
+
+With Queue
+
+LIFO discipline
+
+
+
+Average delay in queue per client ;        0.002 ; minutes
+
+Average number of clients in queue ;       0.001
+
+
+Server 1 utilization ;                     0.268
+
+Server 2 utilization ;                     0.269
+
+Server 3 utilization ;                     0.252
+
+Server 4 utilization ;                     0.289
+
+Server 5 utilization ;                     0.304
+
+Time simulation ended ;                    2058.080 ; minutes
+
+Simulation of a queueing system with 5 servers
+
+Mean interarrival time;        2.00 ; minutes
+
+Mean service time;             3.00 ; minutes
+
+Number of customers ;           1000
+
+With Queue
+
+LIFO discipline
+
+
+
+Average delay in queue per client ;        0.001 ; minutes
 
 Average number of clients in queue ;       0.000
 
 
-Server 1 utilization ;                     0.020
+Server 1 utilization ;                     0.268
 
-Server 2 utilization ;                     0.020
+Server 2 utilization ;                     0.269
 
-Server 3 utilization ;                     0.020
+Server 3 utilization ;                     0.252
 
-Server 4 utilization ;                     0.020
+Server 4 utilization ;                     0.289
 
-Server 5 utilization ;                     0.020
+Server 5 utilization ;                     0.304
 
-Time simulation ended ;                   10925.812 ; minutes
+Time simulation ended ;                    2079.942 ; minutes
+
+Simulation of a queueing system with 5 servers
+
+Mean interarrival time;        2.00 ; minutes
+
+Mean service time;             3.00 ; minutes
+
+Number of customers ;           1000
+
+With Queue
+
+LIFO discipline
+
+
+
+Average delay in queue per client ;        0.008 ; minutes
+
+Average number of clients in queue ;       0.004
+
+
+Server 1 utilization ;                     0.268
+
+Server 2 utilization ;                     0.269
+
+Server 3 utilization ;                     0.252
+
+Server 4 utilization ;                     0.289
+
+Server 5 utilization ;                     0.304
+
+Time simulation ended ;                    1923.689 ; minutes
+
+Simulation of a queueing system with 5 servers
+
+Mean interarrival time;        2.00 ; minutes
+
+Mean service time;             3.00 ; minutes
+
+Number of customers ;           1000
+
+With Queue
+
+LIFO discipline
+
+
+
+Average delay in queue per client ;        0.008 ; minutes
+
+Average number of clients in queue ;       0.004
+
+
+Server 1 utilization ;                     0.268
+
+Server 2 utilization ;                     0.269
+
+Server 3 utilization ;                     0.252
+
+Server 4 utilization ;                     0.289
+
+Server 5 utilization ;                     0.304
+
+Time simulation ended ;                    1913.226 ; minutes
