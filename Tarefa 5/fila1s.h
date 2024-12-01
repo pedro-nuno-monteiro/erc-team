@@ -45,17 +45,10 @@ typedef struct {
 typedef struct {
     int next_event_type;            /*!< Type of the next event to occur (e.g., arrival, departure). */
     int num_custs_delayed;          /*!< Number of customers that have been delayed. */
-    // int num_delays_required;        /*!< Number of delays required to complete the simulation. */
     int num_in_q;                   /*!< Number of customers in the queue. */
     int server_status[MAX_SERVERS + 2];              /*!< Server status (0 = idle, 1 = busy). */
     float time_arrival[Q_LIMIT + 1];    /*!< Time of arrival for each customer in the queue. */
-    // float mean_interarrival;        /*!< Mean time between customer arrivals (inter-arrival time). */
-    // float mean_service;             /*!< Mean service time. */
-    // int number_of_servers;          /*!< Number of active servers. */
     int num_events;                 /*!< Dynamically calculated based on servers. */
-    // int streams[MAX_SERVERS + 1];   /*!< Stream identifiers. */
-    // int without_infinite_queue;     /*!< 1 for infinite queue, 0 for limited queue. */
-    // float A; /* !< Offered traffic. */
 } SystemState;
 
 /*! 

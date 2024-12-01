@@ -1,0 +1,542 @@
+\doxysection{lab1/fila1s.c File Reference}
+\hypertarget{fila1s_8c}{}\label{fila1s_8c}\index{lab1/fila1s.c@{lab1/fila1s.c}}
+{\ttfamily \#include "{}fila1s.\+h"{}}\newline
+{\ttfamily \#include "{}lcgrand.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{fila1s_8c_a189ad95e30fe45bf8dbb37a1cfd4dd16}{ask\+\_\+streams}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state)
+\item 
+void \mbox{\hyperlink{fila1s_8c_a507322543b0cef813fc88b4e03b2049f}{generate\+\_\+other\+\_\+streams}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state)
+\item 
+int \mbox{\hyperlink{fila1s_8c_a7d7e97d6c7e6924f105f98f9050d3e38}{select\+Free\+Server}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state, \mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}stats)
+\item 
+float \mbox{\hyperlink{fila1s_8c_ad3058f8628cdcdec85698cbf472abd86}{expon}} (float mean, int stream)
+\item 
+void \mbox{\hyperlink{fila1s_8c_a7fdc20bba0c0736ba207bd864343577b}{initialize}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state, \mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}stats, \mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}events, int stream)
+\item 
+void \mbox{\hyperlink{fila1s_8c_ac012e944467055e23e5089858e60123d}{report}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state, \mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}stats, \mbox{\hyperlink{struct_files}{Files}} \texorpdfstring{$\ast$}{*}files, \mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}events)
+\item 
+void \mbox{\hyperlink{fila1s_8c_a4bfec20f8a953e28b389800b506499f4}{update\+\_\+time\+\_\+avg\+\_\+stats}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state, \mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}stats, \mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}events)
+\begin{DoxyCompactList}\small\item\em Update area accumulators for time-\/average statistics. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fila1s_8c_a251b70b2f3fa49e0ef6b5096c1d4270b}{timing}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state, \mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}stats, \mbox{\hyperlink{struct_files}{Files}} \texorpdfstring{$\ast$}{*}files, \mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}events)
+\item 
+void \mbox{\hyperlink{fila1s_8c_a0162b1e4ed03e2abbfc30ad29467e1e7}{arrive}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state, \mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}stats, \mbox{\hyperlink{struct_files}{Files}} \texorpdfstring{$\ast$}{*}files, \mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}events)
+\item 
+void \mbox{\hyperlink{fila1s_8c_a8080cfd0a743b89367173c895bab1837}{depart}} (\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}state, \mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}stats, \mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}events)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{fila1s_8c_a0162b1e4ed03e2abbfc30ad29467e1e7}\index{fila1s.c@{fila1s.c}!arrive@{arrive}}
+\index{arrive@{arrive}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{arrive()}{arrive()}}
+{\footnotesize\ttfamily \label{fila1s_8c_a0162b1e4ed03e2abbfc30ad29467e1e7} 
+void arrive (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{, }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}}]{stats}{, }\item[{\mbox{\hyperlink{struct_files}{Files}} \texorpdfstring{$\ast$}{*}}]{files}{, }\item[{\mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}}]{events}{}\end{DoxyParamCaption})}
+
+Function arrive \+: handles customers arriving at the queue by scheduling the next arrival, checking server availability, and managing the queue if all servers are occupied.
+
+Input/\+Output parameters\+:
+\begin{DoxyItemize}
+\item state\+: Pointer to the system state structure, updated to track queue size, server status, and number of lost customers.
+\item stats\+: Pointer to the statistics structure, updated to increment lost customers if the queue is full.
+\item files\+: Pointer to the file management structure, used for handling queue overflow conditions.
+\item events\+: Pointer to the event list structure, updated to schedule the next arrival event. 
+\end{DoxyItemize}We increased the number of users in the waiting list
+
+Check to see whether an overflow condition exists.
+
+The queue has overflowed, so stop the simulation.
+
+There is still room in the queue, so store the time of arrival of the arriving customer at the (new) end of time\+\_\+arrival.
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00335\ \ \ \ \ }
+\DoxyCodeLine{00336\ \ \ \ \ \textcolor{keywordtype}{float}\ delay;}
+\DoxyCodeLine{00337\ \ \ \ \ }
+\DoxyCodeLine{00338\ \ \ \ \ \textcolor{comment}{/*\ Schedule\ the\ next\ arrival\ event\ */}}
+\DoxyCodeLine{00339\ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_a16899595b36a14e4c5f4c2f58b5eb56b}{time\_next\_event}}[1]\ =\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ +\ \mbox{\hyperlink{fila1s_8c_ad3058f8628cdcdec85698cbf472abd86}{expon}}(state-\/>\mbox{\hyperlink{struct_system_state_afa0250edc22f626f46ed6999f17f160a}{mean\_interarrival}},state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[0]);\ }
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{/*\ Checks\ if\ there\ are\ free\ servers,\ if\ there\ are\ not,\ the\ function\ returns\ -\/1\ */}}
+\DoxyCodeLine{00342\ \ \ \ \ \textcolor{keywordtype}{int}\ free\_server\_index\ =\ \mbox{\hyperlink{fila1s_8c_a7d7e97d6c7e6924f105f98f9050d3e38}{selectFreeServer}}(state,\ stats);}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \ \ \ \ \textcolor{keywordflow}{if}\ (free\_server\_index\ !=\ -\/1)\ \{\ \textcolor{comment}{/*\ There\ are\ free\ servers\ */}}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ delay\ =\ 0.0;\ \textcolor{comment}{/*\ The\ customer\ is\ served\ immediately,\ so\ the\ delay\ =\ 0\ */}}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Increases\ the\ number\ of\ customers\ served\ */}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ ++state-\/>\mbox{\hyperlink{struct_system_state_a95b8a861931c663705d8ecedd6d0219c}{num\_custs\_delayed}};}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Mark\ the\ server\ as\ busy\ */}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_ae51b6ee2880318759d27443a74298fa9}{server\_status}}[free\_server\_index]\ =\ \mbox{\hyperlink{fila1s_8h_ab5be0aaddb58ffb9cb20c12530d66316}{BUSY}};}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Schedule\ a\ departure\ for\ this\ customer\ (service\ completion)\ */}}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_a16899595b36a14e4c5f4c2f58b5eb56b}{time\_next\_event}}[free\_server\_index]\ =\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ +\ \mbox{\hyperlink{fila1s_8c_ad3058f8628cdcdec85698cbf472abd86}{expon}}(state-\/>\mbox{\hyperlink{struct_system_state_aaabf9535f8b7048b8b8d9ac912d622eb}{mean\_service}},\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[free\_server\_index-\/1]);}
+\DoxyCodeLine{00355\ \ \ \ \ \}}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{keywordflow}{else}\{\ \textcolor{comment}{/*\ Todos\ os\ servers\ estao\ ocupados\ */}}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(state-\/>\mbox{\hyperlink{struct_system_state_a031a066c65250220261001c826e50450}{without\_infinite\_queue}}\ ==\ 0)\{\ \textcolor{comment}{/*\ If\ we\ don't\ have\ a\ queue\ -\/>\ M/M/n/0\ (Erlang-\/B):\ Reject\ customer\ */}}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ stats-\/>\mbox{\hyperlink{struct_statistics_acb661e710baf5da0ce33cee61d59ff96}{lost\_customers}}++;}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00364\ }
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ ++state-\/>\mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}};\ }
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (state-\/>\mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}}\ >\ \mbox{\hyperlink{fila1s_8h_aaa75be566c9c8da967954407ca97c72b}{Q\_LIMIT}})\ \{}
+\DoxyCodeLine{00369\ }
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}\(\backslash\)nOverflow\ of\ the\ array\ time\_arrival\ at"{}});}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}\ time\ \%f"{}},\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}});}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ exit(2);}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_af50c29f0b99eccfc8c3aa905f1d73cc2}{time\_arrival}}[state-\/>\mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}}]\ =\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}};}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00379\ \ \ \ \ \}}
+\DoxyCodeLine{00380\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_a189ad95e30fe45bf8dbb37a1cfd4dd16}\index{fila1s.c@{fila1s.c}!ask\_streams@{ask\_streams}}
+\index{ask\_streams@{ask\_streams}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{ask\_streams()}{ask\_streams()}}
+{\footnotesize\ttfamily \label{fila1s_8c_a189ad95e30fe45bf8dbb37a1cfd4dd16} 
+void ask\+\_\+streams (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{}\end{DoxyParamCaption})}
+
+Code from Simulation and Modelling 5e Averill M. Law B Function ask\+\_\+streams\+: prompts the user to enter two seeds, one for arrivals and another for departures. Output parameters\+:
+\begin{DoxyItemize}
+\item state-\/\texorpdfstring{$>$}{>}streams\mbox{[}i\mbox{]}\+: array updated with the first two seeds.
+\end{DoxyItemize}
+
+Input parameters\+:
+\begin{DoxyItemize}
+\item state\+: pointer to the system state structure where seeds are stored. 
+\end{DoxyItemize}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{/*\ We\ ask\ for\ 2\ seeds,\ the\ first\ is\ reserved\ for\ arrivals\ and\ the\ second\ is\ used\ for\ departures\ */}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 2;\ i++)\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{do}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(i==0)\{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Escreve\ a\ semente\ correspondente\ as\ chegadas:\ "{}});}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Escreve\ a\ semente\ correspondente\ as\ partidas:\ "{}});}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (scanf(\textcolor{stringliteral}{"{}\%d"{}},\ \&state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i])\ !=\ 1)\ \{\ \ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Por\ favor,\ insira\ um\ numero\ positivo.\(\backslash\)n"{}});}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ch;}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ ((ch\ =\ getchar())\ !=\ \textcolor{charliteral}{'\(\backslash\)n'}\ \&\&\ ch\ !=\ EOF);\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ =\ -\/1;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ <=\ 0\ ||\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ >\ 100)\ \{\ \textcolor{comment}{/*\ We\ guarantee\ that\ each\ seed\ introduced\ is\ within\ the\ desired\ values\ \ */}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}As\ sementes\ têm\ de\ estar\ compreendidas\ entre\ [1,\ 100].\ \(\backslash\)n"{}});}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{while}(state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ <=\ 0\ ||\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ >\ 100\ ||\ (i\ ==\ 1\ \&\&\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[0]\ ==\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[1]));\ \textcolor{comment}{/*\ This\ loop\ ensures\ that\ the\ two\ seeds\ are\ different\ from\ each\ other\ */}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_a8080cfd0a743b89367173c895bab1837}\index{fila1s.c@{fila1s.c}!depart@{depart}}
+\index{depart@{depart}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{depart()}{depart()}}
+{\footnotesize\ttfamily \label{fila1s_8c_a8080cfd0a743b89367173c895bab1837} 
+void depart (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{, }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}}]{stats}{, }\item[{\mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}}]{events}{}\end{DoxyParamCaption})}
+
+Function depart \+: handles customer departures by updating queue length, calculating delay for the customer beginning service, and setting the server status to idle if the queue is empty.
+
+Input/\+Output parameters\+:
+\begin{DoxyItemize}
+\item state\+: Pointer to the system state structure, updated to track server status, queue length, and customer arrival times.
+\item stats\+: Pointer to the statistics structure, updated to accumulate total delay and number of customers delayed.
+\item events\+: Pointer to the event list structure, updated to schedule the next departure or set it to infinity if the server becomes idle. 
+\end{DoxyItemize}If the queue is empty
+
+The queue is empty so make the server idle and eliminate the departure (service completion) event from consideration.
+
+Compute the delay of the customer who is beginning service and update the total delay accumulator.
+
+Increment the number of customers delayed, and schedule departure.
+
+Move each customer in queue (if any) up one place. With a circular queue it is much better
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00394\ \ \ \ \ }
+\DoxyCodeLine{00395\ \ \ \ \ \textcolor{keywordtype}{float}\ delay;}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keywordflow}{if}\ (state-\/>\mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}}\ ==\ 0)\ \{}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_ae51b6ee2880318759d27443a74298fa9}{server\_status}}[state-\/>\mbox{\hyperlink{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\_event\_type}}]\ =\ \mbox{\hyperlink{fila1s_8h_a9c21a7caee326d7803b94ae1952b27ca}{IDLE}};\ \textcolor{comment}{/*\ The\ next\_event\ type\ corresponds\ to\ the\ server\ index\ -\/>\ see\ in\ the\ timing\ function\ */}}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_a16899595b36a14e4c5f4c2f58b5eb56b}{time\_next\_event}}[state-\/>\mbox{\hyperlink{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\_event\_type}}]\ =\ 1.0e+30;\ \textcolor{comment}{/*\ Sets\ the\ next\ event\ to\ infinite\ */}}
+\DoxyCodeLine{00403\ \ \ \ \ \}}
+\DoxyCodeLine{00404\ \ \ \ \ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{/*\ The\ queue\ is\ not\ empty\ */}}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ So\ the\ number\ of\ customers\ in\ the\ queue\ decreases\ */}}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ -\/-\/state-\/>\mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}};}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ }
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ delay\ =\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ -\/\ state-\/>\mbox{\hyperlink{struct_system_state_af50c29f0b99eccfc8c3aa905f1d73cc2}{time\_arrival}}[1];}
+\DoxyCodeLine{00411\ }
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ stats-\/>\mbox{\hyperlink{struct_statistics_a4c8e9207a46d30f1ab90d90bc2242733}{total\_of\_delays}}\ +=\ delay;}
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00414\ }
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ ++state-\/>\mbox{\hyperlink{struct_system_state_a95b8a861931c663705d8ecedd6d0219c}{num\_custs\_delayed}};}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_a16899595b36a14e4c5f4c2f58b5eb56b}{time\_next\_event}}[2]\ =\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ +\ \mbox{\hyperlink{fila1s_8c_ad3058f8628cdcdec85698cbf472abd86}{expon}}(state-\/>\mbox{\hyperlink{struct_system_state_aaabf9535f8b7048b8b8d9ac912d622eb}{mean\_service}},state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[state-\/>\mbox{\hyperlink{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\_event\_type}}]);}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00418\ }
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ state-\/>\mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}};\ ++i)}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_af50c29f0b99eccfc8c3aa905f1d73cc2}{time\_arrival}}[i]\ =\ state-\/>\mbox{\hyperlink{struct_system_state_af50c29f0b99eccfc8c3aa905f1d73cc2}{time\_arrival}}[i\ +\ 1];}
+\DoxyCodeLine{00421\ \ \ \ \ \}}
+\DoxyCodeLine{00422\ }
+\DoxyCodeLine{00423\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_ad3058f8628cdcdec85698cbf472abd86}\index{fila1s.c@{fila1s.c}!expon@{expon}}
+\index{expon@{expon}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{expon()}{expon()}}
+{\footnotesize\ttfamily \label{fila1s_8c_ad3058f8628cdcdec85698cbf472abd86} 
+float expon (\begin{DoxyParamCaption}\item[{float}]{mean}{, }\item[{int}]{stream}{}\end{DoxyParamCaption})}
+
+Function expon\+: calculates an exponentially distributed random variable.
+
+Input parameters\+:
+\begin{DoxyItemize}
+\item mean\+: mean of the exponential distribution
+\item stream\+: seed for random number generation.
+\end{DoxyItemize}
+
+Returns\+: an exponentially distributed value with the specified mean. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/mean\ *\ logf(\mbox{\hyperlink{lcgrand_8c_ab7a029a34172d39dfb6a0d42b16d819a}{lcgrand}}(stream));}
+\DoxyCodeLine{00142\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_a507322543b0cef813fc88b4e03b2049f}\index{fila1s.c@{fila1s.c}!generate\_other\_streams@{generate\_other\_streams}}
+\index{generate\_other\_streams@{generate\_other\_streams}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{generate\_other\_streams()}{generate\_other\_streams()}}
+{\footnotesize\ttfamily \label{fila1s_8c_a507322543b0cef813fc88b4e03b2049f} 
+void generate\+\_\+other\+\_\+streams (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{}\end{DoxyParamCaption})}
+
+Function generate\+\_\+other\+\_\+streams\+: generates additional seed streams for servers.
+
+Input/output parameters\+:
+\begin{DoxyItemize}
+\item state-\/\texorpdfstring{$>$}{>}streams\+: array updated with generated seeds
+\end{DoxyItemize}
+
+Input parameters\+:
+\begin{DoxyItemize}
+\item state\+: structure containing the number of servers. 
+\end{DoxyItemize}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{/*\ This\ function\ generates\ the\ remaining\ seeds\ used.\ If\ there\ are\ n\ servers\ then\ we\ need\ to\ generate\ n-\/1\ seeds\ because\ the\ first\ seed\ corresponding\ to\ arrival\ is\ used\ for\ the\ first\ server.\ */}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{/*\ This\ loop\ serves\ to\ ensure\ that\ the\ seeds\ now\ generated\ are\ not\ the\ same\ as\ the\ seed\ used\ by\ the\ arrival. }}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ Furthermore,\ it\ guarantees\ that\ seed\ generation\ is\ circular,\ that\ is,\ if\ we\ reach\ index\ 1001\ it\ becomes\ 1.\  }}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ Seeds\ are\ generated\ from\ the\ starting\ seed\ for\ server\ 1\ and\ the\ rest\ are\ obtained\ by\ adding\ 1\ unit.\ */}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i=\ 2;\ i<=state-\/>\mbox{\hyperlink{struct_system_state_a338fcdd423201660ebe5bafe73ed6a60}{number\_of\_servers}}\ +\ 1;\ i++)\{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ =\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i-\/1]\ +\ 1;\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ ==\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[0])\{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ =\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i-\/1]\ +\ 2;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ ==\ 101)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]\ =\ 1;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \}\ \ \ }
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ printf(\textcolor{stringliteral}{"{}Streams\ =\ [\ "{}});}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{/*\ This\ loop\ is\ only\ used\ to\ show\ the\ array\ with\ all\ the\ seeds\ that\ will\ be\ used\ */}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i=0;\ i<=state-\/>\mbox{\hyperlink{struct_system_state_a338fcdd423201660ebe5bafe73ed6a60}{number\_of\_servers}}\ +\ 1\ ;\ i++)\{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(i\ <\ state-\/>number\_of\_servers+1)\{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}\ \%d,\ "{}},\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]);}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}\ \%d\ ]\ \(\backslash\)n"{}},\ state-\/>\mbox{\hyperlink{struct_system_state_a73b27c3398aa1720f1f540c6ee765f87}{streams}}[i]);}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_a7fdc20bba0c0736ba207bd864343577b}\index{fila1s.c@{fila1s.c}!initialize@{initialize}}
+\index{initialize@{initialize}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily \label{fila1s_8c_a7fdc20bba0c0736ba207bd864343577b} 
+void initialize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{, }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}}]{stats}{, }\item[{\mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}}]{events}{, }\item[{int}]{stream}{}\end{DoxyParamCaption})}
+
+Function initialize\+: initializes the state of the simulation system, including setting up the simulation clock, random number generators, state variables, and event list
+
+Input parameters\+:
+\begin{DoxyItemize}
+\item stream\+: Random number stream used for generating arrival times.
+\end{DoxyItemize}
+
+Input/\+Output parameters\+:
+\begin{DoxyItemize}
+\item state\+: Pointer to the system state structure.
+\item stats\+: Pointer to the statistics structure.
+\item events\+: Pointer to the event list structure.
+\item stream\+: Random number stream used for generating arrival times. 
+\end{DoxyItemize}Initialize the simulation clock.
+
+These are the departures for each server. We put a big number.
+
+Update the number of events
+
+Number of custumers in queu start in zero
+
+Initialize the statistical counters.
+
+Initialize event list. Since no customers are present, the departure (service completion) event is eliminated from consideration.
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00161\ \ \ \ \ }
+\DoxyCodeLine{00162\ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ =\ 0.0;\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_a16899595b36a14e4c5f4c2f58b5eb56b}{time\_next\_event}}[1]\ =\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ +\ \mbox{\hyperlink{fila1s_8c_ad3058f8628cdcdec85698cbf472abd86}{expon}}(state-\/>\mbox{\hyperlink{struct_system_state_afa0250edc22f626f46ed6999f17f160a}{mean\_interarrival}},\ stream);\ \textcolor{comment}{/*\ time\_next\_event[1]\ representa\ o\ evento\ de\ chegada*/}}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{//\ events-\/>time\_next\_event[2]\ =\ 1.0e+30;}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{comment}{/*\ Initialize\ all\ servers\ as\ IDLE\ */}}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{/*\ Initialize\ departure\ events\ for\ each\ server\ */}}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 2;\ i\ <=\ state-\/>\mbox{\hyperlink{struct_system_state_a338fcdd423201660ebe5bafe73ed6a60}{number\_of\_servers}}\ +\ 1;\ ++i)\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_ae51b6ee2880318759d27443a74298fa9}{server\_status}}[i]\ =\ \mbox{\hyperlink{fila1s_8h_a9c21a7caee326d7803b94ae1952b27ca}{IDLE}};}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ stats-\/>\mbox{\hyperlink{struct_statistics_ae558c2f029d0e9c95913daaae7aa0033}{area\_server\_status}}[i]\ =\ 0.0;}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ We\ use\ i+2\ here\ because\ we\ start\ at\ [2]\ since\ position\ [1]\ is\ for\ the\ arrival\ event\ */}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_a16899595b36a14e4c5f4c2f58b5eb56b}{time\_next\_event}}[i]\ =\ 1.0e+30;\ }
+\DoxyCodeLine{00175\ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a2de2ffc34d0664f7a2e748d2342d1e10}{num\_events}}=state-\/>\mbox{\hyperlink{struct_system_state_a338fcdd423201660ebe5bafe73ed6a60}{number\_of\_servers}}+1\ ;\ }
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}}\ =\ 0;\ }
+\DoxyCodeLine{00181\ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_afaba36fb5a44b654432472baa454e7a9}{time\_last\_event}}\ =\ 0.0;\ \textcolor{comment}{/*\ Time\ of\ last\ event\ starts\ in\ zero\ */}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a95b8a861931c663705d8ecedd6d0219c}{num\_custs\_delayed}}\ =\ \ 0;\ \textcolor{comment}{/*\ Number\ of\ custumers\ */}}
+\DoxyCodeLine{00184\ \ \ \ \ stats-\/>\mbox{\hyperlink{struct_statistics_a4c8e9207a46d30f1ab90d90bc2242733}{total\_of\_delays}}\ \ \ \ =\ \ \ 0.0;\ \textcolor{comment}{/*\ Number\ of\ delays\ */}}
+\DoxyCodeLine{00185\ \ \ \ \ stats-\/>\mbox{\hyperlink{struct_statistics_a2f4a1bbeb237a5f133e7e991ee240593}{area\_num\_in\_q}}\ \ \ \ =\ \ \ 0.0;\ \textcolor{comment}{/*\ Number\ of\ the\ utilization\ rate\ */}}
+\DoxyCodeLine{00186\ \ \ \ \ stats-\/>\mbox{\hyperlink{struct_statistics_acb661e710baf5da0ce33cee61d59ff96}{lost\_customers}}\ \ \ \ =\ \ \ 0;\ \textcolor{comment}{/*\ Number\ of\ lost\ costumers\ */}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ }
+\DoxyCodeLine{00190\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_ac012e944467055e23e5089858e60123d}\index{fila1s.c@{fila1s.c}!report@{report}}
+\index{report@{report}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{report()}{report()}}
+{\footnotesize\ttfamily \label{fila1s_8c_ac012e944467055e23e5089858e60123d} 
+void report (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{, }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}}]{stats}{, }\item[{\mbox{\hyperlink{struct_files}{Files}} \texorpdfstring{$\ast$}{*}}]{files}{, }\item[{\mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}}]{events}{}\end{DoxyParamCaption})}
+
+Function report\+: writes the simulation results to the output file, including performance metrics like average delay, lost customers, and server utilization.
+
+Input/\+Output parameters\+:
+\begin{DoxyItemize}
+\item state\+: Pointer to the system state structure.
+\item stats\+: Pointer to the statistics structure.
+\item files\+: Pointer to the file management structure.
+\item events\+: Pointer to the event list structure.
+\end{DoxyItemize}
+
+Output parameters\+:
+\begin{DoxyItemize}
+\item Writes the formatted simulation report to the output file. 
+\end{DoxyItemize}Write report heading and input parameters to the output file.
+
+Print the average delay in queue per client
+
+Print the average number of lost clients
+
+Print the average number of clients in queue
+
+Print the average server utilization. We use this loop to ensure that if area\+\_\+server\+\_\+status == 0 then we avoid divisions by zero
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Single-\/server\ queueing\ system\(\backslash\)n\(\backslash\)n"{}});}
+\DoxyCodeLine{00211\ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Mean\ interarrival\ time\%11.3f\ minutes\(\backslash\)n\(\backslash\)n"{}},\ state-\/>\mbox{\hyperlink{struct_system_state_afa0250edc22f626f46ed6999f17f160a}{mean\_interarrival}});}
+\DoxyCodeLine{00212\ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Mean\ service\ time\%16.3f\ minutes\(\backslash\)n\(\backslash\)n"{}},\ state-\/>\mbox{\hyperlink{struct_system_state_aaabf9535f8b7048b8b8d9ac912d622eb}{mean\_service}});}
+\DoxyCodeLine{00213\ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Number\ of\ customers\%14d\(\backslash\)n\(\backslash\)n"{}},\ state-\/>\mbox{\hyperlink{struct_system_state_ada13471633986449759bdd49f4ad8b87}{num\_delays\_required}});}
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keywordflow}{if}(state-\/>\mbox{\hyperlink{struct_system_state_a031a066c65250220261001c826e50450}{without\_infinite\_queue}}\ ==\ 0\ )\{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Without\ Queue\(\backslash\)n\(\backslash\)n"{}});}
+\DoxyCodeLine{00216\ \ \ \ \ \}}
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}With\ Queue\(\backslash\)n\(\backslash\)n"{}});}
+\DoxyCodeLine{00219\ \ \ \ \ \}}
+\DoxyCodeLine{00220\ \ \ \ \ }
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nAverage\ delay\ in\ queue\ per\ client\ \%11.3f\ minutes\(\backslash\)n\(\backslash\)n"{}},\ stats-\/>\mbox{\hyperlink{struct_statistics_a4c8e9207a46d30f1ab90d90bc2242733}{total\_of\_delays}}\ /\ state-\/>\mbox{\hyperlink{struct_system_state_a95b8a861931c663705d8ecedd6d0219c}{num\_custs\_delayed}});}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordflow}{if}(state-\/>\mbox{\hyperlink{struct_system_state_a031a066c65250220261001c826e50450}{without\_infinite\_queue}}\ ==\ 0)\{\ \ \textcolor{comment}{/*\ If\ we\ don't\ have\ an\ infinite\ queue\ */}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Average\ number\ of\ lost\ clients\ \%14.3f\(\backslash\)n\(\backslash\)n"{}},\ stats-\/>\mbox{\hyperlink{struct_statistics_acb661e710baf5da0ce33cee61d59ff96}{lost\_customers}});}
+\DoxyCodeLine{00228\ \ \ \ \ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordflow}{else}\{\ \textcolor{comment}{/*\ If\ we\ have\ an\ infinite\ queue\ */}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Average\ number\ of\ clients\ in\ queue\ \%10.3f\(\backslash\)n\(\backslash\)n"{}},\ stats-\/>\mbox{\hyperlink{struct_statistics_a2f4a1bbeb237a5f133e7e991ee240593}{area\_num\_in\_q}}\ /\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}});}
+\DoxyCodeLine{00233\ \ \ \ \ \}}
+\DoxyCodeLine{00234\ \ \ \ \ }
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 2;\ i\ <=\ state-\/>\mbox{\hyperlink{struct_system_state_a338fcdd423201660ebe5bafe73ed6a60}{number\_of\_servers}}\ +\ 1;\ i++\ )\{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ >\ 0)\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Server\ \%d\ utilization\%25.3f\(\backslash\)n\(\backslash\)n"{}},\ i-\/1\ ,stats-\/>\mbox{\hyperlink{struct_statistics_ae558c2f029d0e9c95913daaae7aa0033}{area\_server\_status}}[i]\ /\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}});}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \}\ }
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{/*\ To\ avoid\ division\ by\ zero\ if\ events-\/>sim\_time\ >\ 0\ */}}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Server\ \%d\ utilization\%25.3f\ \(\backslash\)n\(\backslash\)n"{}},\ i-\/1,\ 0.0);}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00246\ \ \ \ \ \}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}Time\ simulation\ ended\%26.3f\ minutes"{}},\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}});}
+\DoxyCodeLine{00250\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_a7d7e97d6c7e6924f105f98f9050d3e38}\index{fila1s.c@{fila1s.c}!selectFreeServer@{selectFreeServer}}
+\index{selectFreeServer@{selectFreeServer}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{selectFreeServer()}{selectFreeServer()}}
+{\footnotesize\ttfamily \label{fila1s_8c_a7d7e97d6c7e6924f105f98f9050d3e38} 
+int select\+Free\+Server (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{, }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}}]{stats}{}\end{DoxyParamCaption})}
+
+Function select\+Free\+Server\+: selects an available server based on the area of each server.
+
+Output parameters\+: index of the available server or -\/1 if all are busy.
+
+Input/output parameters\+:
+\begin{DoxyItemize}
+\item stats-\/\texorpdfstring{$>$}{>}area\+\_\+server\+\_\+status\+: indicates the area of each server.
+\end{DoxyItemize}
+
+Input parameters\+:
+\begin{DoxyItemize}
+\item state-\/\texorpdfstring{$>$}{>}server\+\_\+status\+: array with the status (IDLE/\+BUSY) of each server. 
+\end{DoxyItemize}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ }
+\DoxyCodeLine{00104\ \ \ \ \ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{int}\ livre\ =\ -\/1;\ \textcolor{comment}{/*\ At\ the\ beginning\ we\ assume\ that\ no\ server\ is\ IDLE\ */}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{int}\ aux\ =\ stats-\/>\mbox{\hyperlink{struct_statistics_ae558c2f029d0e9c95913daaae7aa0033}{area\_server\_status}}[2];\ \textcolor{comment}{/*\ Let's\ assume\ that\ the\ first\ server\ is\ the\ one\ with\ the\ lowest\ utilization\ rate\ */}\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{int}\ indice\ =\ 2;\ \textcolor{comment}{/*\ We\ assume\ that\ the\ first\ server\ (index\ =\ 2)\ is\ the\ one\ with\ the\ lowest\ utilization\ rate\ */}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{/*\ This\ loop\ serves\ to\ understand\ which\ server\ has\ the\ lowest\ usage\ rate\ and\ is\ at\ the\ same\ time\ free\ */}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 2;\ i\ <=\ state-\/>\mbox{\hyperlink{struct_system_state_a338fcdd423201660ebe5bafe73ed6a60}{number\_of\_servers}}+1;\ ++i)\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (state-\/>\mbox{\hyperlink{struct_system_state_ae51b6ee2880318759d27443a74298fa9}{server\_status}}[i]\ ==\ \mbox{\hyperlink{fila1s_8h_a9c21a7caee326d7803b94ae1952b27ca}{IDLE}})\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ livre\ =\ 1;\ \textcolor{comment}{/*\ There\ is\ at\ least\ one\ free\ server\ */}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(stats-\/>\mbox{\hyperlink{struct_statistics_ae558c2f029d0e9c95913daaae7aa0033}{area\_server\_status}}[i]<=aux)\{}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ aux\ =\ stats-\/>\mbox{\hyperlink{struct_statistics_ae558c2f029d0e9c95913daaae7aa0033}{area\_server\_status}}[i];}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ indice\ =\ i;\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00119\ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{if}\ (livre\ ==\ -\/1)\{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;\ \textcolor{comment}{/*\ returns\ -\/1\ if\ all\ servers\ are\ busy\ */}}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ indice;\ \textcolor{comment}{/*\ returns\ the\ index\ of\ the\ first\ available\ server\ */}}
+\DoxyCodeLine{00125\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ \ \ \ \ }
+\DoxyCodeLine{00127\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_a251b70b2f3fa49e0ef6b5096c1d4270b}\index{fila1s.c@{fila1s.c}!timing@{timing}}
+\index{timing@{timing}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{timing()}{timing()}}
+{\footnotesize\ttfamily \label{fila1s_8c_a251b70b2f3fa49e0ef6b5096c1d4270b} 
+void timing (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{, }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}}]{stats}{, }\item[{\mbox{\hyperlink{struct_files}{Files}} \texorpdfstring{$\ast$}{*}}]{files}{, }\item[{\mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}}]{events}{}\end{DoxyParamCaption})}
+
+Function timing \+: determines the next event based on the times stored in the event list. Advances the simulation clock to the time of the next event. Checks if the event list is empty; if so, the simulation terminates.
+
+Input/\+Output parameters\+:
+\begin{DoxyItemize}
+\item state\+: Pointer to the system state structure, updated to set the next event type.
+\item stats\+: Pointer to the statistics structure, used here only for access to simulation variables.
+\item files\+: Pointer to the file management structure, used for writing termination messages if the event list is empty.
+\item events\+: Pointer to the event list structure, updated to set the simulation time to the time of the next event. 
+\end{DoxyItemize}The function loops through all event types and checks the time of each stored event. The event with the shortest time is the next to happen
+
+Check to see whether the event list is empty.
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{comment}{/*\ is\ a\ high\ value\ that\ will\ be\ used\ to\ compare\ and\ determine\ the\ shortest\ event\ time\ */}}
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keywordtype}{float}\ min\_time\_next\_event\ =\ 1.0e+29;}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{/*\ initializes\ to\ zero\ because\ there\ is\ no\ event\ selected\ */}}
+\DoxyCodeLine{00300\ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\_event\_type}}\ =\ 0;}
+\DoxyCodeLine{00301\ \ \ \ \ }
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ state-\/>\mbox{\hyperlink{struct_system_state_a2de2ffc34d0664f7a2e748d2342d1e10}{num\_events}};\ ++i)\ \textcolor{comment}{/*\ event\ [1]\ is\ included\ in\ the\ comparison\ because\ it\ may\ be\ the\ next\ event\ */}}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (events-\/>\mbox{\hyperlink{struct_event_list_a16899595b36a14e4c5f4c2f58b5eb56b}{time\_next\_event}}[i]\ <\ min\_time\_next\_event)\ \{}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ min\_time\_next\_event\ =\ events-\/>\mbox{\hyperlink{struct_event_list_a16899595b36a14e4c5f4c2f58b5eb56b}{time\_next\_event}}[i];}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ state-\/>\mbox{\hyperlink{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\_event\_type}}\ =\ i;\ \textcolor{comment}{/*\ the\ index\ value\ of\ the\ event\ with\ the\ shortest\ time\ is\ updated\ */}}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keywordflow}{if}\ (state-\/>\mbox{\hyperlink{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\_event\_type}}\ ==\ 0)\ \{\ \textcolor{comment}{/*\ if\ no\ event\ was\ selected\ it\ means\ that\ the\ event\ list\ is\ empty\ so\ the\ simulation\ is\ stopped\ */}}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ The\ event\ list\ is\ empty,\ so\ stop\ the\ simulation.\ */}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ fprintf(files-\/>\mbox{\hyperlink{struct_files_ae581849c67336453bd5b81e6518019a9}{outfile}},\ \textcolor{stringliteral}{"{}\(\backslash\)nEvent\ list\ empty\ at\ time\ \%f"{}},\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}});}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ exit(1);}
+\DoxyCodeLine{00315\ \ \ \ \ \}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{/*\ The\ event\ list\ is\ not\ empty\ so\ we\ advance\ the\ simulation\ clock\ */}}
+\DoxyCodeLine{00318\ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ =\ min\_time\_next\_event;\ }
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \}}
+
+\end{DoxyCode}
+\Hypertarget{fila1s_8c_a4bfec20f8a953e28b389800b506499f4}\index{fila1s.c@{fila1s.c}!update\_time\_avg\_stats@{update\_time\_avg\_stats}}
+\index{update\_time\_avg\_stats@{update\_time\_avg\_stats}!fila1s.c@{fila1s.c}}
+\doxysubsubsection{\texorpdfstring{update\_time\_avg\_stats()}{update\_time\_avg\_stats()}}
+{\footnotesize\ttfamily \label{fila1s_8c_a4bfec20f8a953e28b389800b506499f4} 
+void update\+\_\+time\+\_\+avg\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_system_state}{System\+State}} \texorpdfstring{$\ast$}{*}}]{state}{, }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \texorpdfstring{$\ast$}{*}}]{stats}{, }\item[{\mbox{\hyperlink{struct_event_list}{Event\+List}} \texorpdfstring{$\ast$}{*}}]{events}{}\end{DoxyParamCaption})}
+
+
+
+Update area accumulators for time-\/average statistics. 
+
+Function update\+\_\+time\+\_\+avg\+\_\+stats\+: updates the time-\/based statistics for the simulation, such as the area under the number-\/in-\/queue and server utilization curves. Input/\+Output parameters\+:
+\begin{DoxyItemize}
+\item state\+: Pointer to the system state structure.
+\item stats\+: Pointer to the statistics structure.
+\item events\+: Pointer to the event list structure. 
+\end{DoxyItemize}Compute time since last event, and update last-\/event-\/time marker.
+
+Update area under number-\/in-\/queue function.
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00263\ \ \ \ \ }
+\DoxyCodeLine{00264\ \ \ \ \ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{float}\ time\_since\_last\_event;\ }
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{comment}{/*\ This\ calculation\ determines\ the\ time\ that\ has\ passed\ since\ the\ last\ processed\ event. }}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ \ \ It\ is\ essential\ to\ calculate\ the\ areas\ under\ the\ curves\ of\ the\ state\ variables\ */}}
+\DoxyCodeLine{00269\ \ \ \ \ time\_since\_last\_event\ =\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}}\ -\/\ events-\/>\mbox{\hyperlink{struct_event_list_afaba36fb5a44b654432472baa454e7a9}{time\_last\_event}};}
+\DoxyCodeLine{00270\ \ \ \ \ events-\/>\mbox{\hyperlink{struct_event_list_afaba36fb5a44b654432472baa454e7a9}{time\_last\_event}}\ \ \ =\ events-\/>\mbox{\hyperlink{struct_event_list_ac8b5e6092f9773f51cedaab4b136738d}{sim\_time}};\ }
+\DoxyCodeLine{00271\ \ \ \ \ }
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{comment}{/*\ This\ metric\ is\ useful\ to\ calculate\ the\ average\ number\ of\ customers\ in\ the\ queue\ during\ the\ simulation\ */}}
+\DoxyCodeLine{00273\ \ \ \ \ stats-\/>\mbox{\hyperlink{struct_statistics_a2f4a1bbeb237a5f133e7e991ee240593}{area\_num\_in\_q}}\ \ +=\ state-\/>\mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\_in\_q}}\ *\ time\_since\_last\_event;\ }
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{comment}{/*\ Update\ the\ area\ under\ the\ server-\/status\ function\ for\ each\ server\ */}}
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 2;\ i\ <=\ state-\/>\mbox{\hyperlink{struct_system_state_a338fcdd423201660ebe5bafe73ed6a60}{number\_of\_servers}}\ +\ 1;\ ++i)}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ stats-\/>\mbox{\hyperlink{struct_statistics_ae558c2f029d0e9c95913daaae7aa0033}{area\_server\_status}}[i]\ +=\ state-\/>\mbox{\hyperlink{struct_system_state_ae51b6ee2880318759d27443a74298fa9}{server\_status}}[i]\ *\ time\_since\_last\_event;}
+\DoxyCodeLine{00278\ \ \ \ \ }
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \}}
+
+\end{DoxyCode}

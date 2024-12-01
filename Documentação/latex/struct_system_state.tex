@@ -1,0 +1,89 @@
+\doxysection{System\+State Struct Reference}
+\hypertarget{struct_system_state}{}\label{struct_system_state}\index{SystemState@{SystemState}}
+
+
+Structure that represents the system state.  
+
+
+
+
+{\ttfamily \#include $<$fila1s.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}{next\+\_\+event\+\_\+type}}
+\item 
+int \mbox{\hyperlink{struct_system_state_a95b8a861931c663705d8ecedd6d0219c}{num\+\_\+custs\+\_\+delayed}}
+\item 
+int \mbox{\hyperlink{struct_system_state_ada13471633986449759bdd49f4ad8b87}{num\+\_\+delays\+\_\+required}}
+\item 
+int \mbox{\hyperlink{struct_system_state_a366819f3677736c863c5613d7d97bbe0}{num\+\_\+in\+\_\+q}}
+\item 
+int \mbox{\hyperlink{struct_system_state_a88b7daa22ba44a5a1f6b9102f148a924}{server\+\_\+status}}
+\item 
+float \mbox{\hyperlink{struct_system_state_af50c29f0b99eccfc8c3aa905f1d73cc2}{time\+\_\+arrival}} \mbox{[}\mbox{\hyperlink{fila1s_8h_aaa75be566c9c8da967954407ca97c72b}{Q\+\_\+\+LIMIT}}+1\mbox{]}
+\item 
+float \mbox{\hyperlink{struct_system_state_afa0250edc22f626f46ed6999f17f160a}{mean\+\_\+interarrival}}
+\item 
+float \mbox{\hyperlink{struct_system_state_aaabf9535f8b7048b8b8d9ac912d622eb}{mean\+\_\+service}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Structure that represents the system state. 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct_system_state_afa0250edc22f626f46ed6999f17f160a}\index{SystemState@{SystemState}!mean\_interarrival@{mean\_interarrival}}
+\index{mean\_interarrival@{mean\_interarrival}!SystemState@{SystemState}}
+\doxysubsubsection{\texorpdfstring{mean\_interarrival}{mean\_interarrival}}
+{\footnotesize\ttfamily \label{struct_system_state_afa0250edc22f626f46ed6999f17f160a} 
+float mean\+\_\+interarrival}
+
+Mean time between customer arrivals (inter-\/arrival time). \Hypertarget{struct_system_state_aaabf9535f8b7048b8b8d9ac912d622eb}\index{SystemState@{SystemState}!mean\_service@{mean\_service}}
+\index{mean\_service@{mean\_service}!SystemState@{SystemState}}
+\doxysubsubsection{\texorpdfstring{mean\_service}{mean\_service}}
+{\footnotesize\ttfamily \label{struct_system_state_aaabf9535f8b7048b8b8d9ac912d622eb} 
+float mean\+\_\+service}
+
+Mean service time. \Hypertarget{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6}\index{SystemState@{SystemState}!next\_event\_type@{next\_event\_type}}
+\index{next\_event\_type@{next\_event\_type}!SystemState@{SystemState}}
+\doxysubsubsection{\texorpdfstring{next\_event\_type}{next\_event\_type}}
+{\footnotesize\ttfamily \label{struct_system_state_a31cfa0a0a620cabbeeb83e640e64a4c6} 
+int next\+\_\+event\+\_\+type}
+
+Type of the next event to occur (e.\+g., arrival, departure). \Hypertarget{struct_system_state_a95b8a861931c663705d8ecedd6d0219c}\index{SystemState@{SystemState}!num\_custs\_delayed@{num\_custs\_delayed}}
+\index{num\_custs\_delayed@{num\_custs\_delayed}!SystemState@{SystemState}}
+\doxysubsubsection{\texorpdfstring{num\_custs\_delayed}{num\_custs\_delayed}}
+{\footnotesize\ttfamily \label{struct_system_state_a95b8a861931c663705d8ecedd6d0219c} 
+int num\+\_\+custs\+\_\+delayed}
+
+Number of customers that have been delayed. \Hypertarget{struct_system_state_ada13471633986449759bdd49f4ad8b87}\index{SystemState@{SystemState}!num\_delays\_required@{num\_delays\_required}}
+\index{num\_delays\_required@{num\_delays\_required}!SystemState@{SystemState}}
+\doxysubsubsection{\texorpdfstring{num\_delays\_required}{num\_delays\_required}}
+{\footnotesize\ttfamily \label{struct_system_state_ada13471633986449759bdd49f4ad8b87} 
+int num\+\_\+delays\+\_\+required}
+
+Number of delays required to complete the simulation. \Hypertarget{struct_system_state_a366819f3677736c863c5613d7d97bbe0}\index{SystemState@{SystemState}!num\_in\_q@{num\_in\_q}}
+\index{num\_in\_q@{num\_in\_q}!SystemState@{SystemState}}
+\doxysubsubsection{\texorpdfstring{num\_in\_q}{num\_in\_q}}
+{\footnotesize\ttfamily \label{struct_system_state_a366819f3677736c863c5613d7d97bbe0} 
+int num\+\_\+in\+\_\+q}
+
+Number of customers in the queue. \Hypertarget{struct_system_state_a88b7daa22ba44a5a1f6b9102f148a924}\index{SystemState@{SystemState}!server\_status@{server\_status}}
+\index{server\_status@{server\_status}!SystemState@{SystemState}}
+\doxysubsubsection{\texorpdfstring{server\_status}{server\_status}}
+{\footnotesize\ttfamily \label{struct_system_state_a88b7daa22ba44a5a1f6b9102f148a924} 
+int server\+\_\+status}
+
+Server status (0 = idle, 1 = busy). \Hypertarget{struct_system_state_af50c29f0b99eccfc8c3aa905f1d73cc2}\index{SystemState@{SystemState}!time\_arrival@{time\_arrival}}
+\index{time\_arrival@{time\_arrival}!SystemState@{SystemState}}
+\doxysubsubsection{\texorpdfstring{time\_arrival}{time\_arrival}}
+{\footnotesize\ttfamily \label{struct_system_state_af50c29f0b99eccfc8c3aa905f1d73cc2} 
+float time\+\_\+arrival\mbox{[}\mbox{\hyperlink{fila1s_8h_aaa75be566c9c8da967954407ca97c72b}{Q\+\_\+\+LIMIT}}+1\mbox{]}}
+
+Time of arrival for each customer in the queue. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{fila1s_8h}{fila1s.\+h}}\end{DoxyCompactItemize}
