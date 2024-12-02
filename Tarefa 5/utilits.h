@@ -27,7 +27,7 @@ void ask_streams(initial_values *ini);
  * @param state Pointer to the system state structure containing the number of servers 
  *              and an array to store the generated seeds.
  */
-void generate_other_streams(initial_values *ini);
+void generate_other_streams(initial_values *ini, int index, SystemState * state);
 
 /*!
  * @brief Reads input parameters from a specified file and verifies their validity.

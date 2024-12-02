@@ -212,8 +212,6 @@ void ask_for_par( Files *files, circular_queue *q, initial_values *ini) {
 
 	clear_screen();
 
-	generate_other_streams(ini);
-	
 	/* Open input file and write the parameters and the random seeds. */
 	files->infile = fopen("mm1in.txt", "w");
 
@@ -258,39 +256,41 @@ void ask_streams(initial_values *ini) {
 	}
 }
 
-void generate_other_streams(initial_values *ini) {
+void generate_other_streams(initial_values *ini, int index, SystemState * state) {
 
+
+	state->run_streams[0] = ini->streams[0] + index - 1; /* Based on the parameter given. It´s minus 1 because the index start at 1 */
+	state->run_streams[1] = ini->streams[1] + (index-1) * ini->number_of_servers; 
 	/* Generate seeds for each server. 
 	If there are n servers, generate n-1 additional seeds. 
 	The first seed corresponds to arrivals and is used for the first server. */
-
 	for(int i = 2; i<=ini->number_of_servers + 1; i++) {
 		
 		/* Generate the next seed by incrementing the previous one. */
-		ini->streams[i] = ini->streams[i - 1] + 1; 
+		state->run_streams[i] = state->run_streams[i - 1] + 1; 
 
 		/* Ensure seeds are unique by checking against the arrival stream seed.
 		Adjust by adding 2 if there's a conflict. */
-		if(ini->streams[i] == ini->streams[0]) {
-			ini->streams[i] = ini->streams[i - 1] + 2;
+		if(state->run_streams[i] == state->run_streams[0]) {
+			state->run_streams[i] = state->run_streams[i - 1] + 2;
 		}
 
 		/* Wrap around if the seed exceeds the upper limit (100). */
-		if (ini->streams[i] == 101) {
-			ini->streams[i] = 1;
+		if (state->run_streams[i] == 101) {
+			state->run_streams[i] = 1;
 		}	
 	}
 
-	printf("Streams = [ ");
+	printf("Streams used for the run %d = [ ", index);
 
   /* Print all generated seeds for verification. */
 	for(int i = 0; i <= ini->number_of_servers + 1 ; i++) {
 
 		if(i < ini->number_of_servers + 1) {
-			printf(" %d, ", ini->streams[i]);
+			printf(" %d, ", state->run_streams[i]);
 		}
 		else {
-			printf(" %d ] \n", ini->streams[i]);
+			printf(" %d ] \n", state->run_streams[i]);
 		}
 	}
 }

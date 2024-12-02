@@ -140,7 +140,7 @@ void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * 
 	float time_since_last_event; /* Compute time since last event, and update last-event-time marker. */
 
 	/* This calculation determines the time that has passed since the last processed event.
-  It is essential to calculate the areas under the curves of the state variables */
+    It is essential to calculate the areas under the curves of the state variables */
 	time_since_last_event = events->sim_time - events->time_last_event;
 	events->time_last_event	 = events->sim_time; 
 	
@@ -200,7 +200,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 		state->server_status[free_server_index] = BUSY;
 
 		/* Schedule a departure for this customer (service completion) */
-		events->time_next_event[free_server_index] = events->sim_time + expon(ini->mean_service, ini->streams[free_server_index-1]);
+		events->time_next_event[free_server_index] = events->sim_time + expon(ini->mean_service, state->run_streams[free_server_index-1]);
   
 		stats->total_of_delays += delay;
   }
@@ -208,7 +208,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 
 		if(ini->without_infinite_queue == 0) { /* If we don't have a queue -> M/M/n/0 (Erlang-B): Reject customer */
 			++stats->lost_customers;
-			--ini->num_delays_required; ////////////////////////////////7
+			--ini->num_delays_required;
 		}
 		else {
 
@@ -250,6 +250,6 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 
 		/* Increment the number of customers delayed, and schedule departure. */
 		++state->num_custs_delayed;
-		events->time_next_event[state->next_event_type] = events->sim_time + expon(ini->mean_service, ini->streams[state->next_event_type]);
+		events->time_next_event[state->next_event_type] = events->sim_time + expon(ini->mean_service, state->run_streams[state->next_event_type]);
 	}
 }

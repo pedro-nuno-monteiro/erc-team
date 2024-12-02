@@ -26,6 +26,9 @@
 #define BUSY 1
 #define IDLE 0
 
+/*! 
+ * @brief Structure that represents the initial values
+ */
 typedef struct {
     float mean_interarrival;        /*!< Mean time between customer arrivals (inter-arrival time). */
     float mean_service;             /*!< Mean service time. */
@@ -33,8 +36,8 @@ typedef struct {
     int num_delays_required;        /*!< Number of delays required to complete the simulation. */
     int streams[MAX_SERVERS + 1];   /*!< Stream identifiers. */
     int without_infinite_queue;     /*!< 1 for infinite queue, 0 for limited queue. */
-    float A; /* !< Offered traffic. */
-    int number_of_reps;
+    float A;                        /* !< Offered traffic. */
+    int number_of_reps;             /* !< Number of runs. */
 } initial_values; 
 
 
@@ -49,6 +52,7 @@ typedef struct {
     int server_status[MAX_SERVERS + 2];              /*!< Server status (0 = idle, 1 = busy). */
     float time_arrival[Q_LIMIT + 1];    /*!< Time of arrival for each customer in the queue. */
     int num_events;                 /*!< Dynamically calculated based on servers. */
+    int run_streams[MAX_SERVERS + 1];   /*!< Streams used in each run. */
 } SystemState;
 
 /*! 

@@ -71,35 +71,35 @@ int main(int argc, char *argv[]) {
 		if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
 			receive_input_file(argc, argv, &files, &q1, &ini);
 		
-			/* Call the function and generate the remaining seeds */
-			generate_other_streams(&ini);
 		}
 		else {
 			ask_for_par(&files, &q1, &ini);
 		}
 	
+		/* Prints all the parameters */
+		printf("\n\nParameters: \n\n");
 		printf("Mean interarrival time: %f\n", ini.mean_interarrival);
 		printf("Mean service time: %f\n", ini.mean_service);
 		printf("Number of customers: %d\n", ini.num_delays_required);
 		printf("Number of servers: %d\n", ini.number_of_servers);
 		printf("Number of runs: %d\n", ini.number_of_reps);
-		if(ini.without_infinite_queue == 0) printf("Without Queue \n");
+		if(ini.without_infinite_queue == 0) printf("Without Queue \n\n");
 		else {
 			printf("With Queue \n");
-			if(q1.dis == 0) printf("FIFO \n");
-			else printf("LIFO \n");
+			if(q1.dis == 0) printf("FIFO \n\n");
+			else printf("LIFO \n\n");
 		}
 
 
 
 	for(int i=1; i <= ini.number_of_reps; i++){
 
-		/* Prints all the parameters */
-		
+		/* Call the function and generate the remaining seeds */
+		generate_other_streams(&ini, i, &state[i]);
 
 		/* Initialize the simulation. */
-		initialize(&state[i], &stats[i], &events[i], ini.streams[0], &q1, &ini);
-		
+		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1, &ini);
+	
 	/* Run the simulation while the required number of customers has not been delayed. */
 		while (state[i].num_custs_delayed < ini.num_delays_required) {
 
