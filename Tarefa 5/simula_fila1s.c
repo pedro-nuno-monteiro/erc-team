@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	report(&state, &stats, &files, &events, &q1, &init);
+	report(state, stats, &files, events, &q1, &init);
 	
 	fclose(files.infile);
 	fclose(files.outfile);
