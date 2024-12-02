@@ -259,11 +259,16 @@ void generate_other_streams(InitialValues * init, int index, SystemState * state
 
 
 	state->run_streams[0] = init->streams[0] + index - 1; /* Based on the parameter given. It´s minus 1 because the index start at 1 */
-	state->run_streams[1] = init->streams[1] + (index-1) * init->number_of_servers; 
+	state->run_streams[1] = init->streams[1] + index * init->number_of_servers; 
+
+	if(state->run_streams[1]>100){
+		state->run_streams[1] = state->run_streams[1] - 100; 
+	}
+
 	/* Generate seeds for each server. 
 	If there are n servers, generate n-1 additional seeds. 
 	The first seed corresponds to arrivals and is used for the first server. */
-	for(int i = 2; i<=init->number_of_servers + 1; i++) {
+	for(int i = 2; i <= init->number_of_servers; i++) {
 		
 		/* Generate the next seed by incrementing the previous one. */
 		state->run_streams[i] = state->run_streams[i - 1] + 1; 
@@ -283,13 +288,13 @@ void generate_other_streams(InitialValues * init, int index, SystemState * state
 	printf("Streams used for the run %d = [ ", index);
 
   /* Print all generated seeds for verification. */
-	for(int i = 0; i <= init->number_of_servers + 1 ; i++) {
+	for(int j = 0; j <= init->number_of_servers ; j++) {
 
-		if(i < init->number_of_servers + 1) {
-			printf(" %d, ", state->run_streams[i]);
+		if(j < init->number_of_servers) {
+			printf(" %d, ", state->run_streams[j]);
 		}
 		else {
-			printf(" %d ] \n", state->run_streams[i]);
+			printf(" %d ] \n", state->run_streams[j]);
 		}
 	}
 }
