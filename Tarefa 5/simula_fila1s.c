@@ -37,13 +37,12 @@
  */
 int main(int argc, char *argv[]) {
 
-	SystemState state[MAX_SERVERS+1];	/* Structure to hold the system state variables. */
-	Statistics stats[MAX_SERVERS+1];		/* Structure to hold the statistical variables. */
-	EventList events[MAX_SERVERS+1];		/* Structure to hold the event list variables. */
-	Files files;				/* Structure to hold the file pointers. */
-	circular_queue q1;	/* Structure to hold the queue. */
-	initial_values ini;
-
+	SystemState state[MAX_SERVERS + 1];	/* Structure to hold the system state variables. */
+	Statistics stats[MAX_SERVERS + 1];	/* Structure to hold the statistical variables. */
+	EventList events[MAX_SERVERS + 1];	/* Structure to hold the event list variables. */
+	Files files;												/* Structure to hold the file pointers. */
+	circular_queue q1;									/* Structure to hold the queue. */
+	InitialValues init;									/* Structure to hold the initial values. */
 
 	/* Asks for the output file. Open the output file */
 	char nome_saida[100];
@@ -53,79 +52,71 @@ int main(int argc, char *argv[]) {
 
 		/* Checks if the name ends with ".txt" */
 		if (strlen(nome_saida) > 4 && strcmp(nome_saida + strlen(nome_saida) - 4, ".csv") == 0) {
-			break;  /* Exit the loop if the name ends with ".txt" */
+			break;  /* Exit the loop if the name ends with ".csv" */
 		} else {
 			printf("Erro: O nome do ficheiro deve terminar com '.csv'. Tente novamente.\n");
 		}
 	}
 
-		files.outfile = fopen(nome_saida, "w");
-		if (!files.outfile) {
-			perror("File opening failed");
-			return EXIT_FAILURE;
+	files.outfile = fopen(nome_saida, "w");
+	if (!files.outfile) {
+		perror("File opening failed");
+		return EXIT_FAILURE;
 	}
 
-		int reps = 9;
-
-		/* Check if the input file is provided as an argument. */
-		if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
-			receive_input_file(argc, argv, &files, &q1, &ini);
-		
-		}
-		else {
-			ask_for_par(&files, &q1, &ini);
-		}
+	/* Check if the input file is provided as an argument. */
+	if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
+		receive_input_file(argc, argv, &files, &q1, &init);
+	}
+	else {
+		ask_for_par(&files, &q1, &init);
+	}
 	
-		/* Prints all the parameters */
-		printf("\n\nParameters: \n\n");
-		printf("Mean interarrival time: %f\n", ini.mean_interarrival);
-		printf("Mean service time: %f\n", ini.mean_service);
-		printf("Number of customers: %d\n", ini.num_delays_required);
-		printf("Number of servers: %d\n", ini.number_of_servers);
-		printf("Number of runs: %d\n", ini.number_of_reps);
-		if(ini.without_infinite_queue == 0) printf("Without Queue \n\n");
-		else {
-			printf("With Queue \n");
-			if(q1.dis == 0) printf("FIFO \n\n");
-			else printf("LIFO \n\n");
-		}
+	/* Prints all the parameters */
+	printf("\n\nParameters: \n\n");
+	printf("Mean interarrival time: %f\n", init.mean_interarrival);
+	printf("Mean service time: %f\n", init.mean_service);
+	printf("Number of customers: %d\n", init.num_delays_required);
+	printf("Number of servers: %d\n", init.number_of_servers);
+	printf("Number of runs: %d\n", init.number_of_reps);
+	if(init.without_infinite_queue == 0) printf("Without Queue \n\n");
+	else {
+		printf("With Queue \n");
+		if(q1.dis == 0) printf("FIFO \n\n");
+		else printf("LIFO \n\n");
+	}
 
-
-
-	for(int i=1; i <= ini.number_of_reps; i++){
+	for(int i = 1; i <= init.number_of_reps; i++) {
 
 		/* Call the function and generate the remaining seeds */
-		generate_other_streams(&ini, i, &state[i]);
+		generate_other_streams(&init, i, &state[i]);
 
 		/* Initialize the simulation. */
-		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1, &ini);
+		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1, &init);
 	
 	/* Run the simulation while the required number of customers has not been delayed. */
-		while (state[i].num_custs_delayed < ini.num_delays_required) {
+		while (state[i].num_custs_delayed < init.num_delays_required) {
 
 			/* Determine the next event (either an arrival or departure). */
-			timing(&state[i], &stats[i], &files, &events[i], &ini);
+			timing(&state[i], &stats[i], &files, &events[i]);
 			
 		/* Update the time-average statistics based on the time elapsed since the last event. */
-			update_time_avg_stats(&state[i], &stats[i], &events[i], &ini);
+			update_time_avg_stats(&state[i], &stats[i], &events[i], &init);
 
 			/* Process the next event based on its type (1 for arrival, 2 for departure). */
 			switch (state[i].next_event_type) {
 				case 1:
-					arrive(&state[i], &stats[i], &files, &events[i], &q1, &ini);
+					arrive(&state[i], &stats[i], &files, &events[i], &q1, &init);
 					break;
 
 				default: /* Se o next_event_type estiver entre 2 e number_of_server+1 */
-					depart(&state[i], &stats[i], &events[i], &q1, &ini);
+					depart(&state[i], &stats[i], &events[i], &q1, &init);
 					break;
 			}
 		}
-
-		/* Invoke the report generator and end the simulation. */
-
 	}
 
-	report(&state, &stats, &files, &events, &q1, &ini);
+	report(&state, &stats, &files, &events, &q1, &init);
 	
 	fclose(files.infile);
 	fclose(files.outfile);

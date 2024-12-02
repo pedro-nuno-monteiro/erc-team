@@ -13,9 +13,9 @@
  * This function requests seeds within a specific range [1, 100], ensuring the seeds are positive,
  * within the specified range, and distinct from each other.
  *
- * @param state Pointer to the system state structure where the seeds are stored.
+ * @param init Pointer to the initial values structure where the seeds will be stored.
  */
-void ask_streams(initial_values *ini);
+void ask_streams(InitialValues *init);
 
 /*! 
  * @brief Generates additional seed streams for each server in the system.
@@ -27,7 +27,7 @@ void ask_streams(initial_values *ini);
  * @param state Pointer to the system state structure containing the number of servers 
  *              and an array to store the generated seeds.
  */
-void generate_other_streams(initial_values *ini, int index, SystemState * state);
+void generate_other_streams(InitialValues *init, int index, SystemState * state);
 
 /*!
  * @brief Reads input parameters from a specified file and verifies their validity.
@@ -41,9 +41,10 @@ void generate_other_streams(initial_values *ini, int index, SystemState * state)
  * @param state Pointer to the SystemState structure that will hold the simulation parameters.
  * @param files Pointer to the Files structure containing file pointers.
  * @param q1 Pointer to the circular queue structure.
+ * @param init Pointer to the InitialValues structure that will store the random seeds.
  * @return `EXIT_SUCCESS` if all parameters are valid; otherwise, `EXIT_FAILURE`.
  */
-int receive_input_file(int argc, char *argv[], Files *files, circular_queue *q1, initial_values *ini);
+int receive_input_file(int argc, char *argv[], Files *files, circular_queue *q1, InitialValues *init);
 
 /*!
  * @brief Prompts the user for simulation parameters, validates inputs, and writes to an input file.
@@ -66,8 +67,9 @@ int receive_input_file(int argc, char *argv[], Files *files, circular_queue *q1,
  * @param state Pointer to the SystemState structure where the simulation parameters will be stored.
  * @param files Pointer to the Files structure that holds the input file pointer.
  * @param q Pointer to the circular queue structure.
+ * @param init Pointer to the InitialValues structure that will store the random seeds.
  */
-void ask_for_par( Files *files, circular_queue *q, initial_values *ini);
+void ask_for_par( Files *files, circular_queue *q, InitialValues *init);
 
 /*!
  * @brief Clears the console screen based on the operating system.

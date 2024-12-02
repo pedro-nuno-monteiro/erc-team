@@ -3,14 +3,14 @@
 #include "utilits.h"
 #include "circular_queue_dynamic.h"
 
-int selectFreeServer(SystemState * state, Statistics * stats, initial_values *ini) { 
+int selectFreeServer(SystemState * state, Statistics * stats, InitialValues *init) { 
 	
 	int livre = -1; /* At the beginning we assume that no server is IDLE */
 	int aux = stats->area_server_status[2]; /* Let's assume that the first server is the one with the lowest utilization rate */ 
 	int indice = 2; /* We assume that the first server (index = 2) is the one with the lowest utilization rate */
 
 	/* Loop through each server to find the free server with the lowest usage rate */
-	for (int i = 2; i <= ini->number_of_servers+1; ++i) {
+	for (int i = 2; i <= init->number_of_servers+1; ++i) {
 		
 		if (state->server_status[i] == IDLE) {
 			livre = 1; /* There is at least one free server */
@@ -32,18 +32,18 @@ float expon(float mean, int stream) {
 	return -mean * logf(lcgrand(stream));
 }
 
-void initialize(SystemState * state, Statistics * stats, EventList * events, int stream, circular_queue * q1, initial_values *ini) {
+void initialize(SystemState * state, Statistics * stats, EventList * events, int stream, circular_queue * q1, InitialValues *init) {
 	
 	events->sim_time = 0.0; /* Initialize the simulation clock. */
 
 	/* Initialize the next arrival event time */
 	/* time_next_event[1] representa o evento de chegada*/
-	events->time_next_event[1] = events->sim_time + expon(ini->mean_interarrival, stream);
+	events->time_next_event[1] = events->sim_time + expon(init->mean_interarrival, stream);
 
 	/* Initialize all servers as IDLE */
 	/* Initialize departure events for each server */
-	for (int i = 2; i <= ini->number_of_servers + 1; ++i) {
-    	state->server_status[i] = IDLE;
+	for (int i = 2; i <= init->number_of_servers + 1; ++i) {
+    state->server_status[i] = IDLE;
 		stats->area_server_status[i] = 0.0;
 		
 		/* We use i + 2 here because we start at [2] since position [1] is for the arrival event */
@@ -51,7 +51,7 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	}
 
 	/* Update number of events */
-	state->num_events=ini->number_of_servers + 1;
+	state->num_events = init->number_of_servers + 1;
 
 	/* Initialize other state variables */
 	state->num_in_q = 0; 						/* Number of custumers in queue start in zero */
@@ -76,66 +76,96 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	}
 }
 
-void report(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1, initial_values *ini) {
+void report(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1, InitialValues *init) {
 		
-		for(int i=1; i<=ini->number_of_reps; i++){
-
-			/* Write report heading and input parameters to the output file */
-		fprintf(files->outfile, "\n\nSimulation of a queueing system with %d servers\n\n", ini->number_of_servers);
-		fprintf(files->outfile, "Mean interarrival time; %11.2f ; minutes\n\n", ini->mean_interarrival);
-		fprintf(files->outfile, "Mean service time; %16.2f ; minutes\n\n", ini->mean_service);
-		if(ini->without_infinite_queue == 1){
-			fprintf(files->outfile, "Number of customers ; %14d\n\n", ini->num_delays_required);
-		}
-		else{
-			fprintf(files->outfile, "Number of customers ; %14d\n\n", ini->num_delays_required + stats[i].lost_customers);
-		}
-		if(ini->without_infinite_queue == 0 ){
-			fprintf(files->outfile, "Without Queue\n\n");
-		}
-		else{
-
-			fprintf(files->outfile, "With Queue\n\n");
-
-			if(q1->dis == 0) {
-				fprintf(files->outfile, "FIFO discipline\n\n");
-			}
-			else {
-				fprintf(files->outfile, "LIFO discipline\n\n");
-			}
-		}
-			
-		/* Print the average delay in queue per client */
-		fprintf(files->outfile, "\n\nAverage delay in queue per client ; %12.3f ; minutes\n\n", stats[i].total_of_delays / state[i].num_custs_delayed);
-		//fprintf(files->outfile, "Average number of occupied servers: %11.3f\n\n", stats->num_occupied_servers / state->num_custs_delayed);
-		if(ini->without_infinite_queue == 0) {  /* If we don't have an infinite queue */
-			/* Print the average number of lost clients */
-			fprintf(files->outfile, "Average number of lost clients ; %12d\n\n\n", stats[i].lost_customers);
-		} 
-		else { /* If we have an infinite queue */
-			/* Print the average number of clients in queue */
-			fprintf(files->outfile, "Average number of clients in queue ; %11.3f\n\n\n", stats[i].area_num_in_q / events[i].sim_time);
-		}
-		if(ini->without_infinite_queue == 0){
-			fprintf(files->outfile, "Blocking Rate: ; %31.3f\n\n\n", erlang_B(ini->A, ini->number_of_servers));
-		}
-		
-		/* Print the average server utilization. 
-		We use this loop to ensure that if area_server_status == 0 then we avoid divisions by zero */
-		for (int i = 2; i <= ini->number_of_servers + 1; i++ ) {
-			if (events->sim_time > 0) {
-				fprintf(files->outfile, "Server %d utilization ; %25.3f\n\n", i-1 ,stats[i].area_server_status[i] / events[i].sim_time);
-			} 
-			else { /* To avoid division by zero if events->sim_time > 0 */
-				fprintf(files->outfile, "Server %d utilization ; %25.3f \n\n", i-1, 0.0);
-		}
-		}
-		fprintf(files->outfile, "Time simulation ended ; %27.3f ; minutes", events[i].sim_time);
-	}
+	/* Write report heading and input parameters to the output file */
+	fprintf(files->outfile, "Simulation of a queueing system with, %d, servers\n", init->number_of_servers);
+	fprintf(files->outfile, "Mean interarrival time, %11.2f, minutes\n", init->mean_interarrival);
+	fprintf(files->outfile, "Mean service time, %16.2f, minutes\n", init->mean_service);
 	
+	if(init->without_infinite_queue == 0 ) {
+		fprintf(files->outfile, "Without Queue\n");
+	}
+	else {
+		fprintf(files->outfile, "With Queue\n");
+
+		if(q1->dis == 0) {
+			fprintf(files->outfile, "FIFO discipline\n");
+		}
+		else {
+			fprintf(files->outfile, "LIFO discipline\n");
+		}
+	}
+	fprintf(files->outfile, "\n");
+
+	for(int i = 1; i <= init->number_of_reps; i++) {
+		fprintf(files->outfile, ", %da corrida", i);
+	}
+	fprintf(files->outfile, "\n");
+
+	fprintf(files->outfile, "Number of customers");
+	for(int k = 1; k <= init->number_of_reps; k++) {
+		if(init->without_infinite_queue == 1) {
+			fprintf(files->outfile, ", %d", init->num_delays_required);
+		} else {
+			fprintf(files->outfile, ", %d", init->num_delays_required + stats[k].lost_customers);
+		}
+	}
+	fprintf(files->outfile, ", costumers\n");
+
+	/* Print the average delay in queue per client */
+	fprintf(files->outfile, "Average delay in queue per client");
+	for(int k = 1; k <= init->number_of_reps; k++) {
+		fprintf(files->outfile, ",%12.3f", stats[k].total_of_delays / state[k].num_custs_delayed);
+	}
+	fprintf(files->outfile, ", minutes\n");
+
+	if(init->without_infinite_queue == 0) {
+		/* Print the average number of lost clients */
+		fprintf(files->outfile, "Average number of lost clients");
+		for(int k = 1; k <= init->number_of_reps; k++) {
+			fprintf(files->outfile, ",%12.3d", stats[k].lost_customers);
+		}
+	} 
+	else { /* If we have an infinite queue */
+		/* Print the average number of clients in queue */
+		fprintf(files->outfile, "Average number of clients in queue");
+		for(int k = 1; k <= init->number_of_reps; k++) {
+			fprintf(files->outfile, ",%11.3f", stats[k].area_num_in_q / events[k].sim_time);
+		}
+	}
+	fprintf(files->outfile, ", clients\n");
+
+	if(init->without_infinite_queue == 0) {
+		fprintf(files->outfile, "Blocking rate");
+		for(int k = 1; k <= init->number_of_reps; k++) {
+			fprintf(files->outfile, ",%31.3f", erlang_B(init->A, init->number_of_servers));
+		}
+		fprintf(files->outfile, "\n");
+	}
+
+	/* Print the average server utilization. 
+	We use this loop to ensure that if area_server_status == 0 then we avoid divisions by zero */
+	for(int k = 2; k <= init->number_of_servers + 1; k++ ) {
+		fprintf(files->outfile, "Server %d utilization", k - 1);
+		for(int j = 1; j <= init->number_of_reps; j++) {
+			if (events[j].sim_time > 0) {
+				fprintf(files->outfile, ",%.3f", stats[j].area_server_status[k] / events[j].sim_time);
+			} else {
+				fprintf(files->outfile, ", 0.000");
+			}
+		}
+		fprintf(files->outfile, "\n");
+	}
+
+	fprintf(files->outfile, "Simulation time");
+	for (int j = 1; j <= init->number_of_reps; j++) {
+		fprintf(files->outfile, ",%.3f", events[j].sim_time);
+	}
+	fprintf(files->outfile, ", minutes\n");	
 }
 
-void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * events, initial_values *ini) {
+void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * events, InitialValues *init) {
 	
 	float time_since_last_event; /* Compute time since last event, and update last-event-time marker. */
 
@@ -148,12 +178,12 @@ void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * 
 	stats->area_num_in_q  += state->num_in_q * time_since_last_event; /* Update area under number-in-queue function. */
 
 	/* Update the area under the server-status function for each server */
-	for (int i = 2; i <= ini->number_of_servers + 1; ++i) {
+	for (int i = 2; i <= init->number_of_servers + 1; ++i) {
     stats->area_server_status[i] += state->server_status[i] * time_since_last_event;
 	}
 }
 
-void timing(SystemState * state, Statistics * stats, Files * files, EventList * events, initial_values *ini) {
+void timing(SystemState * state, Statistics * stats, Files * files, EventList * events) {
 
 	/* is a high value that will be used to compare and determine the shortest event time */
 	float min_time_next_event = 1.0e+29;
@@ -180,15 +210,15 @@ void timing(SystemState * state, Statistics * stats, Files * files, EventList * 
 	events->sim_time = min_time_next_event; 
 }
 
-void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1, initial_values *ini) {
+void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1, InitialValues *init) {
 	
 	float delay;
 
 	/* Schedule the next arrival event */
-	events->time_next_event[1] = events->sim_time + expon(ini->mean_interarrival,ini->streams[0]); 
+	events->time_next_event[1] = events->sim_time + expon(init->mean_interarrival, init->streams[0]); 
 
 	/* Checks if there are free servers, if there are not, the function returns -1 */
-	int free_server_index = selectFreeServer(state, stats, ini);
+	int free_server_index = selectFreeServer(state, stats, init);
 
 	if (free_server_index != -1) { /* There are free servers */
 		delay = 0.0; /* The customer is served immediately, so the delay = 0 */
@@ -200,15 +230,15 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 		state->server_status[free_server_index] = BUSY;
 
 		/* Schedule a departure for this customer (service completion) */
-		events->time_next_event[free_server_index] = events->sim_time + expon(ini->mean_service, state->run_streams[free_server_index-1]);
+		events->time_next_event[free_server_index] = events->sim_time + expon(init->mean_service, state->run_streams[free_server_index - 1]);
   
 		stats->total_of_delays += delay;
   }
 	else { /* All servers are occupied */
 
-		if(ini->without_infinite_queue == 0) { /* If we don't have a queue -> M/M/n/0 (Erlang-B): Reject customer */
+		if(init->without_infinite_queue == 0) { /* If we don't have a queue -> M/M/n/0 (Erlang-B): Reject customer */
 			++stats->lost_customers;
-			--ini->num_delays_required;
+			--init->num_delays_required;
 		}
 		else {
 
@@ -223,7 +253,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	}
 }
 
-void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1, initial_values *ini) {
+void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1, InitialValues *init) {
 	
 	float delay, arrival_time;
 
@@ -250,6 +280,6 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 
 		/* Increment the number of customers delayed, and schedule departure. */
 		++state->num_custs_delayed;
-		events->time_next_event[state->next_event_type] = events->sim_time + expon(ini->mean_service, state->run_streams[state->next_event_type]);
+		events->time_next_event[state->next_event_type] = events->sim_time + expon(init->mean_service, state->run_streams[state->next_event_type]);
 	}
 }

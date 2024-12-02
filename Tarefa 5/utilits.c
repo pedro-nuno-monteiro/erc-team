@@ -2,7 +2,7 @@
 #include "utilits.h"
 
 
-int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1, initial_values *ini) {
+int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1, InitialValues * init) {
 
 	/* Set the initial return value to EXIT_FAILURE in case something goes wrong. */
 	int is_ok = EXIT_FAILURE;
@@ -26,57 +26,56 @@ int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1
 		}
 
 		/* Read input parameters. */
-		//fscanf(files->infile, "%f %f %d %d %d %d %d", &state->mean_interarrival, &state->mean_service, &state->num_delays_required, &state->number_of_servers, &state->without_infinite_queue, &state->streams[0], &state->streams[1]);
 		
-		sscanf(buffer, "%f %f %d", &ini->mean_interarrival, &ini->mean_service, &ini->num_delays_required);
-		fscanf(files->infile, "%d %d %d", &ini ->number_of_reps, &ini->number_of_servers, &ini->without_infinite_queue);
-		fscanf(files->infile, "%d %d", &ini->streams[0], &ini->streams[1]);
+		sscanf(buffer, "%f %f %d", &init->mean_interarrival, &init->mean_service, &init->num_delays_required);
+		fscanf(files->infile, "%d %d %d", &init->number_of_reps, &init->number_of_servers, &init->without_infinite_queue);
+		fscanf(files->infile, "%d %d", &init->streams[0], &init->streams[1]);
 
-		if(ini->without_infinite_queue == 1){
+		if(init->without_infinite_queue == 1) {
 			fscanf(files->infile, " %d", &q1->dis);
 		}
 
-		if(ini->number_of_reps<=0 || ini->number_of_reps>=MAX_SERVERS){
+		if(init->number_of_reps <= 0 || init->number_of_reps >= MAX_SERVERS) {
 			fprintf(stderr, "O numero de corridas tem de ser inferior a 9\n");
 			something_wrong = 1; 
 		}
 
 		/* Verifies the validity of the parameters */ 
-		if (ini->streams[0] <= 0 || ini->streams[1] <= 0 || ini->streams[0] >= 100 || ini->streams[1] >= 100) {
+		if (init->streams[0] <= 0 || init->streams[1] <= 0 || init->streams[0] >= 100 || init->streams[1] >= 100) {
 			fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
 			something_wrong = 1; 
 		}
 
-		if(ini->streams[0] == ini->streams[1]){
+		if(init->streams[0] == init->streams[1]){
 			fprintf(stderr, "As sementes nao podem ser iguais\n");
 			something_wrong = 1;
 		}
 
-		if (ini->mean_interarrival <= 0 || ini->mean_service <= 0 || ini->num_delays_required <= 0 || ini->number_of_servers <= 0 ) {
+		if (init->mean_interarrival <= 0 || init->mean_service <= 0 || init->num_delays_required <= 0 || init->number_of_servers <= 0 ) {
 			fprintf(stderr, "Dados de leitura incorretos -> Caracteres invalidos ou numeros negativos\n");
 			something_wrong = 1;
 		}
 
-		if(ini->number_of_servers> MAX_SERVERS) {
+		if(init->number_of_servers> MAX_SERVERS) {
 			fprintf(stderr, "O numero de server nao respeita as condicoes necessarias\n");
 			something_wrong = 1;
 		}
 
-		if(ini->without_infinite_queue != 0 && ini->without_infinite_queue != 1 ) {
+		if(init->without_infinite_queue != 0 && init->without_infinite_queue != 1 ) {
 			fprintf(stderr, "Dados incorretos:    With Queue = 1      Without Queue = 0 \n");
 			something_wrong = 1;
 		}
 
-		if(q1->dis != 0 && q1->dis != 1 && ini->without_infinite_queue == 1) {
+		if(q1->dis != 0 && q1->dis != 1 && init->without_infinite_queue == 1) {
 			fprintf(stderr, "Dados incorretos:    FIFO = 0      LIFO = 1 \n");
 			something_wrong = 1;
 		}
 
 		/* We calculate the offered rate */
-		ini->A = 1 / ini->mean_interarrival * ini->mean_service; 
+		init->A = 1 / init->mean_interarrival * init->mean_service; 
 		
 		/* We confirm whether the traffic offered is greater than or equal to the number of servers */
-		if(ini->A >= ini->number_of_servers && ini->without_infinite_queue == 1) {
+		if(init->A >= init->number_of_servers && init->without_infinite_queue == 1) {
 			fprintf(stderr, "Quando nao temos fila de espera, o trafego oferecido nao pode ser maior ou igual que o numero de canais. Tem de alterar os valores de Mean_Interarrival e/ou Mean_Service. \n");
 			something_wrong = 1;
 		}
@@ -88,7 +87,7 @@ int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1
 	return is_ok;
 }
 
-void ask_for_par( Files *files, circular_queue *q, initial_values *ini) {
+void ask_for_par(Files *files, circular_queue *q, InitialValues *init) {
 
 	clear_screen();
 
@@ -97,43 +96,43 @@ void ask_for_par( Files *files, circular_queue *q, initial_values *ini) {
 	do {
 		printf("Number of servers -> ");
 		
-		if (scanf("%d", &ini->number_of_servers) != 1) {  
+		if (scanf("%d", &init->number_of_servers) != 1) {  
 			
 			clear_screen();
 			
 			printf("Por favor, insira um valor positivo.\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
-			ini->number_of_servers = -1;
+			init->number_of_servers = -1;
 		}
-	} while(ini->number_of_servers <= 0 || ini->number_of_servers>MAX_SERVERS);
+	} while(init->number_of_servers <= 0 || init->number_of_servers>MAX_SERVERS);
 
 	do {
 		printf("Number of runs -> ");
 		
-		if (scanf("%d", &ini->number_of_reps) != 1) {  
+		if (scanf("%d", &init->number_of_reps) != 1) {  
 			
 			clear_screen();
 			
 			printf("Por favor, insira um valor positivo.\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
-			ini->number_of_servers = -1;
+			init->number_of_servers = -1;
 		}
-	} while(ini->number_of_reps <= 0 || ini->number_of_reps>MAX_SERVERS);
+	} while(init->number_of_reps <= 0 || init->number_of_reps>MAX_SERVERS);
 
 	do {
 		printf("\nWithout Queue = 0  ou Infinite Queue = 1 -> ");
 
-		if (scanf("%d", &ini->without_infinite_queue) != 1) {  
+		if (scanf("%d", &init->without_infinite_queue) != 1) {  
 			clear_screen();
 
 			printf("Por favor, insira 0 ou 1.\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
-			ini->num_delays_required = -1;
+			init->num_delays_required = -1;
 		}
-	} while(ini->without_infinite_queue != 1 && ini->without_infinite_queue != 0 );
+	} while(init->without_infinite_queue != 1 && init->without_infinite_queue != 0 );
 
 	do {
 		
@@ -142,55 +141,55 @@ void ask_for_par( Files *files, circular_queue *q, initial_values *ini) {
 		do {
 			printf("\nMean interarrival time -> ");
 
-			if (scanf("%f", &ini->mean_interarrival) != 1) {
+			if (scanf("%f", &init->mean_interarrival) != 1) {
 
 				clear_screen();
 
 				printf("Por favor, insira um valor positivo.\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
-				ini->mean_interarrival = -1;  // Defines an invalid number to repeat the loop
+				init->mean_interarrival = -1;  // Defines an invalid number to repeat the loop
 			}
-		} while(ini->mean_interarrival <= 0);
+		} while(init->mean_interarrival <= 0);
 
 		do {
 			printf("\nMean service time -> ");
 			
-			if (scanf("%f", &ini->mean_service) != 1) { 
+			if (scanf("%f", &init->mean_service) != 1) { 
 				clear_screen();
 
 				printf("Por favor, insira um valor positivo.\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF);
-				ini->mean_service = -1;
+				init->mean_service = -1;
 			}
-		} while(ini->mean_service <= 0);
+		} while(init->mean_service <= 0);
 		
-		ini->A = 1/ini->mean_interarrival * ini->mean_service;
+		init->A = 1/init->mean_interarrival * init->mean_service;
 
-		if(ini->A >= ini->number_of_servers && ini->without_infinite_queue == 1){
+		if(init->A >= init->number_of_servers && init->without_infinite_queue == 1) {
 			printf("O trafego oferecido nao pode ser maior ou igual que o numero de canais. Tem de alterar os valores de Mean_Interarrival e/ou Mean_Service. \n");
 		}
 	
-	} while(ini->A >= ini->number_of_servers && ini->without_infinite_queue == 1);
+	} while(init->A >= init->number_of_servers && init->without_infinite_queue == 1);
 		
 	clear_screen();
 
 	do {
 		printf("Number of delayed customers -> ");
 		
-		if (scanf("%d", &ini->num_delays_required) != 1) { 
+		if (scanf("%d", &init->num_delays_required) != 1) { 
 
 			clear_screen();
 
 			printf("Por favor, insira um valor positivo.\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
-			ini->num_delays_required = -1;
+			init->num_delays_required = -1;
 		}
-	} while(ini->num_delays_required <= 0);
+	} while(init->num_delays_required <= 0);
 
-	if(ini->without_infinite_queue == 1){
+	if(init->without_infinite_queue == 1){
 		do {
 			printf("Select the discipline (0 for FIFO and 1 for LIFO) -> ");
 			
@@ -208,7 +207,7 @@ void ask_for_par( Files *files, circular_queue *q, initial_values *ini) {
 
 	clear_screen();
 
-	ask_streams(ini);
+	ask_streams(init);
 
 	clear_screen();
 
@@ -218,20 +217,20 @@ void ask_for_par( Files *files, circular_queue *q, initial_values *ini) {
 	fprintf(files->infile, "# mean_interarrival | mean_service | num_delays_required\n");
 	fprintf(files->infile, "# number_of_reps | number_of_servers | without_infinite_queue\n");
 	fprintf(files->infile, "# stream_0 | stream_1\n");
-	if(ini->without_infinite_queue == 1){
+	if(init->without_infinite_queue == 1){
 		fprintf(files->infile, "# discipline\n");
 	}
 	
-	fprintf(files->infile, "%.2f %.2f %d\n", ini->mean_interarrival, ini->mean_service, ini->num_delays_required);
-	fprintf(files->infile, "%d %d %d\n", ini->number_of_reps, ini->number_of_servers, ini->without_infinite_queue);
-	fprintf(files->infile, "%d %d\n", ini->streams[0], ini->streams[1]);
-	if(ini->without_infinite_queue == 1){
+	fprintf(files->infile, "%.2f %.2f %d\n", init->mean_interarrival, init->mean_service, init->num_delays_required);
+	fprintf(files->infile, "%d %d %d\n", init->number_of_reps, init->number_of_servers, init->without_infinite_queue);
+	fprintf(files->infile, "%d %d\n", init->streams[0], init->streams[1]);
+	if(init->without_infinite_queue == 1){
 		fprintf(files->infile, "%d \n", q->dis);
 	}
 	
 }
 
-void ask_streams(initial_values *ini) {
+void ask_streams(InitialValues * init) {
 
 	/* Ask for 2 seeds, the first is for arrivals and the second for departures */
 	for(int i = 0; i < 2; i++) {
@@ -239,32 +238,32 @@ void ask_streams(initial_values *ini) {
 			if(i == 0) printf("Escreve a semente correspondente as chegadas: ");
 			else printf("Escreve a semente correspondente as partidas: ");
 			
-			if (scanf("%d", &ini->streams[i]) != 1) {  
+			if (scanf("%d", &init->streams[i]) != 1) {  
 				printf("Por favor, insira um numero positivo.\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF); 
-				ini->streams[i] = -1;
+				init->streams[i] = -1;
 			}
 
 			/* We guarantee that each seed introduced is within the desired values */
-			if(ini->streams[i] <= 0 || ini->streams[i] > 100) {
+			if(init->streams[i] <= 0 || init->streams[i] > 100) {
 				printf("As sementes têm de estar compreendidas entre [1, 100]. \n");
 			}
 
 			/* This loop ensures that the two seeds are different from each other */
-		} while(ini->streams[i] <= 0 || ini->streams[i] > 100 || (i == 1 && ini->streams[0] == ini->streams[1]));
+		} while(init->streams[i] <= 0 || init->streams[i] > 100 || (i == 1 && init->streams[0] == init->streams[1]));
 	}
 }
 
-void generate_other_streams(initial_values *ini, int index, SystemState * state) {
+void generate_other_streams(InitialValues * init, int index, SystemState * state) {
 
 
-	state->run_streams[0] = ini->streams[0] + index - 1; /* Based on the parameter given. It´s minus 1 because the index start at 1 */
-	state->run_streams[1] = ini->streams[1] + (index-1) * ini->number_of_servers; 
+	state->run_streams[0] = init->streams[0] + index - 1; /* Based on the parameter given. It´s minus 1 because the index start at 1 */
+	state->run_streams[1] = init->streams[1] + (index-1) * init->number_of_servers; 
 	/* Generate seeds for each server. 
 	If there are n servers, generate n-1 additional seeds. 
 	The first seed corresponds to arrivals and is used for the first server. */
-	for(int i = 2; i<=ini->number_of_servers + 1; i++) {
+	for(int i = 2; i<=init->number_of_servers + 1; i++) {
 		
 		/* Generate the next seed by incrementing the previous one. */
 		state->run_streams[i] = state->run_streams[i - 1] + 1; 
@@ -284,9 +283,9 @@ void generate_other_streams(initial_values *ini, int index, SystemState * state)
 	printf("Streams used for the run %d = [ ", index);
 
   /* Print all generated seeds for verification. */
-	for(int i = 0; i <= ini->number_of_servers + 1 ; i++) {
+	for(int i = 0; i <= init->number_of_servers + 1 ; i++) {
 
-		if(i < ini->number_of_servers + 1) {
+		if(i < init->number_of_servers + 1) {
 			printf(" %d, ", state->run_streams[i]);
 		}
 		else {
