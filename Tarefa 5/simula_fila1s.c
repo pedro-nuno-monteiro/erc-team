@@ -44,6 +44,8 @@ int main(int argc, char *argv[]) {
 	circular_queue q1;									/* Structure to hold the queue. */
 	InitialValues init;									/* Structure to hold the initial values. */
 
+	clear_screen();
+
 	/* Asks for the output file. Open the output file */
 	char nome_saida[100];
 	while (1) {
