@@ -104,26 +104,32 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 
 	fprintf(files->outfile, "Number of customers");
 	for(int k = 1; k <= init->number_of_reps; k++) {
-		if(init->without_infinite_queue == 1) {
-			fprintf(files->outfile, ", %d", init->num_delays_required);
-		} else {
-			fprintf(files->outfile, ", %d", state->num_delays_required_state + stats[k].lost_customers);
-		}
+		fprintf(files->outfile, ", %d", init->num_delays_required);
 	}
 	fprintf(files->outfile, ", costumers\n");
 
-	/* Print the average delay in queue per client */
-	fprintf(files->outfile, "Average delay in queue per client");
-	for(int k = 1; k <= init->number_of_reps; k++) {
-		fprintf(files->outfile, ",%12.3f", stats[k].total_of_delays / state[k].num_custs_delayed);
+	if(init->without_infinite_queue == 0) {
+		fprintf(files->outfile, "Average number of customers delayed");
+		for(int k = 1; k <= init->number_of_reps; k++) {
+			fprintf(files->outfile, ", %d", init->num_delays_required - stats[k].lost_customers);
+		}
+		fprintf(files->outfile, ", costumers\n");
 	}
-	fprintf(files->outfile, ", minutes\n");
 
+	/* Print the average delay in queue per client */
+	if(init->without_infinite_queue) {
+		fprintf(files->outfile, "Average delay in queue per client");
+		for(int k = 1; k <= init->number_of_reps; k++) {
+			fprintf(files->outfile, ",%12.3f", stats[k].total_of_delays / state[k].num_custs_delayed);
+		}
+		fprintf(files->outfile, ", minutes\n");
+	}
+	
 	if(init->without_infinite_queue == 0) {
 		/* Print the average number of lost clients */
 		fprintf(files->outfile, "Average number of lost clients");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			fprintf(files->outfile, ",%12.3d", stats[k].lost_customers);
+			fprintf(files->outfile, ",%d", stats[k].lost_customers);
 		}
 	} 
 	else { /* If we have an infinite queue */
@@ -238,7 +244,6 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 		/* If we don't have a queue -> M/M/n/0 (Erlang-B): Reject customer */
 		if(init->without_infinite_queue == 0) {
 			++stats->lost_customers;
-			--state->num_delays_required_state;
 		}
 		else {
 

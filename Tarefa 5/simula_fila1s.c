@@ -97,8 +97,6 @@ int main(int argc, char *argv[]) {
 		/* Initialize the simulation. */
 		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1[i], &init);
 	
-		printf("Run: %d\n", i);
-
 		/* Run the simulation while the required number of customers has not been delayed. */
 		while (state[i].num_custs_delayed < init.num_delays_required) {
 			
