@@ -1,7 +1,6 @@
 #include "fila1s.h"
 #include "utilits.h"
 
-
 int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1, InitialValues * init) {
 
 	/* Set the initial return value to EXIT_FAILURE in case something goes wrong. */
@@ -89,76 +88,64 @@ int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1
 
 void ask_for_par(Files *files, circular_queue *q, InitialValues *init) {
 
-	clear_screen();
-
 	/* Ask for all parameters and guarantees the validity of those */
 
 	do {
 		printf("Number of servers -> ");
-		
-		if (scanf("%d", &init->number_of_servers) != 1) {  
-			
-			clear_screen();
-			
-			printf("Por favor, insira um valor positivo.\n");
+		scanf("%d", &init->number_of_servers);
+
+		if (init->number_of_servers <= 0 || init->number_of_servers > MAX_SERVERS) {  
+			printf("Por favor, insira um valor valido (1 - %d).\n\n", MAX_SERVERS);
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
 			init->number_of_servers = -1;
 		}
-	} while(init->number_of_servers <= 0 || init->number_of_servers>MAX_SERVERS);
+	} while(init->number_of_servers <= 0 || init->number_of_servers > MAX_SERVERS);
 
 	do {
 		printf("Number of runs -> ");
-		
-		if (scanf("%d", &init->number_of_reps) != 1) {  
+		scanf("%d", &init->number_of_reps);
+
+		if (init->number_of_reps <= 0 || init->number_of_reps > MAX_SERVERS) {  
 			
-			clear_screen();
-			
-			printf("Por favor, insira um valor positivo.\n");
+			printf("Por favor, insira um valor valido (1 - %d).\n\n", MAX_SERVERS);
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
 			init->number_of_servers = -1;
 		}
-	} while(init->number_of_reps <= 0 || init->number_of_reps>MAX_SERVERS);
+	} while(init->number_of_reps <= 0 || init->number_of_reps > MAX_SERVERS);
 
 	do {
-		printf("\nWithout Queue = 0  ou Infinite Queue = 1 -> ");
+		printf("Choose - without queue (0) or infinite queue (1) -> ");
+		scanf("%d", &init->without_infinite_queue);
 
-		if (scanf("%d", &init->without_infinite_queue) != 1) {  
-			clear_screen();
-
-			printf("Por favor, insira 0 ou 1.\n");
+		if (init->without_infinite_queue != 1 && init->without_infinite_queue != 0) {  
+			printf("Por favor, insira 0 ou 1.\n\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
-			init->num_delays_required = -1;
+			init->without_infinite_queue = -1;
 		}
 	} while(init->without_infinite_queue != 1 && init->without_infinite_queue != 0 );
 
 	do {
-		
-		clear_screen();
-
 		do {
-			printf("\nMean interarrival time -> ");
+			printf("Mean interarrival time -> ");
+			scanf("%f", &init->mean_interarrival);
 
-			if (scanf("%f", &init->mean_interarrival) != 1) {
-
-				clear_screen();
-
-				printf("Por favor, insira um valor positivo.\n");
+			if (init->mean_interarrival <= 0) {
+				printf("Por favor, insira um valor positivo.\n\n");
 				int ch;
-				while ((ch = getchar()) != '\n' && ch != EOF);  // Cleans the buffer
-				init->mean_interarrival = -1;  // Defines an invalid number to repeat the loop
+				while ((ch = getchar()) != '\n' && ch != EOF); 
+				init->mean_interarrival = -1;
 			}
 		} while(init->mean_interarrival <= 0);
 
 		do {
-			printf("\nMean service time -> ");
-			
-			if (scanf("%f", &init->mean_service) != 1) { 
-				clear_screen();
+			printf("Mean service time -> ");
+			scanf("%f", &init->mean_service);
 
-				printf("Por favor, insira um valor positivo.\n");
+			if (init->mean_service <= 0) { 
+				printf("Por favor, insira um valor positivo.\n\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF);
 				init->mean_service = -1;
@@ -168,44 +155,41 @@ void ask_for_par(Files *files, circular_queue *q, InitialValues *init) {
 		init->A = 1/init->mean_interarrival * init->mean_service;
 
 		if(init->A >= init->number_of_servers && init->without_infinite_queue == 1) {
-			printf("O trafego oferecido nao pode ser maior ou igual que o numero de canais. Tem de alterar os valores de Mean_Interarrival e/ou Mean_Service. \n");
+			printf("O trafego oferecido nao pode ser maior ou igual que o numero de canais.\nPor favor, altere os valores 'Mean Interarrival' e/ou 'Mean Service'\n\n");
 		}
 	
 	} while(init->A >= init->number_of_servers && init->without_infinite_queue == 1);
-		
-	clear_screen();
 
 	do {
 		printf("Number of delayed customers -> ");
-		
-		if (scanf("%d", &init->num_delays_required) != 1) { 
+		scanf("%d", &init->num_delays_required);
 
-			clear_screen();
-
-			printf("Por favor, insira um valor positivo.\n");
+		if(init->num_delays_required <= 0) { 
+			printf("Por favor, insira um valor positivo.\n\n");
 			int ch;
 			while ((ch = getchar()) != '\n' && ch != EOF);
 			init->num_delays_required = -1;
 		}
 	} while(init->num_delays_required <= 0);
 
-	if(init->without_infinite_queue == 1){
+	if(init->without_infinite_queue == 1) {
+		int dis = -1; 
 		do {
 			printf("Select the discipline (0 for FIFO and 1 for LIFO) -> ");
+			scanf("%d", &dis);
 			
-			if (scanf("%d", &q->dis) != 1) { 
-
-				clear_screen();
-
-				printf("Por favor, insira 0 ou 1.\n");
+			if(dis != 0 && dis != 1) { 
+				printf("Por favor, insira 0 ou 1.\n\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF);
-				q->dis = -1;
+				dis = -1;
 			}
-		} while(q->dis != 0 && q->dis != 1);	
-	}
+		} while(dis != 0 && dis != 1);
 
-	clear_screen();
+		for(int i = 0; i < init->number_of_reps; i++) {
+			q[i].dis = dis;
+		}
+	}
 
 	ask_streams(init);
 
@@ -227,7 +211,6 @@ void ask_for_par(Files *files, circular_queue *q, InitialValues *init) {
 	if(init->without_infinite_queue == 1){
 		fprintf(files->infile, "%d \n", q->dis);
 	}
-	
 }
 
 void ask_streams(InitialValues * init) {
@@ -238,8 +221,10 @@ void ask_streams(InitialValues * init) {
 			if(i == 0) printf("Escreve a semente correspondente as chegadas: ");
 			else printf("Escreve a semente correspondente as partidas: ");
 			
-			if (scanf("%d", &init->streams[i]) != 1) {  
-				printf("Por favor, insira um numero positivo.\n");
+			scanf("%d", &init->streams[i]);
+
+			if(init->streams[i] <= 0) {  
+				printf("Por favor, insira um valor positivo.\n\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF); 
 				init->streams[i] = -1;
@@ -257,18 +242,18 @@ void ask_streams(InitialValues * init) {
 
 void generate_other_streams(InitialValues * init, int index, SystemState * state) {
 
-
-	state->run_streams[0] = init->streams[0] + index - 1; /* Based on the parameter given. It´s minus 1 because the index start at 1 */
+	/* Based on the parameter given. It´s minus 1 because the index start at 1 */
+	state->run_streams[0] = init->streams[0] + index - 1;
 	state->run_streams[1] = init->streams[1] + index * init->number_of_servers; 
 
-	if(state->run_streams[1]>100){
+	if(state->run_streams[1] > 100) {
 		state->run_streams[1] = state->run_streams[1] - 100; 
 	}
 
-	/* Generate seeds for each server. 
-	If there are n servers, generate n-1 additional seeds. 
+	/* Generate seeds for each server.
+	If there are n servers, generate n - 1 additional seeds. 
 	The first seed corresponds to arrivals and is used for the first server. */
-	for(int i = 2; i <= init->number_of_servers; i++) {
+	for(int i = 2; i <= init->number_of_servers; ++i) {
 		
 		/* Generate the next seed by incrementing the previous one. */
 		state->run_streams[i] = state->run_streams[i - 1] + 1; 
@@ -288,14 +273,8 @@ void generate_other_streams(InitialValues * init, int index, SystemState * state
 	printf("Streams used for the run %d = [ ", index);
 
   /* Print all generated seeds for verification. */
-	for(int j = 0; j <= init->number_of_servers ; j++) {
-
-		if(j < init->number_of_servers) {
-			printf(" %d, ", state->run_streams[j]);
-		}
-		else {
-			printf(" %d ] \n", state->run_streams[j]);
-		}
+	for(int j = 0; j < init->number_of_servers ; j++) {
+		printf("%d%s", state->run_streams[j], (j < init->number_of_servers - 1) ? ", " : " ]\n");
 	}
 }
 

@@ -1,18 +1,16 @@
-Simulation of a queueing system with, 7, servers
-Mean interarrival time,        4.00, minutes
-Mean service time,             6.00, minutes
-With Queue
-LIFO discipline
+Simulation of a queueing system with, 5, servers
+Mean interarrival time,       10.00, minutes
+Mean service time,            15.00, minutes
+Without Queue
 
 , 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida
-Number of customers, 1000, 1000, 1000, 1000, 1000
-Average delay in queue per client,       0.000,       0.000,       0.000,       0.000,       0.001, minutes
-Average number of clients in queue,      0.000,      0.000,      0.000,      0.000,      0.000
-Server 1 utilization,0.216,0.201,0.192,0.202,0.211
-Server 2 utilization,0.213,0.199,0.192,0.205,0.213
-Server 3 utilization,0.214,0.200,0.192,0.205,0.210
-Server 4 utilization,0.214,0.201,0.191,0.205,0.210
-Server 5 utilization,0.216,0.200,0.192,0.204,0.209
-Server 6 utilization,0.214,0.202,0.192,0.203,0.209
-Server 7 utilization,0.213,0.201,0.194,0.202,0.210
-Simulation time,3914.176,4180.548,4139.593,4130.790,3810.235, minutes
+Number of customers, 14, 4, 16, 14, 6416976, costumers
+Average delay in queue per client,       0.000,       0.000,       0.000,       0.000,       0.000, minutes
+Average number of lost clients,         042,         032,         044,         042,     6417004, clients
+Blocking rate,                          0.014,                          0.014,                          0.014,                          0.014,                          0.014
+Server 1 utilization,0.334,0.331,0.345,0.366,0.000
+Server 2 utilization,0.337,0.331,0.344,0.366,1.000
+Server 3 utilization,0.335,0.332,0.346,0.366,0.000
+Server 4 utilization,0.335,0.330,0.344,0.366,0.984
+Server 5 utilization,0.000,0.000,0.000,0.000,1.066
+Simulation time,11949.083,12211.785,12495.783,12019.344,3143031652997467200000000000000000.000, minutes

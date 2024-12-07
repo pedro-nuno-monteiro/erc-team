@@ -1,8 +1,6 @@
 # mean_interarrival | mean_service | num_delays_required
 # number_of_reps | number_of_servers | without_infinite_queue
 # stream_0 | stream_1
-# discipline
-2.00 7.50 1000
-3 7 1
-45 89
-0 
+10.00 15.00 1200
+5 5 0
+6 7

@@ -10,7 +10,7 @@ int selectFreeServer(SystemState * state, Statistics * stats, InitialValues *ini
 	int indice = 2; /* We assume that the first server (index = 2) is the one with the lowest utilization rate */
 
 	/* Loop through each server to find the free server with the lowest usage rate */
-	for (int i = 2; i <= init->number_of_servers+1; ++i) {
+	for (int i = 2; i <= init->number_of_servers; ++i) {
 		
 		if (state->server_status[i] == IDLE) {
 			livre = 1; /* There is at least one free server */
@@ -34,7 +34,8 @@ float expon(float mean, int stream) {
 
 void initialize(SystemState * state, Statistics * stats, EventList * events, int stream, circular_queue * q1, InitialValues *init) {
 	
-	events->sim_time = 0.0; /* Initialize the simulation clock. */
+	/* Initialize the simulation clock. */
+	events->sim_time = 0.0;
 
 	/* Initialize the next arrival event time */
 	/* time_next_event[1] representa o evento de chegada*/
@@ -42,7 +43,7 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 
 	/* Initialize all servers as IDLE */
 	/* Initialize departure events for each server */
-	for (int i = 2; i <= init->number_of_servers + 1; ++i) {
+	for(int i = 2; i <= init->number_of_servers + 1; ++i) {
     state->server_status[i] = IDLE;
 		stats->area_server_status[i] = 0.0;
 		
@@ -50,19 +51,17 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 		events->time_next_event[i] = 1.0e+30; /* Set a large value for departure times initially */
 	}
 
-	/* Update number of events */
+	events->time_last_event = 0.0; 	/* No events have occured yet */
+	
+	state->next_event_type = 0; 		/* No next event initially */
+	state->num_custs_delayed =	 0; /* No customers delayed initially */
+	state->num_in_q = 0; 						/* Number of custumers in queue start in zero */
 	state->num_events = init->number_of_servers + 1;
 
-	/* Initialize other state variables */
-	state->num_in_q = 0; 						/* Number of custumers in queue start in zero */
-	events->time_last_event = 0.0; 	/* No events have occured yet */
-
-	/* Initialize the statistical counters */
-	state->num_custs_delayed =	 0; 	/* No customers delayed initially */
-	stats->total_of_delays	 =	 0.0; /* No delays initially */
-	stats->area_num_in_q	 =	 0.0; 	/* No customers in queue, so no area under the curve */
-	stats->lost_customers    =   0; 	/* No customers lost initially */
-	stats->num_occupied_servers = 0;    /* No server occupied */
+	stats->area_num_in_q = 0.0; 			/* No customers in queue, so no area under the curve */
+	stats->total_of_delays = 0.0; 		/* No delays initially */
+	stats->lost_customers = 0; 				/* No customers lost initially */
+	stats->num_occupied_servers = 0;	/* No server occupied */
 	
 	/* Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */	
@@ -77,7 +76,7 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 }
 
 void report(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1, InitialValues *init) {
-		
+
 	/* Write report heading and input parameters to the output file */
 	fprintf(files->outfile, "Simulation of a queueing system with, %d, servers\n", init->number_of_servers);
 	fprintf(files->outfile, "Mean interarrival time, %11.2f, minutes\n", init->mean_interarrival);
@@ -108,7 +107,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 		if(init->without_infinite_queue == 1) {
 			fprintf(files->outfile, ", %d", init->num_delays_required);
 		} else {
-			fprintf(files->outfile, ", %d", init->num_delays_required + stats[k].lost_customers);
+			fprintf(files->outfile, ", %d", state->num_delays_required_state + stats[k].lost_customers);
 		}
 	}
 	fprintf(files->outfile, ", costumers\n");
@@ -225,7 +224,6 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 
 		/* Increases the number of customers served */
 		++state->num_custs_delayed;
-		//printf("Num_custs_delayed: %d\n", state->num_custs_delayed);
 
 		/* Mark the server as busy */
 		state->server_status[free_server_index] = BUSY;
@@ -234,20 +232,19 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 		events->time_next_event[free_server_index] = events->sim_time + expon(init->mean_service, state->run_streams[free_server_index - 1]);
   
 		stats->total_of_delays += delay;
-  }
+  } 
 	else { /* All servers are occupied */
 
-		if(init->without_infinite_queue == 0) { /* If we don't have a queue -> M/M/n/0 (Erlang-B): Reject customer */
+		/* If we don't have a queue -> M/M/n/0 (Erlang-B): Reject customer */
+		if(init->without_infinite_queue == 0) {
 			++stats->lost_customers;
-			--init->num_delays_required;
+			--state->num_delays_required_state;
 		}
 		else {
 
 			++state->num_in_q; /* We increased the number of users in the waiting list */
-			printf("Fila: %d\n", state->num_in_q);
 			
 			/* Check to see whether an overflow condition exists. */
-			
 			if(!enQ(q1, events->sim_time)) {
 				fprintf(files->outfile, "\nOverflow of the array time_arrival at %f", events->sim_time);
 			}
@@ -268,13 +265,17 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 	}
 	else { /* The queue is not empty */
 		
+		printf("no else, arrival time = %f\n", arrival_time);
+
 		/* So the number of customers in the queue decreases */
 		--state->num_in_q;
 
 		if(!deQ(q1, &arrival_time)) {
 			printf("\nUnderflow of the array time_arrival at %f", events->sim_time);
 		}
-
+		
+		printf("depois do deQ\n");
+		
 		/* Compute the delay of the customer who is beginning service and update the total delay accumulator. */
 		delay = events->sim_time - arrival_time;
 
@@ -282,6 +283,13 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 
 		/* Increment the number of customers delayed, and schedule departure. */
 		++state->num_custs_delayed;
+
+		printf("state->run_streams[state->next_event_type] = %d", state->run_streams[state->next_event_type]);
+
 		events->time_next_event[state->next_event_type] = events->sim_time + expon(init->mean_service, state->run_streams[state->next_event_type]);
+
+		printf("events->time_next_event[state->next_event_type] = %f\n", events->time_next_event[state->next_event_type]);
+
+		printf("depois do expon\n");
 	}
 }

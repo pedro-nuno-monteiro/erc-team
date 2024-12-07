@@ -36,8 +36,8 @@ typedef struct {
     int num_delays_required;        /*!< Number of delays required to complete the simulation. */
     int streams[MAX_SERVERS + 1];   /*!< Stream identifiers. */
     int without_infinite_queue;     /*!< 1 for infinite queue, 0 for limited queue. */
-    float A;                        /* !< Offered traffic. */
-    int number_of_reps;             /* !< Number of runs. */
+    float A;                        /*!< Offered traffic. */
+    int number_of_reps;             /*!< Number of runs. */
 } InitialValues;
 
 /*! 
@@ -51,6 +51,7 @@ typedef struct {
     float time_arrival[Q_LIMIT + 1];    /*!< Time of arrival for each customer in the queue. */
     int num_events;                     /*!< Dynamically calculated based on servers. */
     int run_streams[MAX_SERVERS + 1];   /*!< Streams used in each run. */
+    int num_delays_required_state;      /*!< Number of delays required to complete the simulation. */
 } SystemState;
 
 /*! 

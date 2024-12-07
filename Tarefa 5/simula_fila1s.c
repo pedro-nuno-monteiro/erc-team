@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 	Statistics stats[MAX_SERVERS + 1];	/* Structure to hold the statistical variables. */
 	EventList events[MAX_SERVERS + 1];	/* Structure to hold the event list variables. */
 	Files files;												/* Structure to hold the file pointers. */
-	circular_queue q1[MAX_SERVERS + 1];									/* Structure to hold the queue. */
+	circular_queue q1[MAX_SERVERS + 1];	/* Structure to hold the queue. */
 	InitialValues init;									/* Structure to hold the initial values. */
 
 	clear_screen();
@@ -52,11 +52,11 @@ int main(int argc, char *argv[]) {
 		printf("Escreva o ficheiro onde quer escrever o report (com extensao .csv): ");
 		scanf("%99s", nome_saida);  /* Reads the file name, limiting it to 99 characters */ 
 
-		/* Checks if the name ends with ".txt" */
+		/* Checks if the name ends with ".csv" */
 		if (strlen(nome_saida) > 4 && strcmp(nome_saida + strlen(nome_saida) - 4, ".csv") == 0) {
 			break;  /* Exit the loop if the name ends with ".csv" */
 		} else {
-			printf("Erro: O nome do ficheiro deve terminar com '.csv'. Tente novamente.\n");
+			printf("Erro: O nome do ficheiro deve terminar com '.csv'. Tente novamente.\n\n");
 		}
 	}
 
@@ -71,8 +71,8 @@ int main(int argc, char *argv[]) {
 		receive_input_file(argc, argv, &files, &q1[0], &init);
 	}
 	else {
-		ask_for_par(&files, &q1[0], &init);
-	}
+		ask_for_par(&files, q1, &init);
+	}	
 	
 	/* Prints all the parameters */
 	printf("\n\nParameters: \n\n");
@@ -82,7 +82,6 @@ int main(int argc, char *argv[]) {
 	printf("Number of servers: %d\n", init.number_of_servers);
 	printf("Number of runs: %d\n", init.number_of_reps);
 
-
 	if(init.without_infinite_queue == 0) printf("Without Queue \n\n");
 	else {
 		printf("With Queue \n");
@@ -90,9 +89,7 @@ int main(int argc, char *argv[]) {
 		else printf("LIFO \n\n");
 	}
 
-	for(int i = 1; i <= init.number_of_reps; i++) {
-
-		q1[i] = q1[0]; 
+	for(int i = 0; i < init.number_of_reps; i++) {
 
 		/* Call the function and generate the remaining seeds */
 		generate_other_streams(&init, i, &state[i]);
@@ -100,13 +97,15 @@ int main(int argc, char *argv[]) {
 		/* Initialize the simulation. */
 		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1[i], &init);
 	
-	/* Run the simulation while the required number of customers has not been delayed. */
-		while (state[i].num_custs_delayed < init.num_delays_required) {
+		printf("Run: %d\n", i);
 
+		/* Run the simulation while the required number of customers has not been delayed. */
+		while (state[i].num_custs_delayed < init.num_delays_required) {
+			
 			/* Determine the next event (either an arrival or departure). */
 			timing(&state[i], &stats[i], &files, &events[i]);
 			
-		/* Update the time-average statistics based on the time elapsed since the last event. */
+			/* Update the time-average statistics based on the time elapsed since the last event. */
 			update_time_avg_stats(&state[i], &stats[i], &events[i], &init);
 
 			/* Process the next event based on its type (1 for arrival, 2 for departure). */

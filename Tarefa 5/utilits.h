@@ -64,7 +64,6 @@ int receive_input_file(int argc, char *argv[], Files *files, circular_queue *q1,
  * and ensures it is less than the number of servers. It calls `ask_streams` to collect random seeds and 
  * `generate_other_streams` to generate additional seeds for each server.
  *
- * @param state Pointer to the SystemState structure where the simulation parameters will be stored.
  * @param files Pointer to the Files structure that holds the input file pointer.
  * @param q Pointer to the circular queue structure.
  * @param init Pointer to the InitialValues structure that will store the random seeds.
