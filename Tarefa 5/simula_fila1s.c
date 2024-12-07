@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 		else printf("LIFO \n\n");
 	}
 
-	for(int i = 0; i < init.number_of_reps; i++) {
+	for(int i = 1; i <= init.number_of_reps; i++) {
 
 		/* Call the function and generate the remaining seeds */
 		generate_other_streams(&init, i, &state[i]);

@@ -265,16 +265,12 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 	}
 	else { /* The queue is not empty */
 		
-		printf("no else, arrival time = %f\n", arrival_time);
-
 		/* So the number of customers in the queue decreases */
 		--state->num_in_q;
 
 		if(!deQ(q1, &arrival_time)) {
 			printf("\nUnderflow of the array time_arrival at %f", events->sim_time);
 		}
-		
-		printf("depois do deQ\n");
 		
 		/* Compute the delay of the customer who is beginning service and update the total delay accumulator. */
 		delay = events->sim_time - arrival_time;
@@ -284,12 +280,6 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 		/* Increment the number of customers delayed, and schedule departure. */
 		++state->num_custs_delayed;
 
-		printf("state->run_streams[state->next_event_type] = %d", state->run_streams[state->next_event_type]);
-
 		events->time_next_event[state->next_event_type] = events->sim_time + expon(init->mean_service, state->run_streams[state->next_event_type]);
-
-		printf("events->time_next_event[state->next_event_type] = %f\n", events->time_next_event[state->next_event_type]);
-
-		printf("depois do expon\n");
 	}
 }
