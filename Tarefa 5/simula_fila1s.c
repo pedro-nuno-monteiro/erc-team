@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 	Statistics stats[MAX_SERVERS + 1];	/* Structure to hold the statistical variables. */
 	EventList events[MAX_SERVERS + 1];	/* Structure to hold the event list variables. */
 	Files files;												/* Structure to hold the file pointers. */
-	circular_queue q1;									/* Structure to hold the queue. */
+	circular_queue q1[MAX_SERVERS + 1];									/* Structure to hold the queue. */
 	InitialValues init;									/* Structure to hold the initial values. */
 
 	clear_screen();
@@ -68,10 +68,10 @@ int main(int argc, char *argv[]) {
 
 	/* Check if the input file is provided as an argument. */
 	if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
-		receive_input_file(argc, argv, &files, &q1, &init);
+		receive_input_file(argc, argv, &files, &q1[0], &init);
 	}
 	else {
-		ask_for_par(&files, &q1, &init);
+		ask_for_par(&files, &q1[0], &init);
 	}
 	
 	/* Prints all the parameters */
@@ -81,20 +81,24 @@ int main(int argc, char *argv[]) {
 	printf("Number of customers: %d\n", init.num_delays_required);
 	printf("Number of servers: %d\n", init.number_of_servers);
 	printf("Number of runs: %d\n", init.number_of_reps);
+
+
 	if(init.without_infinite_queue == 0) printf("Without Queue \n\n");
 	else {
 		printf("With Queue \n");
-		if(q1.dis == 0) printf("FIFO \n\n");
+		if(q1[0].dis == 0) printf("FIFO \n\n");
 		else printf("LIFO \n\n");
 	}
 
 	for(int i = 1; i <= init.number_of_reps; i++) {
 
+		q1[i] = q1[0]; 
+
 		/* Call the function and generate the remaining seeds */
 		generate_other_streams(&init, i, &state[i]);
 
 		/* Initialize the simulation. */
-		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1, &init);
+		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1[i], &init);
 	
 	/* Run the simulation while the required number of customers has not been delayed. */
 		while (state[i].num_custs_delayed < init.num_delays_required) {
@@ -108,17 +112,17 @@ int main(int argc, char *argv[]) {
 			/* Process the next event based on its type (1 for arrival, 2 for departure). */
 			switch (state[i].next_event_type) {
 				case 1:
-					arrive(&state[i], &stats[i], &files, &events[i], &q1, &init);
+					arrive(&state[i], &stats[i], &files, &events[i], &q1[i], &init);
 					break;
 
 				default: /* Se o next_event_type estiver entre 2 e number_of_server+1 */
-					depart(&state[i], &stats[i], &events[i], &q1, &init);
+					depart(&state[i], &stats[i], &events[i], &q1[i], &init);
 					break;
 			}
 		}
 	}
 
-	report(state, stats, &files, events, &q1, &init);
+	report(state, stats, &files, events, &q1[0], &init);
 	
 	fclose(files.infile);
 	fclose(files.outfile);

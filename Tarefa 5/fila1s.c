@@ -225,6 +225,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 
 		/* Increases the number of customers served */
 		++state->num_custs_delayed;
+		//printf("Num_custs_delayed: %d\n", state->num_custs_delayed);
 
 		/* Mark the server as busy */
 		state->server_status[free_server_index] = BUSY;
@@ -243,6 +244,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 		else {
 
 			++state->num_in_q; /* We increased the number of users in the waiting list */
+			printf("Fila: %d\n", state->num_in_q);
 			
 			/* Check to see whether an overflow condition exists. */
 			

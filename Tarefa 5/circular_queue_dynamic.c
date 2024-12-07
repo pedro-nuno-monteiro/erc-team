@@ -59,7 +59,10 @@ int expand (circular_queue * q) {
 int enQ (circular_queue * q, double val) {
 
 	// If full, expands before attempting insert
-	if(isFull(q) && !expand(q)) return 0; // ends in case expand failed
+	if(isFull(q) && !expand(q)){
+		printf("Erro: Falha ao expandir a fila.\n");
+		return 0;
+	}  // ends in case expand failed
 
 	// Now inserts
 	if (isEmpty(q)) {   // Inserts in empty queue
@@ -122,7 +125,8 @@ void printQ(const circular_queue * q) {
 			}
 		}
 		else { // q->rear > q-front
-			while (i <= q->rear + q->max_size) {
+			while (i < q->front + q->max_size) {
+			//while (i <= q->rear + q->max_size) {
 				printf("%.2lf\n", q->tab[i % q->max_size]);
 				i++;
 			}
