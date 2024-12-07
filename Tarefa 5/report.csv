@@ -6,11 +6,11 @@ LIFO discipline
 
 , 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida
 Number of customers, 2000, 2000, 2000, 2000, 2000, costumers
-Average delay in queue per client,       0.139,       0.155,       0.258,       0.498,       0.109, minutes
-Average number of clients in queue,      0.014,      0.015,      0.027,      0.050,      0.011, clients
-Server 1 utilization,0.341,0.345,0.357,0.371,0.332
-Server 2 utilization,0.342,0.345,0.359,0.371,0.330
-Server 3 utilization,0.341,0.344,0.357,0.372,0.330
-Server 4 utilization,0.341,0.345,0.358,0.371,0.331
-Server 5 utilization,0.000,0.000,0.000,0.000,0.000
+Average delay in queue per client,       0.064,       0.051,       0.042,       0.030,       0.023, minutes
+Average number of clients in queue,      0.007,      0.005,      0.004,      0.003,      0.002, clients
+Server 1 utilization,0.281,0.284,0.291,0.294,0.270
+Server 2 utilization,0.282,0.283,0.292,0.294,0.270
+Server 3 utilization,0.284,0.282,0.291,0.294,0.270
+Server 4 utilization,0.282,0.282,0.291,0.295,0.270
+Server 5 utilization,0.282,0.282,0.291,0.295,0.270
 Simulation time,19624.090,20031.338,19273.623,19866.615,20453.045, minutes

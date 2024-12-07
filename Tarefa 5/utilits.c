@@ -253,7 +253,7 @@ void generate_other_streams(InitialValues * init, int index, SystemState * state
 	/* Generate seeds for each server.
 	If there are n servers, generate n - 1 additional seeds. 
 	The first seed corresponds to arrivals and is used for the first server. */
-	for(int i = 2; i <= init->number_of_servers; ++i) {
+	for(int i = 2; i <= init->number_of_servers + 1; ++i) {
 		
 		/* Generate the next seed by incrementing the previous one. */
 		state->run_streams[i] = state->run_streams[i - 1] + 1; 

@@ -10,7 +10,7 @@ int selectFreeServer(SystemState * state, Statistics * stats, InitialValues *ini
 	int indice = 2; /* We assume that the first server (index = 2) is the one with the lowest utilization rate */
 
 	/* Loop through each server to find the free server with the lowest usage rate */
-	for (int i = 2; i <= init->number_of_servers; ++i) {
+	for (int i = 2; i <= init->number_of_servers + 1; ++i) {
 		
 		if (state->server_status[i] == IDLE) {
 			livre = 1; /* There is at least one free server */
