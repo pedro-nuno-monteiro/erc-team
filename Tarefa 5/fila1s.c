@@ -143,8 +143,10 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 
 	if(init->without_infinite_queue == 0) {
 		fprintf(files->outfile, "Blocking rate");
+		float blocking_rate = 0;
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			fprintf(files->outfile, ",%31.3f", erlang_B(init->A, init->number_of_servers));
+			blocking_rate = ((float)stats[k].lost_customers / init->num_delays_required);
+			fprintf(files->outfile, ",%31.4f", blocking_rate);
 		}
 		fprintf(files->outfile, "\n");
 	}
@@ -168,6 +170,9 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 		fprintf(files->outfile, ",%.3f", events[j].sim_time);
 	}
 	fprintf(files->outfile, ", minutes\n");	
+
+	fprintf(files->outfile, "\nEarlang - B, %.3f", erlang_B(init->A, init->number_of_servers));
+	//fprintf(files->outfile, "Earlang - C, %.3f", erlang_C(init->A, init->number_of_servers));
 }
 
 void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * events, InitialValues *init) {

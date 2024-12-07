@@ -293,7 +293,7 @@ double erlang_B(double A, unsigned int n) {
     double AE;
     for (int i = 1; i <= n; i++) {
 		AE = A *E;
-        E = AE / (AE + i); /*In each iteration i is E(A, i)*/
+			E = AE / (AE + i); /*In each iteration i is E(A, i)*/
     }
     return E;
 }
