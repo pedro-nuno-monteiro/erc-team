@@ -64,7 +64,7 @@ typedef struct {
     int lost_customers;                         /*!< Number of lost customers (Erlang-B model). */
     int num_occupied_servers;                   /*!< Sum of occupied servers. */
     int waiting_custumers;                      /*!< Number of customers that waited on a queue (Erlang-C model). */
-    int real_number_of_custumers_atendidos;
+    int real_number_of_custumers_chegados;
 } Statistics;
 
 /*! 

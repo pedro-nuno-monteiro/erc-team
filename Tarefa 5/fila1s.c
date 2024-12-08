@@ -63,7 +63,8 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	stats->lost_customers = 0; 				/* No customers lost initially */
 	stats->num_occupied_servers = 0;	/* No server occupied */
 	stats->waiting_custumers = 0; 
-	
+	stats->real_number_of_custumers_chegados = 0; 
+
 	/* Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */	
 
@@ -150,7 +151,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 		fprintf(files->outfile, "Blocking rate");
 		
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			blocking_rate[k] = ((float)stats[k].lost_customers / init->num_delays_required);
+			blocking_rate[k] = ((float)stats[k].lost_customers / state[k].num_custs_delayed);
 			fprintf(files->outfile, ";%.4f", blocking_rate[k]);
 		}
 		fprintf(files->outfile, "\n");
@@ -161,7 +162,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 		fprintf(files->outfile, "Waiting rate");
 		
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			waiting_rate[k] = ((float)stats[k].waiting_custumers / init->num_delays_required);
+			waiting_rate[k] = ((float)stats[k].waiting_custumers / state[k].num_custs_delayed);
 			fprintf(files->outfile, ";%.4f", waiting_rate[k]);
 		}
 		fprintf(files->outfile, "\n");
@@ -279,6 +280,10 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	
 	float delay;
 
+	++stats->real_number_of_custumers_chegados;
+	printf("\nChegou: %d", stats->real_number_of_custumers_chegados);
+
+
 	/* Schedule the next arrival event */
 	events->time_next_event[1] = events->sim_time + expon(init->mean_interarrival, init->streams[0]); 
 
@@ -289,7 +294,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 		delay = 0.0; /* The customer is served immediately, so the delay = 0 */
 
 		/* Increases the number of customers served */
-		++state->num_custs_delayed;
+		//++state->num_custs_delayed;
 
 		/* Mark the server as busy */
 		state->server_status[free_server_index] = BUSY;
@@ -327,6 +332,7 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 	if (state->num_in_q == 0) {
 		/* The queue is empty so make the server idle and eliminate the
 		departure (service completion) event from consideration. */
+		++state->num_custs_delayed;
 		state->server_status[state->next_event_type] = IDLE; /* The next_event type corresponds to the server index -> see in the timing function */
 		events->time_next_event[state->next_event_type] = 1.0e+30; /* Sets the next event to infinite */
 	}

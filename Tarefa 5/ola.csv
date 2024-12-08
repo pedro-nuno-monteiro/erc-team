@@ -1,0 +1,26 @@
+Simulation of a queueing system with;5 ; servers
+Mean interarrival time; 10.00; minutes
+Mean service time; 15.00; minutes
+With Queue
+LIFO discipline
+
+; 1a corrida; 2a corrida; 3a corrida; 4a corrida; 5a corrida
+Number of customers;1000;1000;1000;1000;1000; costumers
+Average delay in queue per client;0.139;0.042;0.016;0.140;0.064; minutes
+Average number of clients in queue;0.013;0.004;0.001;0.013;0.006; clients
+Waiting rate;0.0210;0.0100;0.0090;0.0220;0.0160
+Server 1 utilization;0.284;0.273;0.272;0.280;0.303; ; ; Soma;  1.412
+Server 2 utilization;0.283;0.273;0.274;0.281;0.303; ; ; Soma;  1.414
+Server 3 utilization;0.286;0.273;0.274;0.281;0.302; ; ; Soma;  1.416
+Server 4 utilization;0.283;0.275;0.273;0.280;0.304; ; ; Soma;  1.416
+Server 5 utilization;0.284;0.274;0.272;0.281;0.303; ; ; Soma;  1.414
+Simulation time;10974.095;10462.649;11286.481;11091.492;10760.083; minutes
+
+Intervalo de Confianca ; 
+[ 0.008 , 0.023 ] 
+
+Valores Teoricos
+Trafego Oferecido ; 1.500
+Earlang - C; 0.020
+W_e; 4.286
+L_q; 0.009
