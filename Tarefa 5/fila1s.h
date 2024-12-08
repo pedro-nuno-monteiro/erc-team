@@ -178,11 +178,11 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
  * @param files Pointer to the file management structure that handles the output file.
  * @param events Pointer to the event list structure that tracks simulation time and events.
  * @param q1 Pointer to the circular queue structure that holds customer arrival times.
+ * @param init Pointer to the initial values structure that contains the number of servers.
  * 
  * @note This function assumes the `files->outfile` has been opened before calling and will write the results to this file.
  */
 void report(SystemState* state, Statistics* stats, Files* files, EventList* events, circular_queue * q1, InitialValues *init);
-
 
 /** 
  * @brief Updates the time-based statistics for the simulation, such as the area under the 

@@ -31,9 +31,13 @@ int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1
 		fscanf(files->infile, "%d %d %d", &init->number_of_reps, &init->number_of_servers, &init->without_infinite_queue);
 		fscanf(files->infile, "%d %d", &init->streams[0], &init->streams[1]);
 
+		int dis = 0;
+
 		if(init->without_infinite_queue == 1) {
-			fscanf(files->infile, " %d", &q1->dis);
+			fscanf(files->infile, " %d", &dis);
 		}
+
+		q1->dis = dis;
 
 		if(init->number_of_reps <= 0 || init->number_of_reps >= MAX_SERVERS) {
 			fprintf(stderr, "O numero de corridas tem de ser inferior a 9\n");
@@ -233,7 +237,7 @@ void ask_streams(InitialValues * init) {
 
 			/* We guarantee that each seed introduced is within the desired values */
 			if(init->streams[i] <= 0 || init->streams[i] > 100) {
-				printf("As sementes têm de estar compreendidas entre [1, 100]. \n");
+				printf("As sementes tem de estar compreendidas entre [1, 100].\n\n");
 			}
 
 			/* This loop ensures that the two seeds are different from each other */
@@ -243,9 +247,9 @@ void ask_streams(InitialValues * init) {
 
 void generate_other_streams(InitialValues * init, int index, SystemState * state) {
 
-	/* Based on the parameter given. It´s minus 1 because the index start at 1 */
-	state->run_streams[0] = init->streams[0] + index-1;
-	state->run_streams[1] = init->streams[1] + (index-1) * init->number_of_servers; 
+	/* Based on the parameter given. It's minus 1 because the index start at 1 */
+	state->run_streams[0] = init->streams[0] + index - 1;
+	state->run_streams[1] = init->streams[1] + (index - 1) * init->number_of_servers; 
 
 	if(state->run_streams[1] > 100) {
 		state->run_streams[1] = state->run_streams[1] - 100; 
@@ -281,9 +285,9 @@ void generate_other_streams(InitialValues * init, int index, SystemState * state
 
 void clear_screen() {
 	#ifdef _WIN32
-			system("cls");
+		system("cls");
 	#else
-			system("clear");
+		system("clear");
 	#endif
 }
 
@@ -311,34 +315,31 @@ double erlang_C(double A, unsigned int n){
 
 }
 
-void intervalo_confianca(float array[], InitialValues * init, float *inferior, float *superior){
+void intervalo_confianca(float array[], InitialValues * init, float *inferior, float *superior) {
 
 	float value;
 
 	float soma = 0, media, soma_quadrado = 0, variancia, desvio_padrao; 
-	for(int i=1; i <= init->number_of_reps; i++){
+	for(int i = 1; i <= init->number_of_reps; i++) {
 		soma += array[i];
 	}
 
 	media = soma / init->number_of_reps; 
 
-	for(int i=1; i <= init->number_of_reps; i++){
+	for(int i = 1; i <= init->number_of_reps; i++) {
 		soma_quadrado += (array[i] - media) * (array[i] - media);
 	}
-
 
 	variancia = soma_quadrado / (init->number_of_reps - 1);
 	desvio_padrao = sqrt(variancia);
 
-
 	FILE *file;
 
 	file = fopen("t_student_95.txt", "r");
-    if (file == NULL) {
-        fprintf(stderr, "Erro ao abrir o ficheiro t_student_95.txt .\n");
-        exit(EXIT_FAILURE);
-    }
-
+	if (file == NULL) {
+		fprintf(stderr, "Erro ao abrir o ficheiro t_student_95.txt .\n");
+		exit(EXIT_FAILURE);
+	}
 
 	for (int i = 1; i < init->number_of_reps; i++) {
 		if (fscanf(file, " %f", &value) != 1) {
@@ -354,5 +355,4 @@ void intervalo_confianca(float array[], InitialValues * init, float *inferior, f
 	
 	*inferior = media - aux;  
 	*superior = media + aux;
-
 }

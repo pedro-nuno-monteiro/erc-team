@@ -80,9 +80,9 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 void report(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1, InitialValues *init) {
 
 	/* Write report heading and input parameters to the output file */
-	fprintf(files->outfile, "Simulation of a queueing system with;%d ; servers\n", init->number_of_servers);
-	fprintf(files->outfile, "Mean interarrival time; %.2f; minutes\n", init->mean_interarrival);
-	fprintf(files->outfile, "Mean service time; %.2f; minutes\n", init->mean_service);
+	fprintf(files->outfile, "Simulation of a queueing system with,%d , servers\n", init->number_of_servers);
+	fprintf(files->outfile, "Mean interarrival time, %.2f, minutes\n", init->mean_interarrival);
+	fprintf(files->outfile, "Mean service time, %.2f, minutes\n", init->mean_service);
 	
 	if(init->without_infinite_queue == 0 ) {
 		fprintf(files->outfile, "Without Queue\n");
@@ -100,135 +100,123 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	fprintf(files->outfile, "\n");
 
 	for(int i = 1; i <= init->number_of_reps; i++) {
-		fprintf(files->outfile, "; %da corrida", i);
+		fprintf(files->outfile, ", %da corrida", i);
 	}
 	fprintf(files->outfile, "\n");
 
 	fprintf(files->outfile, "Number of customers");
 	for(int k = 1; k <= init->number_of_reps; k++) {
-		fprintf(files->outfile, ";%d", init->num_delays_required);
+		fprintf(files->outfile, ",%d", init->num_delays_required);
 	}
-	fprintf(files->outfile, "; costumers\n");
+	fprintf(files->outfile, ", costumers\n");
 
 	if(init->without_infinite_queue == 0) {
 		fprintf(files->outfile, "Average number of customers delayed");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			fprintf(files->outfile, "; %d", init->num_delays_required - stats[k].lost_customers);
+			fprintf(files->outfile, ", %d", init->num_delays_required - stats[k].lost_customers);
 		}
-		fprintf(files->outfile, "; costumers\n");
+		fprintf(files->outfile, ", costumers\n");
 	}
 
 	/* Print the average delay in queue per client */
 	if(init->without_infinite_queue) {
 		fprintf(files->outfile, "Average delay in queue per client");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			fprintf(files->outfile, ";%.3f", stats[k].total_of_delays / state[k].num_custs_delayed);
+			fprintf(files->outfile, ",%.3f", stats[k].total_of_delays / state[k].num_custs_delayed);
 		}
-		fprintf(files->outfile, "; minutes\n");
+		fprintf(files->outfile, ", minutes\n");
 	}
 	
+	/* Print the average number of lost clients */
 	if(init->without_infinite_queue == 0) {
-		/* Print the average number of lost clients */
 		fprintf(files->outfile, "Average number of lost clients");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			fprintf(files->outfile, ";%d", stats[k].lost_customers);
+			fprintf(files->outfile, ",%d", stats[k].lost_customers);
 		}
 	} 
-	else { /* If we have an infinite queue */
+	else {
 		/* Print the average number of clients in queue */
 		fprintf(files->outfile, "Average number of clients in queue");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			fprintf(files->outfile, ";%.3f", stats[k].area_num_in_q / events[k].sim_time);
+			fprintf(files->outfile, ",%.3f", stats[k].area_num_in_q / events[k].sim_time);
 		}
 	}
-	fprintf(files->outfile, "; clients\n");
+	fprintf(files->outfile, ", clients\n");
 
 	float blocking_rate[init->number_of_reps];
 	float waiting_rate[init->number_of_reps];
 
 	if(init->without_infinite_queue == 0) {
-	
 		fprintf(files->outfile, "Blocking rate");
-		
 		for(int k = 1; k <= init->number_of_reps; k++) {
 			blocking_rate[k] = ((float)stats[k].lost_customers / state[k].num_custs_delayed);
-			fprintf(files->outfile, ";%.4f", blocking_rate[k]);
+			fprintf(files->outfile, ",%.4f", blocking_rate[k]);
 		}
 		fprintf(files->outfile, "\n");
-
 	}
-
-	else{
+	else {
 		fprintf(files->outfile, "Waiting rate");
-		
 		for(int k = 1; k <= init->number_of_reps; k++) {
 			waiting_rate[k] = ((float)stats[k].waiting_custumers / stats[k].real_number_of_custumers_chegados);
-			fprintf(files->outfile, ";%.4f", waiting_rate[k]);
+			fprintf(files->outfile, ",%.4f", waiting_rate[k]);
 		}
 		fprintf(files->outfile, "\n");
-
 	}
 
 	/* Print the average server utilization. 
 	We use this loop to ensure that if area_server_status == 0 then we avoid divisions by zero */
-
 	for(int k = 2; k <= init->number_of_servers + 1; k++ ) {
 		float sum_area_server_status = 0;
 		fprintf(files->outfile, "Server %d utilization", k - 1);
 		for(int j = 1; j <= init->number_of_reps; j++) {
 			sum_area_server_status = sum_area_server_status + stats[j].area_server_status[k] / events[j].sim_time;
 			if (events[j].sim_time > 0) {
-				fprintf(files->outfile, ";%.4f", stats[j].area_server_status[k] / events[j].sim_time);
+				fprintf(files->outfile, ",%.4f", stats[j].area_server_status[k] / events[j].sim_time);
 			} else {
-				fprintf(files->outfile, "; 0.0000");
+				fprintf(files->outfile, ", 0.0000");
 			}
 		}
-		fprintf(files->outfile, "; ; ; Soma;  %.4f", sum_area_server_status);
+		fprintf(files->outfile, ", , , Soma,  %.4f", sum_area_server_status);
 		fprintf(files->outfile, "\n");
 	}
 
 	fprintf(files->outfile, "Simulation time");
 	for (int j = 1; j <= init->number_of_reps; j++) {
-		fprintf(files->outfile, ";%.3f", events[j].sim_time);
+		fprintf(files->outfile, ",%.3f", events[j].sim_time);
 	}
-	fprintf(files->outfile, "; minutes\n");	
+	fprintf(files->outfile, ", minutes\n");	
 
-	if(init->number_of_reps > 1){
-		fprintf(files->outfile, "\nIntervalo de Confianca ; ");
+	if(init->number_of_reps > 1) {
+		fprintf(files->outfile, "\nIntervalo de Confianaa");
 		float intervalo[2];
-		if(init->without_infinite_queue == 0){
+		if(init->without_infinite_queue == 0) {
 			intervalo_confianca(blocking_rate, init, &intervalo[0], &intervalo[1]);
 		}
-		else{
+		else {
 			intervalo_confianca(waiting_rate, init, &intervalo[0], &intervalo[1]);
 		}
-		
-		fprintf(files->outfile, "\n[ %.3f , %.3f ] \n", intervalo[0], intervalo[1]);
+		fprintf(files->outfile, "\n[ %.3f %.3f ] \n", intervalo[0], intervalo[1]);
 	}
 
-
-	fprintf(files->outfile, "\nValores Teoricos");
+	fprintf(files->outfile, "\nValores Teoricos");	
+	fprintf(files->outfile, "\nTrafego Oferecido , %.3f", init->A);
 	
-	fprintf(files->outfile, "\nTrafego Oferecido ; %.3f", init->A);
-	
-
-	if(init->without_infinite_queue == 0){
+	if(init->without_infinite_queue == 0) {
 		float E_B = erlang_B(init->A, init->number_of_servers);
 		float A_C = init->A * (1-E_B);
 
-		fprintf(files->outfile, "\nEarlang - B; %.3f", E_B);
-		fprintf(files->outfile, "\nTrafego Transportado; %.3f", A_C);
+		fprintf(files->outfile, "\nEarlang - B, %.3f", E_B);
+		fprintf(files->outfile, "\nTrafego Transportado, %.3f", A_C);
 	}
-	else{
+	else {
 		float E_C = erlang_C(init->A, init->number_of_servers);
-		float W_e = init->mean_service/(init->number_of_servers - init->A);
+		float W_e = init->mean_service / (init->number_of_servers - init->A);
 		float L_q = W_e * E_C / init->mean_interarrival;
 
-		fprintf(files->outfile, "\nEarlang - C; %.3f", E_C);
-		fprintf(files->outfile, "\nW_e; %.3f", W_e);
-		fprintf(files->outfile, "\nL_q; %.3f", L_q);
+		fprintf(files->outfile, "\nEarlang - C, %.3f", E_C);
+		fprintf(files->outfile, "\nW_e, %.3f", W_e);
+		fprintf(files->outfile, "\nL_q, %.3f", L_q);
 	}
-
 }
 
 void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * events, InitialValues *init) {
@@ -281,8 +269,6 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	float delay;
 
 	++stats->real_number_of_custumers_chegados;
-	//printf("\nChegou: %d", stats->real_number_of_custumers_chegados);
-
 
 	/* Schedule the next arrival event */
 	events->time_next_event[1] = events->sim_time + expon(init->mean_interarrival, init->streams[0]); 
@@ -292,9 +278,6 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 
 	if (free_server_index != -1) { /* There are free servers */
 		delay = 0.0; /* The customer is served immediately, so the delay = 0 */
-
-		/* Increases the number of customers served */
-		//++state->num_custs_delayed;
 
 		/* Mark the server as busy */
 		state->server_status[free_server_index] = BUSY;
