@@ -162,7 +162,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 		fprintf(files->outfile, "Waiting rate");
 		
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			waiting_rate[k] = ((float)stats[k].waiting_custumers / state[k].num_custs_delayed);
+			waiting_rate[k] = ((float)stats[k].waiting_custumers / stats[k].real_number_of_custumers_chegados);
 			fprintf(files->outfile, ";%.4f", waiting_rate[k]);
 		}
 		fprintf(files->outfile, "\n");
@@ -178,12 +178,12 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 		for(int j = 1; j <= init->number_of_reps; j++) {
 			sum_area_server_status = sum_area_server_status + stats[j].area_server_status[k] / events[j].sim_time;
 			if (events[j].sim_time > 0) {
-				fprintf(files->outfile, ";%.3f", stats[j].area_server_status[k] / events[j].sim_time);
+				fprintf(files->outfile, ";%.4f", stats[j].area_server_status[k] / events[j].sim_time);
 			} else {
-				fprintf(files->outfile, "; 0.000");
+				fprintf(files->outfile, "; 0.0000");
 			}
 		}
-		fprintf(files->outfile, "; ; ; Soma;  %.3f", sum_area_server_status);
+		fprintf(files->outfile, "; ; ; Soma;  %.4f", sum_area_server_status);
 		fprintf(files->outfile, "\n");
 	}
 
@@ -281,7 +281,7 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	float delay;
 
 	++stats->real_number_of_custumers_chegados;
-	printf("\nChegou: %d", stats->real_number_of_custumers_chegados);
+	//printf("\nChegou: %d", stats->real_number_of_custumers_chegados);
 
 
 	/* Schedule the next arrival event */
