@@ -1,5 +1,6 @@
 #include "fila1s.h"
 #include "utilits.h"
+#include <math.h>
 
 int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1, InitialValues * init) {
 
@@ -243,8 +244,8 @@ void ask_streams(InitialValues * init) {
 void generate_other_streams(InitialValues * init, int index, SystemState * state) {
 
 	/* Based on the parameter given. It´s minus 1 because the index start at 1 */
-	state->run_streams[0] = init->streams[0] + index - 1;
-	state->run_streams[1] = init->streams[1] + index * init->number_of_servers; 
+	state->run_streams[0] = init->streams[0] + index-1;
+	state->run_streams[1] = init->streams[1] + (index-1) * init->number_of_servers; 
 
 	if(state->run_streams[1] > 100) {
 		state->run_streams[1] = state->run_streams[1] - 100; 
@@ -273,8 +274,8 @@ void generate_other_streams(InitialValues * init, int index, SystemState * state
 	printf("Streams used for the run %d = [ ", index);
 
   /* Print all generated seeds for verification. */
-	for(int j = 0; j < init->number_of_servers ; j++) {
-		printf("%d%s", state->run_streams[j], (j < init->number_of_servers - 1) ? ", " : " ]\n");
+	for(int j = 0; j <= init->number_of_servers ; j++) {
+		printf("%d%s", state->run_streams[j], (j <= init->number_of_servers - 1) ? ", " : " ]\n");
 	}
 }
 
@@ -296,4 +297,62 @@ double erlang_B(double A, unsigned int n) {
 			E = AE / (AE + i); /*In each iteration i is E(A, i)*/
     }
     return E;
+}
+
+double erlang_C(double A, unsigned int n){
+
+	double E_B, E_C; 
+
+	E_B = erlang_B(A, n);
+
+	E_C = (n * E_B) / (n - A * (1 - E_B));
+
+	return E_C;
+
+}
+
+void intervalo_confianca(float array[], InitialValues * init, float *inferior, float *superior){
+
+	float value;
+
+	float soma = 0, media, soma_quadrado = 0, variancia, desvio_padrao; 
+	for(int i=1; i <= init->number_of_reps; i++){
+		soma += array[i];
+	}
+
+	media = soma / init->number_of_reps; 
+
+	for(int i=1; i <= init->number_of_reps; i++){
+		soma_quadrado += (array[i] - media) * (array[i] - media);
+	}
+
+
+	variancia = soma_quadrado / (init->number_of_reps - 1);
+	desvio_padrao = sqrt(variancia);
+
+
+	FILE *file;
+
+	file = fopen("t_student_95.txt", "r");
+    if (file == NULL) {
+        fprintf(stderr, "Erro ao abrir o ficheiro t_student_95.txt .\n");
+        exit(EXIT_FAILURE);
+    }
+
+
+	for (int i = 1; i < init->number_of_reps; i++) {
+		if (fscanf(file, " %f", &value) != 1) {
+			fprintf(stderr, "Erro ao ler o valor no indice %d do ficheiro\n", i);
+			fclose(file);
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	float aux; 
+
+	aux = desvio_padrao / sqrt(init->number_of_reps) * value;
+	
+	*inferior = media - aux;  
+	*superior = media + aux;
+
 }

@@ -93,6 +93,42 @@ void clear_screen();
  */
 double erlang_B(double A, unsigned int n);
 
+/*!
+ * @brief Calculates the waiting on queue probability in an M/M/n/inf system using the Erlang-B formula.
+ *
+ * This function computes the waiting on queue probability (or customer loss) in an M/M/n/inf queuing system, where customers arrive according to a Poisson process and are served by `n` servers. The calculation is based on the Erlang-C formula, which uses the offered traffic `A` (arrival rate multiplied by the average service time) and the number of channels `n` (the number of servers) to determine the probability of a customer going to a queue.
+ *
+ * The Erlang-B formula is especially used for loss systems, where there is no waiting queue, and customers are rejected if all servers are busy.
+ *
+ * @param A The offered traffic to the system, which is the arrival rate multiplied by the average service time (A = λ * T).
+ * @param n The number of channels (servers) available in the system.
+ * @return The waiting on queue probability in the M/M/n/inf system.
+ */
+double erlang_C(double A, unsigned int n);
+
+/*!
+ * @brief Calculates the confidence interval for a given sample using the t-distribution.
+ *
+ * This function computes the confidence interval for a set of values, based on the t-distribution, which is commonly used when the sample size is small and the population variance is unknown. The calculation uses the sample mean, standard deviation, and a critical value from the t-distribution (from a file `t_student_95.txt`) to determine the interval around the sample mean that would contain the true population mean with a certain level of confidence.
+ * 
+ * The confidence interval is calculated using the formula:
+ * 
+ *      CI = [mean - (t * (std_dev / sqrt(n))), mean + (t * (std_dev / sqrt(n)))]
+ *
+ * Where:
+ * - `mean` is the average of the sample values.
+ * - `t` is the critical value from the t-distribution for a 95% confidence level.
+ * - `std_dev` is the standard deviation of the sample.
+ * - `n` is the number of samples.
+ *
+ * The critical value `t` is read from a file containing t-distribution values for the desired confidence level (95% in this case).
+ *
+ * @param array The array containing the sample data.
+ * @param init A pointer to an `InitialValues` structure, which holds the number of repetitions (`number_of_reps`) for the sample.
+ * @param inferior A pointer to a float that will hold the lower bound of the confidence interval.
+ * @param superior A pointer to a float that will hold the upper bound of the confidence interval.
+ */
+void intervalo_confianca(float array[], InitialValues * init, float *inferior, float *superior );
 
 #endif
 

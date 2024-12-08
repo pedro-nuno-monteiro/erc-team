@@ -62,7 +62,9 @@ typedef struct {
     float area_server_status[MAX_SERVERS + 2];  /*!< Cumulative area under the server-status function (busy or idle). */
     float total_of_delays;                      /*!< Total delay time. */
     int lost_customers;                         /*!< Number of lost customers (Erlang-B model). */
-    int num_occupied_servers;                   /* !< Sum of occupied servers. */
+    int num_occupied_servers;                   /*!< Sum of occupied servers. */
+    int waiting_custumers;                      /*!< Number of customers that waited on a queue (Erlang-C model). */
+    int real_number_of_custumers_atendidos;
 } Statistics;
 
 /*! 
@@ -180,6 +182,7 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
  * @note This function assumes the `files->outfile` has been opened before calling and will write the results to this file.
  */
 void report(SystemState* state, Statistics* stats, Files* files, EventList* events, circular_queue * q1, InitialValues *init);
+
 
 /** 
  * @brief Updates the time-based statistics for the simulation, such as the area under the 

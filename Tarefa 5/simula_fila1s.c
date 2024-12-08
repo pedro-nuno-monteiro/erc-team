@@ -124,5 +124,6 @@ int main(int argc, char *argv[]) {
 	fclose(files.infile);
 	fclose(files.outfile);
 	
+	
 	return EXIT_SUCCESS;
 }
