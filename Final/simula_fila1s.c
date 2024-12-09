@@ -118,14 +118,14 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		printf(" Numero real custumers: %d\n", stats[i].real_number_of_custumers_chegados);
+		/*printf(" Numero real custumers chegados: %d\n", stats[i].real_number_of_custumers_chegados);
 		printf(" Custumers atendidos: %d\n", state[i].num_custs_delayed);
 		if(init.without_infinite_queue==1){
 			printf("Ficaram a espera: %d\n", stats[i].waiting_custumers);
 		}
 		else{
 			printf("Perdemos: %d\n", stats[i].lost_customers);
-		}
+		}*/
 
 	}
 

@@ -282,7 +282,6 @@ void timing(SystemState * state, Statistics * stats, Files * files, EventList * 
 void arrive(SystemState * state, Statistics * stats, Files * files, EventList * events, circular_queue * q1, InitialValues *init) {
 	
 	float delay;
-
 	++stats->real_number_of_custumers_chegados;
 
 	/* Schedule the next arrival event */
