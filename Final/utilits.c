@@ -39,7 +39,7 @@ int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1
 
 		q1->dis = dis;
 
-		if(init->number_of_reps <= 0 || init->number_of_reps >= MAX_SERVERS) {
+		if(init->number_of_reps <= 0 || init->number_of_reps > MAX_SERVERS) {
 			fprintf(stderr, "O numero de corridas tem de ser inferior a 9\n");
 			something_wrong = 1; 
 		}
@@ -307,9 +307,9 @@ double erlang_C(double A, unsigned int n){
 
 	double E_B, E_C; 
 
-	E_B = erlang_B(A, n);
+	E_B = erlang_B(A, n); /* Calculate Erlang B value */
 
-	E_C = (n * E_B) / (n - A * (1 - E_B));
+	E_C = (n * E_B) / (n - A * (1 - E_B)); /* Apply the Erlang C formula */
 
 	return E_C;
 
@@ -319,28 +319,34 @@ void intervalo_confianca(float array[], InitialValues * init, float *inferior, f
 
 	float value;
 
+	/* Calculate the sum of all elements in the array */
 	float soma = 0, media, soma_quadrado = 0, variancia, desvio_padrao; 
 	for(int i = 1; i <= init->number_of_reps; i++) {
 		soma += array[i];
 	}
 
+	/* Calculate the mean */
 	media = soma / init->number_of_reps; 
 
+	/* Calculate the sum of squared deviations from the mean */
 	for(int i = 1; i <= init->number_of_reps; i++) {
 		soma_quadrado += (array[i] - media) * (array[i] - media);
 	}
 
+	/* Calculate variance and standard deviation */
 	variancia = soma_quadrado / (init->number_of_reps - 1);
 	desvio_padrao = sqrt(variancia);
 
 	FILE *file;
 
+	/* Open the file containing t-Student values for 95% confidence level */
 	file = fopen("t_student_95.txt", "r");
 	if (file == NULL) {
 		fprintf(stderr, "Erro ao abrir o ficheiro t_student_95.txt .\n");
 		exit(EXIT_FAILURE);
 	}
 
+	/* Read t-Student values from the file until the 'number_of_reps - 1' */
 	for (int i = 1; i < init->number_of_reps; i++) {
 		if (fscanf(file, " %f", &value) != 1) {
 			fprintf(stderr, "Erro ao ler o valor no indice %d do ficheiro\n", i);
@@ -351,8 +357,10 @@ void intervalo_confianca(float array[], InitialValues * init, float *inferior, f
 
 	float aux; 
 
+	/* Calculate the margin of error */
 	aux = desvio_padrao / sqrt(init->number_of_reps) * value;
 	
+	/* Calculate the lower and upper bounds of the confidence interval */
 	*inferior = media - aux;  
 	*superior = media + aux;
 }
