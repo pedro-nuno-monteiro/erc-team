@@ -149,7 +149,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	if(init->without_infinite_queue == 0) {
 		fprintf(files->outfile, "Blocking rate");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			blocking_rate[k] = ((float)stats[k].lost_customers / state[k].num_custs_delayed);
+			blocking_rate[k] = ((float)stats[k].lost_customers / stats[k].real_number_of_custumers_chegados);
 			fprintf(files->outfile, ",%.4f", blocking_rate[k]);
 		}
 		fprintf(files->outfile, "\n");
