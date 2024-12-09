@@ -1,0 +1,25 @@
+Simulation of a queueing system with,6 , servers
+Mean interarrival time, 4.00, minutes
+Mean service time, 20.00, minutes
+Without Queue
+
+, 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida, 6a corrida, 7a corrida, 8a corrida, 9a corrida
+Number of customers,5000,5000,5000,5000,5000,5000,5000,5000,5000, costumers
+Average number of customers delayed, 4160, 4189, 4219, 4239, 4243, 4209, 4156, 4176, 4292, costumers
+Average number of lost clients,840,811,781,761,757,791,844,824,708, clients
+Blocking rate,0.1680,0.1622,0.1562,0.1522,0.1514,0.1582,0.1688,0.1648,0.1416
+Server 1 utilization,0.6211,0.6311,0.6234,0.6269,0.6123,0.6233,0.6194,0.6237,0.6026, , , Soma,  5.5837
+Server 2 utilization,0.6214,0.6310,0.6231,0.6271,0.6112,0.6231,0.6193,0.6232,0.6019, , , Soma,  5.5812
+Server 3 utilization,0.6207,0.6308,0.6228,0.6275,0.6111,0.6236,0.6205,0.6234,0.6026, , , Soma,  5.5831
+Server 4 utilization,0.6210,0.6315,0.6230,0.6269,0.6110,0.6235,0.6197,0.6235,0.6024, , , Soma,  5.5824
+Server 5 utilization,0.6216,0.6311,0.6229,0.6271,0.6111,0.6233,0.6193,0.6234,0.6026, , , Soma,  5.5824
+Server 6 utilization,0.6216,0.6310,0.6231,0.6268,0.6114,0.6241,0.6196,0.6236,0.6019, , , Soma,  5.5831
+Simulation time,26786.367,26253.352,26628.207,26789.938,27237.857,26967.529,26898.707,26772.865,27121.736, minutes
+
+Intervalo de Confianaa
+[ 0.151 0.165 ] 
+
+Valores Teoricos
+Trafego Oferecido , 5.000
+Earlang - B, 0.192
+Trafego Transportado, 4.041

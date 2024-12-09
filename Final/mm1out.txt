@@ -1,0 +1,30 @@
+Simulation of a queueing system with 5 servers
+
+Mean interarrival time      34.00 minutes
+
+Mean service time            3.00 minutes
+
+Number of customers           344
+
+With Queue
+
+LIFO discipline
+
+
+
+Average delay in queue per client        0.000 minutes
+
+Average number of clients in queue       0.000
+
+
+Server 1 utilization                     0.020
+
+Server 2 utilization                     0.020
+
+Server 3 utilization                     0.020
+
+Server 4 utilization                     0.020
+
+Server 5 utilization                     0.020
+
+Time simulation ended                   10925.812 minutes
