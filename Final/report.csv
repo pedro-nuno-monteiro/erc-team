@@ -1,27 +1,25 @@
 Simulation of a queueing system with,5 , servers
 Mean interarrival time, 10.00, minutes
 Mean service time, 15.00, minutes
-With Queue
-LIFO discipline
+Without Queue
 
 , 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida
 Number of customers,1000,1000,1000,1000,1000, costumers
-Average delay in queue per client,0.056,0.071,0.053,0.020,0.019, minutes
-Average number of clients in queue,0.005,0.007,0.005,0.002,0.002, clients
-Waiting rate,0.0112,0.0149,0.0111,0.0075,0.0074
-Server 1 utilization,0.2830,0.2809,0.2897,0.2812,0.2937
-Server 2 utilization,0.2829,0.2812,0.2924,0.2806,0.2884
-Server 3 utilization,0.2827,0.2811,0.2900,0.2806,0.2875
-Server 4 utilization,0.2834,0.2824,0.2936,0.2812,0.2881
-Server 5 utilization,0.2854,0.2841,0.2921,0.2847,0.2888
-Soma dos servidores,1.4174,1.4097,1.4578,1.4083,1.4465
-Simulation time,10392.609,10717.005,10682.742,10681.519,10695.054, minutes
+Average number of customers delayed, 995, 995, 983, 995, 995, costumers
+Average number of lost clients,5,5,17,5,5, clients
+Blocking rate,0.0050,0.0050,0.0170,0.0050,0.0050
+Server 1 utilization,0.2799,0.2789,0.2891,0.2805,0.2742
+Server 2 utilization,0.2781,0.2769,0.2907,0.2811,0.2736
+Server 3 utilization,0.2792,0.2772,0.2902,0.2795,0.2740
+Server 4 utilization,0.2796,0.2772,0.2902,0.2784,0.2743
+Server 5 utilization,0.2779,0.2770,0.2920,0.2815,0.2763
+Soma dos servidores,1.3946,1.3871,1.4521,1.4009,1.3724
+Simulation time,9700.218,9989.921,9925.395,10056.470,10163.276, minutes
 
 Intervalo de Confianca
-[ 0.007 0.014 ] 
+[ 0.001 0.014 ] 
 
 Valores Teoricos
 Trafego Oferecido , 1.500
-Earlang - C, 0.020
-W_e, 4.286
-L_q, 0.009
+Earlang - B, 0.014
+Trafego Transportado, 1.479

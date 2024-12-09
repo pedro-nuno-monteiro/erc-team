@@ -294,6 +294,9 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 	if (free_server_index != -1) { /* There are free servers */
 		delay = 0.0; /* The customer is served immediately, so the delay = 0 */
 
+		/* Increases the number of customers served */
+		++state->num_custs_delayed;
+
 		/* Mark the server as busy */
 		state->server_status[free_server_index] = BUSY;
 
@@ -330,7 +333,6 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
 	if (state->num_in_q == 0) {
 		/* The queue is empty so make the server idle and eliminate the
 		departure (service completion) event from consideration. */
-		++state->num_custs_delayed;
 		state->server_status[state->next_event_type] = IDLE; /* The next_event type corresponds to the server index -> see in the timing function */
 		events->time_next_event[state->next_event_type] = 1.0e+30; /* Sets the next event to infinite */
 	}
