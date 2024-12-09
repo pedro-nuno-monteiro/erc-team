@@ -166,19 +166,34 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	/* Print the average server utilization. 
 	We use this loop to ensure that if area_server_status == 0 then we avoid divisions by zero */
 	for(int k = 2; k <= init->number_of_servers + 1; k++ ) {
-		float sum_area_server_status = 0;
+
 		fprintf(files->outfile, "Server %d utilization", k - 1);
+		
 		for(int j = 1; j <= init->number_of_reps; j++) {
-			sum_area_server_status = sum_area_server_status + stats[j].area_server_status[k] / events[j].sim_time;
 			if (events[j].sim_time > 0) {
 				fprintf(files->outfile, ",%.4f", stats[j].area_server_status[k] / events[j].sim_time);
 			} else {
 				fprintf(files->outfile, ", 0.0000");
 			}
 		}
-		fprintf(files->outfile, ", , , Soma,  %.4f", sum_area_server_status);
 		fprintf(files->outfile, "\n");
 	}
+
+	float soma[init->number_of_reps];
+	for (int i = 1; i <= init->number_of_reps; i++) {
+		soma[i] = 0;
+	}
+	for(int i = 1; i <= init->number_of_reps; i++) {
+		for(int j = 2; j <= init->number_of_servers + 1; j++) {
+			soma[i] += stats[i].area_server_status[j] / events[i].sim_time;
+		}
+	}
+
+	fprintf(files->outfile, "Soma dos servidores");
+	for(int j = 1; j <= init->number_of_reps; j++) {
+		fprintf(files->outfile, ",%.4f", soma[j]);
+	}
+	fprintf(files->outfile, "\n");
 
 	fprintf(files->outfile, "Simulation time");
 	for (int j = 1; j <= init->number_of_reps; j++) {
@@ -187,7 +202,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	fprintf(files->outfile, ", minutes\n");	
 
 	if(init->number_of_reps > 1) {
-		fprintf(files->outfile, "\nIntervalo de Confianaa");
+		fprintf(files->outfile, "\nIntervalo de Confianca");
 		float intervalo[2];
 		if(init->without_infinite_queue == 0) {
 			intervalo_confianca(blocking_rate, init, &intervalo[0], &intervalo[1]);

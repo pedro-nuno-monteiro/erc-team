@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 
 	/* Check if the input file is provided as an argument. */
 	if (argc >= 2) { /* If in the input argument we have the name of the file we want to read */
-		receive_input_file(argc, argv, &files, &q1[0], &init);
+		receive_input_file(argc, argv, &files, q1, &init);
 	}
 	else {
 		ask_for_par(&files, q1, &init);

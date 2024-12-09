@@ -37,7 +37,9 @@ int receive_input_file(int argc, char *argv[],  Files *files, circular_queue *q1
 			fscanf(files->infile, " %d", &dis);
 		}
 
-		q1->dis = dis;
+		for(int i = 0; i < init->number_of_reps; i++) {
+			q1[i].dis = dis;
+		}
 
 		if(init->number_of_reps <= 0 || init->number_of_reps > MAX_SERVERS) {
 			fprintf(stderr, "O numero de corridas tem de ser inferior a 9\n");
