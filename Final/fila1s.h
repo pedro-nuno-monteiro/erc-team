@@ -20,7 +20,7 @@
 #define Q_LIMIT 100
 
 /*! Maximum number of servers allowed. */
-#define MAX_SERVERS 9  /*!< No repetitions; thus, n < 99. */
+#define MAX_SERVERS 11  /*!< No repetitions; thus, n < 99. */
 
 /*! Mnemonics for server states: BUSY or IDLE. */
 #define BUSY 1

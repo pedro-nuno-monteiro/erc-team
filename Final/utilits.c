@@ -139,25 +139,25 @@ void ask_for_par(Files *files, circular_queue *q, InitialValues *init) {
 			printf("Mean interarrival time -> ");
 			scanf("%f", &init->mean_interarrival);
 
-			if (init->mean_interarrival <= 0) {
+			if (init->mean_interarrival < 0) {
 				printf("Por favor, insira um valor positivo.\n\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF); 
 				init->mean_interarrival = -1;
 			}
-		} while(init->mean_interarrival <= 0);
+		} while(init->mean_interarrival < 0);
 
 		do {
 			printf("Mean service time -> ");
 			scanf("%f", &init->mean_service);
 
-			if (init->mean_service <= 0) { 
+			if (init->mean_service < 0) { 
 				printf("Por favor, insira um valor positivo.\n\n");
 				int ch;
 				while ((ch = getchar()) != '\n' && ch != EOF);
 				init->mean_service = -1;
 			}
-		} while(init->mean_service <= 0);
+		} while(init->mean_service < 0);
 		
 		init->A = 1/init->mean_interarrival * init->mean_service;
 
@@ -299,9 +299,10 @@ double erlang_B(double A, unsigned int n) {
 
     double AE;
     for (int i = 1; i <= n; i++) {
-		AE = A *E;
+			AE = A * E;
 			E = AE / (AE + i); /*In each iteration i is E(A, i)*/
-    }
+			printf("E(%f, %d) = %f\n", A, i, E);
+		}
     return E;
 }
 
@@ -311,7 +312,11 @@ double erlang_C(double A, unsigned int n){
 
 	E_B = erlang_B(A, n); /* Calculate Erlang B value */
 
+	printf("E_B = %f\n", E_B);
+
 	E_C = (n * E_B) / (n - A * (1 - E_B)); /* Apply the Erlang C formula */
+
+	printf("E_C = %f\n", E_C);
 
 	return E_C;
 

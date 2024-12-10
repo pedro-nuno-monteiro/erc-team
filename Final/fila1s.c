@@ -218,7 +218,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	
 	if(init->without_infinite_queue == 0) {
 		float E_B = erlang_B(init->A, init->number_of_servers);
-		float A_C = init->A * (1-E_B);
+		float A_C = init->A * (1 - E_B);
 
 		fprintf(files->outfile, "\nEarlang - B, %.3f", E_B);
 		fprintf(files->outfile, "\nTrafego Transportado, %.3f", A_C);

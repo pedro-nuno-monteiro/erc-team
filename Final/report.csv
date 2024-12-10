@@ -1,25 +1,32 @@
-Simulation of a queueing system with,5 , servers
-Mean interarrival time, 10.00, minutes
-Mean service time, 15.00, minutes
-Without Queue
+Simulation of a queueing system with,10 , servers
+Mean interarrival time, 50.00, minutes
+Mean service time, 200.00, minutes
+With Queue
+LIFO discipline
 
-, 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida
-Number of customers,1000,1000,1000,1000,1000, costumers
-Average number of customers delayed, 992, 992, 990, 989, 994, costumers
-Average number of lost clients,8,8,10,11,6, clients
-Blocking rate,0.0079,0.0079,0.0099,0.0109,0.0060
-Server 1 utilization,0.2751,0.2704,0.2875,0.2866,0.2888
-Server 2 utilization,0.2758,0.2712,0.2870,0.2853,0.2879
-Server 3 utilization,0.2752,0.2712,0.2888,0.2862,0.2877
-Server 4 utilization,0.2761,0.2699,0.2872,0.2841,0.2873
-Server 5 utilization,0.2750,0.2704,0.2891,0.2840,0.2896
-Soma dos servidores,1.3772,1.3531,1.4396,1.4263,1.4413
-Simulation time,9993.721,9781.481,10103.688,9849.555,9901.379, minutes
+, 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida, 6a corrida, 7a corrida, 8a corrida, 9a corrida, 10a corrida
+Number of customers,20000,20000,20000,20000,20000,20000,20000,20000,20000,20000, costumers
+Average delay in queue per client,0.152,0.087,0.069,0.122,0.278,0.065,0.127,0.074,0.109,0.166, minutes
+Average number of clients in queue,0.003,0.002,0.001,0.002,0.006,0.001,0.003,0.001,0.002,0.003, clients
+Waiting rate,0.0026,0.0029,0.0025,0.0033,0.0052,0.0029,0.0033,0.0030,0.0024,0.0035
+Server 1 utilization,0.3788,0.3780,0.3771,0.3767,0.3822,0.3764,0.3755,0.3714,0.3797,0.3815
+Server 2 utilization,0.3788,0.3780,0.3771,0.3771,0.3822,0.3763,0.3756,0.3714,0.3798,0.3816
+Server 3 utilization,0.3787,0.3781,0.3774,0.3767,0.3823,0.3762,0.3755,0.3712,0.3797,0.3814
+Server 4 utilization,0.3788,0.3783,0.3771,0.3769,0.3822,0.3764,0.3755,0.3716,0.3799,0.3818
+Server 5 utilization,0.3789,0.3785,0.3771,0.3776,0.3822,0.3762,0.3757,0.3713,0.3797,0.3815
+Server 6 utilization,0.3788,0.3782,0.3772,0.3767,0.3822,0.3762,0.3756,0.3713,0.3797,0.3814
+Server 7 utilization,0.3787,0.3780,0.3773,0.3770,0.3822,0.3764,0.3754,0.3712,0.3798,0.3814
+Server 8 utilization,0.3789,0.3783,0.3771,0.3767,0.3823,0.3762,0.3758,0.3713,0.3797,0.3814
+Server 9 utilization,0.3788,0.3780,0.3771,0.3768,0.3824,0.3763,0.3755,0.3713,0.3797,0.3817
+Server 10 utilization,0.3789,0.3782,0.3771,0.3767,0.3823,0.3765,0.3754,0.3714,0.3800,0.3814
+Soma dos servidores,3.7883,3.7818,3.7716,3.7689,3.8223,3.7631,3.7554,3.7134,3.7977,3.8151
+Simulation time,987591.438,999366.688,1003915.313,998179.500,987801.875,999988.563,999719.125,1011793.250,997024.813,992226.438, minutes
 
 Intervalo de Confianca
-[ 0.006 0.011 ] 
+[ 0.003 0.004 ] 
 
 Valores Teoricos
-Trafego Oferecido , 1.500
-Earlang - B, 0.014
-Trafego Transportado, 1.479
+Trafego Oferecido , 4.000
+Earlang - C, 0.009
+W_e, 33.333
+L_q, 0.006
