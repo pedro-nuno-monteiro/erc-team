@@ -115,7 +115,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	if(init->without_infinite_queue == 0) {
 		fprintf(files->outfile, "Average number of customers delayed");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			fprintf(files->outfile, ", %d", init->num_delays_required - stats[k].lost_customers);
+			fprintf(files->outfile, ", %d", abs(init->num_delays_required - stats[k].lost_customers));
 		}
 		fprintf(files->outfile, ", costumers\n");
 	}
