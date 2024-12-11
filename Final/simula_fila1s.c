@@ -17,7 +17,7 @@
  * This simulation may be run with or without an input file. With the input file, the parameters are:
  * 1. Mean interarrival time,
  * 2. Mean service time,
- * 3. Number of customers to be delayed.
+ * 3. Number of costumers to be delayed.
  * 4. Number of servers,
  * 5. Queue capacity (0 for infinite queue or any other number for a finite queue).
  * 6. Random seeds for the arrival and departure processes.
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 	printf("\n\nParameters: \n\n");
 	printf("Mean interarrival time: %f\n", init.mean_interarrival);
 	printf("Mean service time: %f\n", init.mean_service);
-	printf("Number of customers: %d\n", init.num_delays_required);
+	printf("Number of costumers: %d\n", init.num_delays_required);
 	printf("Number of servers: %d\n", init.number_of_servers);
 	printf("Number of runs: %d\n", init.number_of_reps);
 
@@ -97,8 +97,8 @@ int main(int argc, char *argv[]) {
 		/* Initialize the simulation. */
 		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1[i], &init);
 	
-		/* Run the simulation while the required number of customers has not been delayed. */
-		while(stats[i].real_number_of_custumers_partidos < init.num_delays_required) {
+		/* Run the simulation while the required number of costumers has not been delayed. */
+		while(stats[i].real_number_of_costumers_partidos < init.num_delays_required) {
 
 			/* Determine the next event (either an arrival or departure). */
 			timing(&state[i], &stats[i], &files, &events[i]);
@@ -118,16 +118,18 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		printf("\n Numero real costumers chegados: %d\n", stats[i].real_number_of_custumers_chegados);
-		printf(" Numero real costumers partidos: %d\n", stats[i].real_number_of_custumers_partidos);
+		/*
+		printf("\n Numero real costumers chegados: %d\n", stats[i].real_number_of_costumers_chegados);
+		printf(" Numero real costumers partidos: %d\n", stats[i].real_number_of_costumers_partidos);
 		printf(" Costumers atendidos: %d\n", state[i].num_custs_delayed);
 		if(init.without_infinite_queue == 1) {
-			printf("Ficaram a espera: %d\n", stats[i].waiting_custumers);
+			printf("Ficaram a espera: %d\n", stats[i].waiting_costumers);
 			printf("Ficaram a espera2: %d\n", state[i].num_in_q);
 		}
 		else {
-			printf("Perdemos: %d\n", stats[i].lost_customers);
+			printf("Perdemos: %d\n", stats[i].lost_costumers);
 		}
+		*/
 
 	}
 

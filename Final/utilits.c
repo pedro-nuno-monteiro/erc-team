@@ -168,7 +168,7 @@ void ask_for_par(Files *files, circular_queue *q, InitialValues *init) {
 	} while(init->A >= init->number_of_servers && init->without_infinite_queue == 1);
 
 	do {
-		printf("Number of delayed customers -> ");
+		printf("Number of delayed costumers -> ");
 		scanf("%d", &init->num_delays_required);
 
 		if(init->num_delays_required <= 0) { 

@@ -30,7 +30,7 @@
  * @brief Structure that represents the initial values
  */
 typedef struct {
-    float mean_interarrival;        /*!< Mean time between customer arrivals (inter-arrival time). */
+    float mean_interarrival;        /*!< Mean time between costumer arrivals (inter-arrival time). */
     float mean_service;             /*!< Mean service time. */
     int number_of_servers;          /*!< Number of active servers. */
     int num_delays_required;        /*!< Number of delays required to complete the simulation. */
@@ -45,10 +45,10 @@ typedef struct {
  */
 typedef struct {
     int next_event_type;                /*!< Type of the next event to occur (e.g., arrival, departure). */
-    int num_custs_delayed;              /*!< Number of customers that have been delayed. */
-    int num_in_q;                       /*!< Number of customers in the queue. */
+    int num_custs_delayed;              /*!< Number of costumers that have been delayed. */
+    int num_in_q;                       /*!< Number of costumers in the queue. */
     int server_status[MAX_SERVERS + 2]; /*!< Server status (0 = idle, 1 = busy). */
-    float time_arrival[Q_LIMIT + 1];    /*!< Time of arrival for each customer in the queue. */
+    float time_arrival[Q_LIMIT + 1];    /*!< Time of arrival for each costumer in the queue. */
     int num_events;                     /*!< Dynamically calculated based on servers. */
     int run_streams[MAX_SERVERS + 1];   /*!< Streams used in each run. */
     int num_delays_required_state;      /*!< Number of delays required to complete the simulation. */
@@ -61,11 +61,11 @@ typedef struct {
     float area_num_in_q;                        /*!< Cumulative area under the number-in-queue function. */
     float area_server_status[MAX_SERVERS + 2];  /*!< Cumulative area under the server-status function (busy or idle). */
     float total_of_delays;                      /*!< Total delay time. */
-    int lost_customers;                         /*!< Number of lost customers (Erlang-B model). */
+    int lost_costumers;                         /*!< Number of lost costumers (Erlang-B model). */
     int num_occupied_servers;                   /*!< Sum of occupied servers. */
-    int waiting_custumers;                      /*!< Number of customers that waited on a queue (Erlang-C model). */
-    int real_number_of_custumers_chegados;
-    int real_number_of_custumers_partidos;
+    int waiting_costumers;                      /*!< Number of costumers that waited on a queue (Erlang-C model). */
+    int real_number_of_costumers_chegados;
+    int real_number_of_costumers_partidos;
 } Statistics;
 
 /*! 
@@ -111,7 +111,7 @@ int selectFreeServer(SystemState * state, Statistics * stats, InitialValues * in
  * @param stats Pointer to the statistics structure that holds the statistical data.
  * @param events Pointer to the event list structure that keeps track of event times and simulation time.
  * @param stream The random number stream used to generate the arrival times.
- * @param q1 Pointer to the circular queue structure that holds the customer arrival times.
+ * @param q1 Pointer to the circular queue structure that holds the costumer arrival times.
  * @param init Pointer to the initial values structure that contains the simulation parameters.
  */
 void initialize(SystemState *state, Statistics *stats, EventList *events, int stream, circular_queue *q1, InitialValues * init);
@@ -133,34 +133,34 @@ void initialize(SystemState *state, Statistics *stats, EventList *events, int st
 void timing(SystemState *state, Statistics *stats, Files* files, EventList *events);
 
 /** 
- * @brief Handles customer arrivals at the queue by scheduling the next arrival, checking server availability,
+ * @brief Handles costumer arrivals at the queue by scheduling the next arrival, checking server availability,
  *        and managing the queue if all servers are occupied.
  * 
  * This function schedules the next arrival event, selects an available server (if any), and manages the queue. 
- * If no servers are available and the queue is not infinite, the customer is rejected. If the queue has space, 
- * the customer's arrival time is added to the queue.
+ * If no servers are available and the queue is not infinite, the costumer is rejected. If the queue has space, 
+ * the costumer's arrival time is added to the queue.
  * 
- * @param state Pointer to the system state structure, updated to track queue size, server status, and number of lost customers.
- * @param stats Pointer to the statistics structure, updated to increment lost customers if the queue is full.
+ * @param state Pointer to the system state structure, updated to track queue size, server status, and number of lost costumers.
+ * @param stats Pointer to the statistics structure, updated to increment lost costumers if the queue is full.
  * @param files Pointer to the file management structure, used for handling queue overflow conditions.
  * @param events Pointer to the event list structure, updated to schedule the next arrival event.
- * @param q1 Pointer to the circular queue structure, updated to add the arrival time of the customer.
+ * @param q1 Pointer to the circular queue structure, updated to add the arrival time of the costumer.
  * @param init Pointer to the initial values structure, used to determine if the queue is infinite.
  */
 void arrive(SystemState *state, Statistics *stats, Files* files, EventList *events, circular_queue * q1, InitialValues * init);
 
 /** 
- * @brief Handles customer departures by updating queue length, calculating delay for the customer beginning service,
+ * @brief Handles costumer departures by updating queue length, calculating delay for the costumer beginning service,
  *        and setting the server status to idle if the queue is empty.
  * 
- * This function handles the departure of a customer from the queue, updating the system's state by reducing the queue size, 
- * calculating the delay for the departing customer, and scheduling the next departure event. If the queue is empty, 
+ * This function handles the departure of a costumer from the queue, updating the system's state by reducing the queue size, 
+ * calculating the delay for the departing costumer, and scheduling the next departure event. If the queue is empty, 
  * the server status is set to idle.
  * 
- * @param state Pointer to the system state structure, updated to track server status, queue length, and customer arrival times.
- * @param stats Pointer to the statistics structure, updated to accumulate total delay and number of customers delayed.
+ * @param state Pointer to the system state structure, updated to track server status, queue length, and costumer arrival times.
+ * @param stats Pointer to the statistics structure, updated to accumulate total delay and number of costumers delayed.
  * @param events Pointer to the event list structure, updated to schedule the next departure or set it to infinity if the server becomes idle.
- * @param q1 Pointer to the circular queue structure, updated to remove the departing customer's arrival time.
+ * @param q1 Pointer to the circular queue structure, updated to remove the departing costumer's arrival time.
  * @param init Pointer to the initial values structure, used to determine the number of servers.
  */
 void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1, InitialValues * init);
@@ -169,16 +169,16 @@ void depart(SystemState *state, Statistics *stats, EventList *events, circular_q
  * @brief Writes the simulation results to the output file, including performance metrics.
  *
  * This function generates a formatted report of the simulation, including metrics such as the 
- * average delay, lost customers, server utilization, and other system parameters. The results 
+ * average delay, lost costumers, server utilization, and other system parameters. The results 
  * are written to the output file.
  * 
  * @param state Pointer to the system state structure that contains parameters such as mean interarrival time, 
- *              mean service time, and the number of customers.
- * @param stats Pointer to the statistics structure that contains calculated values like delays, lost customers, 
+ *              mean service time, and the number of costumers.
+ * @param stats Pointer to the statistics structure that contains calculated values like delays, lost costumers, 
  *              and server utilization statistics.
  * @param files Pointer to the file management structure that handles the output file.
  * @param events Pointer to the event list structure that tracks simulation time and events.
- * @param q1 Pointer to the circular queue structure that holds customer arrival times.
+ * @param q1 Pointer to the circular queue structure that holds costumer arrival times.
  * @param init Pointer to the initial values structure that contains the number of servers.
  * 
  * @note This function assumes the `files->outfile` has been opened before calling and will write the results to this file.
@@ -193,7 +193,7 @@ void report(SystemState* state, Statistics* stats, Files* files, EventList* even
  * statistics, including the area under the number-in-queue function and server utilization.
  * 
  * @param state Pointer to the system state structure containing the current state of the system, 
- *              including the number of customers in the queue and server status.
+ *              including the number of costumers in the queue and server status.
  * @param stats Pointer to the statistics structure that will be updated with the time-based metrics.
  * @param events Pointer to the event list structure that contains simulation time and last event time.
  * @param init Pointer to the initial values structure that contains the number of servers.

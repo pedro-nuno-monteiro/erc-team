@@ -1,0 +1,27 @@
+Simulation of a queueing system with,1, servers,,,,,,,,,
+Mean interarrival time,15, minutes,,,,,,,,,
+Mean service time,4, minutes,,,,,,,,,
+With Queue,,,,,,,,,,,
+LIFO discipline,,,,,,,,,,,
+,,,,,,,,,,,
+, 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida, 6a corrida, 7a corrida, 8a corrida, 9a corrida, 10a corrida,
+Number of costumers,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000, costumers
+Average delay in queue per client,1.426,1.242,1.37,1.174,1.432,1.618,1.421,1.814,1.238,1.744, minutes
+Average number of clients in queue,0.098,0.084,0.091,0.076,0.095,0.104,0.096,0.121,0.08,0.123, clients
+Waiting rate,0.2587,0.259,0.247,0.237,0.28,0.257,0.307,0.286,0.239,0.283,
+Server 1 utilization,0.2659,0.2595,0.2653,0.2557,0.2631,0.247,0.2576,0.2737,0.2563,0.2806,
+Soma dos servidores,0.2659,0.2595,0.2653,0.2557,0.2631,0.247,0.2576,0.2737,0.2563,0.2806,
+Simulation time,14634.952,14851.22,15047.249,15424.936,15107.268,15610.421,14769.535,14987.697,15497.881,14175.329, minutes
+,,,,,,,,,,,
+Intervalos de Confianca,,,,,,,,,,,
+Trafego Transportado,[ 0.256 0.269 ] ,,1.4479,,0.013,0.04952947,4.952947003,,,,
+Waiting rate,[ 0.249 0.282 ] ,,0.0968,,0.033,0.124354675,12.43546746,,,,
+,,,0.26537,,,,,,,,
+Valores Teoricos,,,,,,,,,,,
+Trafego Oferecido ,0.267,,0.26247,,,,,,,,
+Earlang - C,0.267,,,,,,,,,,
+W_e,5.455,,,,,,,,,,
+L_q,0.097,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,

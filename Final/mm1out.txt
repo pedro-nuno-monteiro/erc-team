@@ -4,7 +4,7 @@ Mean interarrival time      34.00 minutes
 
 Mean service time            3.00 minutes
 
-Number of customers           344
+Number of costumers           344
 
 With Queue
 
