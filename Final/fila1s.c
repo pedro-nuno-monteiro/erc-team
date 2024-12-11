@@ -6,15 +6,16 @@
 int selectFreeServer(SystemState * state, Statistics * stats, InitialValues *init) { 
 	
 	int livre = -1; /* At the beginning we assume that no server is IDLE */
-	int aux = stats->area_server_status[2]; /* Let's assume that the first server is the one with the lowest utilization rate */ 
+	float aux = stats->area_server_status[2]; /* Let's assume that the first server is the one with the lowest utilization rate */ 
 	int indice = 2; /* We assume that the first server (index = 2) is the one with the lowest utilization rate */
 
 	/* Loop through each server to find the free server with the lowest usage rate */
-	for (int i = 2; i <= init->number_of_servers + 1; ++i) {
-		
+	for(int i = 2; i <= init->number_of_servers + 1; ++i) {
+
 		if (state->server_status[i] == IDLE) {
 			livre = 1; /* There is at least one free server */
-			
+
+			indice = i; 
 			/* If this server has a lower usage rate, update the chosen server index */
 			if(stats->area_server_status[i] <= aux) {
 				aux = stats->area_server_status[i];
@@ -54,7 +55,7 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	events->time_last_event = 0.0; 	/* No events have occured yet */
 	
 	state->next_event_type = 0; 		/* No next event initially */
-	state->num_custs_delayed =	 0; /* No customers delayed initially */
+	state->num_custs_delayed = 0; 	/* No customers delayed initially */
 	state->num_in_q = 0; 						/* Number of custumers in queue start in zero */
 	state->num_events = init->number_of_servers + 1;
 
@@ -64,6 +65,7 @@ void initialize(SystemState * state, Statistics * stats, EventList * events, int
 	stats->num_occupied_servers = 0;	/* No server occupied */
 	stats->waiting_custumers = 0; 
 	stats->real_number_of_custumers_chegados = 0; 
+	stats->real_number_of_custumers_partidos = 0;
 
 	/* Initialize event list. Since no customers are present, the departure
 	(service completion) event is eliminated from consideration. */	
@@ -149,7 +151,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	if(init->without_infinite_queue == 0) {
 		fprintf(files->outfile, "Blocking rate");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			blocking_rate[k] = ((float)stats[k].lost_customers / stats[k].real_number_of_custumers_chegados);
+			blocking_rate[k] = ((float)stats[k].lost_customers / state[k].num_custs_delayed);
 			fprintf(files->outfile, ",%.4f", blocking_rate[k]);
 		}
 		fprintf(files->outfile, "\n");
@@ -157,7 +159,7 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	else {
 		fprintf(files->outfile, "Waiting rate");
 		for(int k = 1; k <= init->number_of_reps; k++) {
-			waiting_rate[k] = ((float)stats[k].waiting_custumers / stats[k].real_number_of_custumers_chegados);
+			waiting_rate[k] = ((float)stats[k].waiting_custumers / state[k].num_custs_delayed);
 			fprintf(files->outfile, ",%.4f", waiting_rate[k]);
 		}
 		fprintf(files->outfile, "\n");
@@ -241,7 +243,7 @@ void update_time_avg_stats(SystemState * state, Statistics * stats, EventList * 
 	/* This calculation determines the time that has passed since the last processed event.
     It is essential to calculate the areas under the curves of the state variables */
 	time_since_last_event = events->sim_time - events->time_last_event;
-	events->time_last_event	 = events->sim_time; 
+	events->time_last_event = events->sim_time; 
 	
 	/* This metric is useful to calculate the average number of customers in the queue during the simulation */
 	stats->area_num_in_q  += state->num_in_q * time_since_last_event; /* Update area under number-in-queue function. */
@@ -327,9 +329,11 @@ void arrive(SystemState * state, Statistics * stats, Files * files, EventList * 
 void depart(SystemState *state, Statistics *stats, EventList *events, circular_queue * q1, InitialValues *init) {
 	
 	float delay, arrival_time;
+	stats->real_number_of_custumers_partidos++;
 
 	/* If the queue is empty -> IDLE */
 	if (state->num_in_q == 0) {
+
 		/* The queue is empty so make the server idle and eliminate the
 		departure (service completion) event from consideration. */
 		state->server_status[state->next_event_type] = IDLE; /* The next_event type corresponds to the server index -> see in the timing function */

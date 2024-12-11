@@ -98,15 +98,15 @@ int main(int argc, char *argv[]) {
 		initialize(&state[i], &stats[i], &events[i], state[i].run_streams[0], &q1[i], &init);
 	
 		/* Run the simulation while the required number of customers has not been delayed. */
-		while (state[i].num_custs_delayed < init.num_delays_required) {
-			
+		while(stats[i].real_number_of_custumers_partidos < init.num_delays_required) {
+
 			/* Determine the next event (either an arrival or departure). */
 			timing(&state[i], &stats[i], &files, &events[i]);
 			
 			/* Update the time-average statistics based on the time elapsed since the last event. */
 			update_time_avg_stats(&state[i], &stats[i], &events[i], &init);
 
-			/* Process the next event based on its type (1 for arrival, 2 for departure). */
+			/* Process the next event based on its type (1 for arrival, rest for departure). */
 			switch (state[i].next_event_type) {
 				case 1:
 					arrive(&state[i], &stats[i], &files, &events[i], &q1[i], &init);
@@ -118,14 +118,16 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		/*printf(" Numero real custumers chegados: %d\n", stats[i].real_number_of_custumers_chegados);
-		printf(" Custumers atendidos: %d\n", state[i].num_custs_delayed);
-		if(init.without_infinite_queue==1){
+		printf("\n Numero real costumers chegados: %d\n", stats[i].real_number_of_custumers_chegados);
+		printf(" Numero real costumers partidos: %d\n", stats[i].real_number_of_custumers_partidos);
+		printf(" Costumers atendidos: %d\n", state[i].num_custs_delayed);
+		if(init.without_infinite_queue == 1) {
 			printf("Ficaram a espera: %d\n", stats[i].waiting_custumers);
+			printf("Ficaram a espera2: %d\n", state[i].num_in_q);
 		}
-		else{
+		else {
 			printf("Perdemos: %d\n", stats[i].lost_customers);
-		}*/
+		}
 
 	}
 

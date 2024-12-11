@@ -301,7 +301,7 @@ double erlang_B(double A, unsigned int n) {
     for (int i = 1; i <= n; i++) {
 			AE = A * E;
 			E = AE / (AE + i); /*In each iteration i is E(A, i)*/
-			printf("E(%f, %d) = %f\n", A, i, E);
+			//printf("E(%f, %d) = %f\n", A, i, E);
 		}
     return E;
 }
@@ -312,11 +312,11 @@ double erlang_C(double A, unsigned int n){
 
 	E_B = erlang_B(A, n); /* Calculate Erlang B value */
 
-	printf("E_B = %f\n", E_B);
+	//printf("E_B = %f\n", E_B);
 
 	E_C = (n * E_B) / (n - A * (1 - E_B)); /* Apply the Erlang C formula */
 
-	printf("E_C = %f\n", E_C);
+	//printf("E_C = %f\n", E_C);
 
 	return E_C;
 

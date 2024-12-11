@@ -65,6 +65,7 @@ typedef struct {
     int num_occupied_servers;                   /*!< Sum of occupied servers. */
     int waiting_custumers;                      /*!< Number of customers that waited on a queue (Erlang-C model). */
     int real_number_of_custumers_chegados;
+    int real_number_of_custumers_partidos;
 } Statistics;
 
 /*! 

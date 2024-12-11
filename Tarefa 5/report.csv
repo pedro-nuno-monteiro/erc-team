@@ -1,24 +1,24 @@
-Simulation of a queueing system with,5, servers,,,,,,,
-Mean interarrival time,10, minutes,,,,,,,
-Mean service time,15, minutes,,,,,,,
-Without Queue,,,,,,,,,
-,,,,,,,,,
-, 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida,,,,
-Number of customers,2000,2000,2000,2000,2000, costumers,,,
-Average number of customers delayed,1987,1984,1984,1982,1976, costumers,,,
-Average number of lost clients,13,16,16,18,24, clients,,,
-Blocking rate,0.0065,0.008,0.008,0.009,0.012,,,,
-Server 1 utilization,0.2822,0.2766,0.2757,0.2776,0.3037, , , Soma,1.4158
-Server 2 utilization,0.2822,0.2765,0.2757,0.2776,0.3026, , , Soma,1.4146
-Server 3 utilization,0.282,0.2759,0.2758,0.2772,0.3034, , , Soma,1.4143
-Server 4 utilization,0.2821,0.2783,0.2761,0.2772,0.3028, , , Soma,1.4166
-Server 5 utilization,0.2817,0.277,0.2754,0.2777,0.3031, , , Soma,1.4149
-Simulation time,21513.348,21847.254,22092.705,21903.189,21034.979, minutes,,,
-,,,,,,,,,
-Intervalo de Confianaa,,,,,,,,,
-[ 0.006 0.011 ] ,,,,,,,,,
-,,,,,,,,,
-Valores Teoricos,,,,,,,,,
-Trafego Oferecido ,1.5,,,,,,,,
-Earlang - B,0.014,,,,,,,,
-Trafego Transportado,1.479,,,,,,,,
+Simulation of a queueing system with,5 , servers
+Mean interarrival time, 10.00, minutes
+Mean service time, 15.00, minutes
+Without Queue
+
+, 1a corrida, 2a corrida, 3a corrida, 4a corrida, 5a corrida
+Number of customers,100,100,100,100,100, costumers
+Average number of customers delayed, 100, 99, 100, 99, 100, costumers
+Average number of lost clients,0,1,0,1,0, clients
+Blocking rate,0.0000,0.0100,0.0000,0.0100,0.0000
+Server 1 utilization,0.2583,0.2086,0.2561,0.2884,0.3058, , , Soma,  1.3173
+Server 2 utilization,0.2482,0.2468,0.2604,0.2781,0.2773, , , Soma,  1.3108
+Server 3 utilization,0.2554,0.2262,0.2547,0.2826,0.3194, , , Soma,  1.3382
+Server 4 utilization,0.2824,0.2177,0.2621,0.2928,0.2764, , , Soma,  1.3314
+Server 5 utilization,0.2518,0.2233,0.2566,0.2983,0.2775, , , Soma,  1.3076
+Simulation time,1151.772,1124.597,1081.814,1070.089,1123.403, minutes
+
+Intervalo de Confianaa
+[ -0.003 0.011 ] 
+
+Valores Teoricos
+Trafego Oferecido , 1.500
+Earlang - B, 0.014
+Trafego Transportado, 1.479
