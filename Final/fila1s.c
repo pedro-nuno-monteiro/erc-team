@@ -204,15 +204,21 @@ void report(SystemState * state, Statistics * stats, Files * files, EventList * 
 	fprintf(files->outfile, ", minutes\n");	
 
 	if(init->number_of_reps > 1) {
-		fprintf(files->outfile, "\nIntervalo de Confianca");
+		fprintf(files->outfile, "\nIntervalos de Confianca\n");
 		float intervalo[2];
+		intervalo_confianca(soma, init, &intervalo[0], &intervalo[1]);
+		fprintf(files->outfile, "Tráfego Transportado,");
+		fprintf(files->outfile, "[ %.3f %.3f ] \n", intervalo[0], intervalo[1]);
+		
 		if(init->without_infinite_queue == 0) {
+			fprintf(files->outfile, "Blocking rate,");
 			intervalo_confianca(blocking_rate, init, &intervalo[0], &intervalo[1]);
 		}
 		else {
+			fprintf(files->outfile, "Waiting rate,");
 			intervalo_confianca(waiting_rate, init, &intervalo[0], &intervalo[1]);
 		}
-		fprintf(files->outfile, "\n[ %.3f %.3f ] \n", intervalo[0], intervalo[1]);
+		fprintf(files->outfile, "[ %.3f %.3f ] \n", intervalo[0], intervalo[1]);
 	}
 
 	fprintf(files->outfile, "\nValores Teoricos");	
